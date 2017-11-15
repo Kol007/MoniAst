@@ -1,0 +1,13 @@
+@keyframes ringing_animation {
+    0%   { color: #3c763d; }
+    25%  { color: #a94442; }
+    50%  { color: #3c763d; }
+    75%  { color: #a94442; }
+    100% { color: #3c763d; }
+}
+
+.channel-ringing {
+    animation-name: ringing_animation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}

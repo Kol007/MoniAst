@@ -1,0 +1,17 @@
+.selected-sip {
+  box-shadow: 0px 0px 1px 2px rgb(220, 53, 69);
+}
+
+*:focus {
+  outline: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.sip-status-indicator {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}
