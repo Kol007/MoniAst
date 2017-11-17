@@ -1,4 +1,5 @@
 import {
+  API_URL,
   SIP_SELECT,
   LOAD_ALL_SIPS,
   CHANGE_SIP_STATUS,
@@ -9,9 +10,6 @@ import {
   SIP_SPY,
   SIP_SPY_WHISPER
 } from '../constants';
-
-// const API_URL = 'http://localhost:3001/api';
-const API_URL = 'http://93.89.215.83:3001/api';
 
 export function loadSipPeers() {
   return {

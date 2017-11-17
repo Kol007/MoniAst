@@ -1,4 +1,5 @@
 import {
+  API_URL,
   AUTH_USER,
   AUTH_ERROR,
   UNAUTH_USER,
@@ -8,9 +9,6 @@ import {
   ADD_USER,
   DELETE_USER
 } from '../constants';
-
-// const API_URL = 'http://localhost:3001/api';
-const API_URL = 'http://93.89.215.83:3001/api';
 
 export function loginUser({ username, password, path }) {
   return {

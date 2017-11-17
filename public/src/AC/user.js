@@ -1,11 +1,10 @@
 import {
+  API_URL,
   POST_USER,
   LOAD_USERS,
   PATCH_USER,
   DELETE_USER
 } from '../constants';
-
-const API_URL = 'http://93.89.215.83:3001/api';
 
 export function getUsers() {
   return {

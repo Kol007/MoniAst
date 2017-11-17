@@ -1,5 +1,5 @@
 export const INCREMENT = 'INCREMENT';
-
+export const API_URL = '/api';
 // AUTH
 export const AUTH_USER = 'AUTH_USER';
 export const UNAUTH_USER = 'UNAUTH_USER';

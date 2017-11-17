@@ -2,6 +2,7 @@ config/config.js
 #config/passport.js
 
 .idea/
+public/.idea/
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 # Logs

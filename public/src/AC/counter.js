@@ -1,4 +1,4 @@
-import { INCREMENT } from '../constants';
+import { API_URL, INCREMENT } from '../constants';
 
 export function increment() {
   const action = {

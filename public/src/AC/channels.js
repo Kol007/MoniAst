@@ -1,6 +1,4 @@
-import { BRIDGE_START, BRIDGE_STOP, LOAD_ALL_CHANNELS, START, SUCCESS, FAIL, NEW_CHANNEL, REMOVE_CHANNEL } from '../constants';
-
-const API_URL = 'http://93.89.215.83:3001/api';
+import { API_URL, BRIDGE_START, BRIDGE_STOP, LOAD_ALL_CHANNELS, START, SUCCESS, FAIL, NEW_CHANNEL, REMOVE_CHANNEL } from '../constants';
 
 export function loadChannels() {
   return {
