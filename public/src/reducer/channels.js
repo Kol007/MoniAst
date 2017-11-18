@@ -23,11 +23,9 @@ export default (channels = defaultState, action) => {
       return channels.merge(arrayToMap(response,  channel => new ChannelModel(channel)));
 
     case LOAD_ALL_CHANNELS + FAIL:
-      // console.log('---FAIL!!!!: ', LOAD_ALL_CHANNELS + FAIL, payload, response);
       return channels;
 
     case NEW_CHANNEL:
-      // console.log('--- NEW_CHANNEL ---', response, payload);
       return channels.setIn([payload.channel.channel.id], new ChannelModel({...payload.channel.channel}))
 
     case REMOVE_CHANNEL:

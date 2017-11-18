@@ -28,8 +28,8 @@ const defaultState = new Map({
 
   sipSpy: new Map({
     isError: false,
-    status: "",
-    message: ""
+    status: '',
+    message: ''
   })
 });
 
@@ -71,16 +71,13 @@ export default (state = defaultState, action) => {
       return state.set('filter', payload.filter);
 
     case SIP_SPY + START:
-      console.log('--AC-', SIP_SPY + START);
       return state;
     case SIP_SPY + SUCCESS:
-      console.log('--AC-', SIP_SPY + SUCCESS);
       return state
         .setIn(['sipSpy', 'isError'], response.status === 'Failure')
         .setIn(['sipSpy', 'message'], response.reason)
         .setIn(['sipSpy', 'status'], response.status);
     case SIP_SPY + FAIL:
-      console.log('--AC-', SIP_SPY + FAIL, 'FAIL!!!!', payload, response);
       return state
         .setIn(['sipSpy', 'isError'], true)
         .setIn(['sipSpy', 'message'], 'Ошибка API.');

@@ -34,9 +34,6 @@ class PanelUsers extends Component {
   render() {
     const { entities: users, isLoaded, isLoading } = this.props;
 
-    console.log('---', users);
-
-    // return null;
     const usersComponent = users.map(user => {
       return (
         <tr key={user._id}>

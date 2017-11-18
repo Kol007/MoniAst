@@ -44,7 +44,7 @@ const statusStyle = {
 };
 
 class SipPeer extends PureComponent {
-  handleSelectSip = ev => {
+  handleSelectSip = (ev) => {
     ev.preventDefault();
 
     const { selectSip, sipPeer } = this.props;
@@ -55,8 +55,6 @@ class SipPeer extends PureComponent {
   render() {
     const { channels, sipPeer, isSelected, isTrunk } = this.props;
     const { login, sip, status } = sipPeer;
-
-    // console.log('---', login);
 
     const SipUp =
       channels &&

@@ -55,18 +55,29 @@ class PanelSip extends Component {
   }
 }
 
+PanelSip.propTypes = {
+  sip: PropTypes.array,
+  channels: PropTypes.object,
+
+  isLoading: PropTypes.bool,
+  isLoaded: PropTypes.bool,
+  selectSip: PropTypes.string,
+
+  sipSpyStatus: PropTypes.object,
+};
+
 function mapStateToProps(state) {
   const { sip, channels } = state;
 
   return {
     sip: getFilteredSipsState(state),
-    channels: channels,
+    channels,
 
     isLoading: sip.get('isLoading'),
     isLoaded: sip.get('isLoaded'),
     selectedSip: sip.get('selectedSip'),
 
-    filter: sip.get('filter'),
+    // filter: sip.get('filter'),
     sipSpyStatus: sip.get('sipSpy').toJSON()
   };
 }

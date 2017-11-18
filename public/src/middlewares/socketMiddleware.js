@@ -27,15 +27,18 @@ export default function(store) {
   const token = localStorage.token;
   if (!token) return;
 
-  const url = `${location.protocol}//${location.hostname}:3001`;
+  const url = `${location.protocol}//${location.hostname}:${location.port}`;
   const socket = io.connect(url, {
     query: {
       token: token.split(' ')[1]
     }
   });
 
-  socket.on("unauthorized", function(error) {
-    if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
+  socket.on('unauthorized', function(error) {
+    if (
+      error.data.type === 'UnauthorizedError' ||
+      error.data.code === 'invalid_token'
+    ) {
       // redirect user to login page perhaps?
       console.log("User's token has expired");
     }

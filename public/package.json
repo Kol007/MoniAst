@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "test": "jest",
-    "dev": "webpack-dev-server --hot --inline --host 93.89.215.83 --port 8090 --public --config webpack.dev.js",
+    "dev": "webpack-dev-server --hot --inline --host 0.0.0.0 --port 8090 --public --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js --progress -p"
   },
   "keywords": [
@@ -14,7 +14,7 @@
     "ui"
   ],
   "author": "Kol007",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "immutable": "^3.8.2",
     "prop-types": "^15.6.0",

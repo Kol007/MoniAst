@@ -28,7 +28,9 @@ class User extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { getUser, user, match, isNew } = nextProps;
-    if (isNew) return;
+    if (isNew) {
+      return;
+    }
 
     const username = match.params.id;
 
@@ -73,7 +75,6 @@ class User extends Component {
     const { firstName, lastName, sip, role, username, password } = this.state;
     const { isNew, patchUser, postUser } = this.props;
 
-    console.log('-isNew-postUser-', !!isNew);
     if (isNew)
       return postUser({
         username,
@@ -144,7 +145,7 @@ class User extends Component {
                   name="role"
                   id="role"
                   value={this.state.role}
-                  onChange={ev => this.setState({ role: ev.target.value })}
+                  onChange={(ev) => this.setState({ role: ev.target.value })}
                 >
                   <option value={'Admin'}>Admin</option>
                   <option value={'Client'}>Client</option>

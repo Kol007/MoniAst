@@ -1,4 +1,5 @@
 import { START, SUCCESS, FAIL, LOG_OUT } from '../constants';
+import { paramsForAPI, UserException } from '../common';
 
 export default store => next => action => {
   const {
@@ -33,37 +34,26 @@ export default store => next => action => {
       Authorization: `${token}`
     });
   }
-console.log('---', options, type);
-    fetch(callAPI, options)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
 
-        throw new UserException(res.statusText, res.status);
-      })
-      .then(response => next({ ...rest, type: type + SUCCESS, response, payload }))
-      .catch(error => {
-        if (error.status === 403 || error.status === 401) {
-          next({ ...rest, payload, type: LOG_OUT });
-        }
+  fetch(callAPI, options)
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
 
-        return next({
-          ...rest,
-          type: type + FAIL,
-          errorMessage: error.message,
-          errorCode: error.status
-        });
+      throw new UserException(res.statusText, res.status);
+    })
+    .then(response => next({ ...rest, type: type + SUCCESS, response, payload }))
+    .catch(error => {
+      if (error.status === 403 || error.status === 401) {
+        next({ ...rest, payload, type: LOG_OUT });
+      }
+
+      return next({
+        ...rest,
+        type: type + FAIL,
+        errorMessage: error.message,
+        errorCode: error.status
       });
+    });
 };
-
-function UserException(message, status) {
-  this.message = message;
-  this.status = status;
-}
-
-function paramsForAPI(params) {
-  return Object.keys(params)
-    .map(el => `${el}=${params[el]}`)
-    .join('&');
-}

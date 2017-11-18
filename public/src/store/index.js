@@ -6,10 +6,15 @@ import { createLogger } from 'redux-logger';
 import api from '../middlewares/api';
 import startWS, { webSocketMiddleware } from '../middlewares/socketMiddleware';
 
-const logger = createLogger();
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const enhancer = composeEnhancers(applyMiddleware(thunk, api, webSocketMiddleware/*, randomId*/ , logger));
+let middleware = [ thunk, api, webSocketMiddleware ];
+
+if (process.env.NODE_ENV !== 'production') {
+  const logger = createLogger();
+
+  middleware = [ ...middleware, logger ];
+}
+const enhancer = composeEnhancers(applyMiddleware(...middleware));
 
 const store = createStore(reducer, {}, enhancer);
 startWS(store);

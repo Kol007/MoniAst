@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { loginUser } from '../../AC/auth';
 import { withRouter } from 'react-router-dom';
@@ -93,8 +94,11 @@ class Login extends Component {
   };
 }
 
-Login.propTypes = {};
-Login.defaultProps = {};
+Login.propTypes = {
+  isError: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isLoggedIn: PropTypes.bool,
+};
 
 function mapStateToProps(state) {
   return {

@@ -175,8 +175,8 @@ exports.verifyToken = function (req, res, next) {
 
     // Otherwise, save new password and clear resetToken from database
     resetUser.password = req.body.password;
-    resetUser.resetPasswordToken = undefined;
-    resetUser.resetPasswordExpires = undefined;
+    resetUser.resetPasswordToken = null;
+    resetUser.resetPasswordExpires = null;
 
     resetUser.save((err) => {
       if (err) { return next(err); }
@@ -187,9 +187,6 @@ exports.verifyToken = function (req, res, next) {
         text: 'You are receiving this username because you changed your password. \n\n' +
         'If you did not request this change, please contact us immediately.'
       };
-
-      // Otherwise, send user username confirmation of password change via Mailgun
-      mailgun.sendEmail(resetUser.username, message);
 
       return res.status(200).json({ message: 'Password changed successfully. Please login with your new password.' });
     });

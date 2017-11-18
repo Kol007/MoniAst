@@ -9,7 +9,6 @@ export function loadChannels() {
 }
 
 export function newChannel(channel) {
-  // console.log('--- ACTION new CHANNEL', channel);
   return {
     type: NEW_CHANNEL,
     payload: {channel},
@@ -18,7 +17,6 @@ export function newChannel(channel) {
 }
 
 export function removeChannel(id) {
-  // console.log('---removeChannel', id);
   return {
     type: REMOVE_CHANNEL,
     payload: { id },

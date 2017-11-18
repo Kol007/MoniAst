@@ -52,7 +52,6 @@ export default (state = defaultState, action) => {
         .set('isLoaded', true);
 
     case LOAD_USERS + FAIL:
-      console.log('---', LOAD_USERS + FAIL, response);
       return state
         .set('isLoading', false)
         .set('isLoaded', false)

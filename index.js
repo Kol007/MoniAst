@@ -15,7 +15,7 @@ mongoose.connect(config.database);
 
 // Start the server
 let server;
-if (process.env.NODE_ENV != config.test_env) {
+if (process.env.NODE_ENV !== config.test_env) {
   const port = helpers.normalizePort(config.port);
 
   server = app.listen(port);
@@ -29,32 +29,12 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 app.use(bodyParser.json()); // Send JSON responses
 app.use(logger('dev')); // Log requests to API using morgan
 
-// Enable CORS from client-side
-app.use((req, res, next) => {
-  // res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
 // Import routes to be served
 router(app);
-// call by default index.html page
-
 
 // // Serve static assets
-// app.use(express.static(path.resolve(__dirname, 'public', 'build')));
-//
-// // Always return the main index.html, so react-router render the route in the client
-// app.get('*', (req, res) => {
-//   console.log('---', 'AAAAAAAAAAAAAAAAAAAAAAAAAaa');
-//   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-// });
 app.use(express.static(`${__dirname}/public`));
 app.get('*', (req, res) => {
-  console.log('---', 'AAAAAAAAAAAAAAAAAAAAAAAAAaa');
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 

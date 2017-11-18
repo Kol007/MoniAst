@@ -14,7 +14,7 @@
     "server-side"
   ],
   "author": "Nikita Romankevich",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "asterisk-manager": "^0.1.16",
     "async": "^2.5.0",

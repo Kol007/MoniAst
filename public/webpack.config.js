@@ -15,7 +15,7 @@ module.exports = {
     proxy: [
       {
         path: '/api/',
-        target: 'http://93.89.215.83:3001',
+        target: 'http://0.0.0.0:3001',
         secure: false
       }
     ],
@@ -46,7 +46,7 @@ module.exports = {
       // In `disabled` mode you can use this plugin to just generate Webpack Stats JSON file by setting `generateStatsFile` to `true`.
       analyzerMode: 'server',
       // Host that will be used in `server` mode to start HTTP server.
-      analyzerHost: '93.89.215.83',
+      analyzerHost: '0.0.0.0',
       // Port that will be used in `server` mode to start HTTP server.
       analyzerPort: 8887
     }),
