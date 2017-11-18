@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/user');
-// const mailgun = require('../config/mailgun');
-// const mailchimp = require('../config/mailchimp');
 const setUserInfo = require('../helpers').setUserInfo;
 const getRole = require('../helpers').getRole;
 const config = require('../config/config');
@@ -78,11 +76,7 @@ exports.register = function (req, res, next) {
     user.save((err, user) => {
       if (err) { return next(err); }
 
-      // Subscribe member to Mailchimp list
-      // mailchimp.subscribeToNewsletter(user.username);
-
       // Respond with JWT if user was created
-
       const userInfo = setUserInfo(user);
 
       res.status(201).json(userInfo);
@@ -99,14 +93,12 @@ exports.roleAuthorization = function (requiredRole) {
   return function (req, res, next) {
     const user = req.user[0];
 
-    console.log('---', user, user._id);
     User.findById(user._id, (err, foundUser) => {
       if (err) {
         res.status(422).json({ error: 'No user was found.' });
         return next(err);
       }
 
-      console.log('--tyu321-', foundUser);
       // If user is found, check role.
       if (getRole(foundUser.role) >= getRole(requiredRole)) {
         return next();
@@ -152,9 +144,6 @@ exports.forgotPassword = function (req, res, next) {
           'http://'}${req.headers.host}/reset-password/${resetToken}\n\n` +
           `If you did not request this, please ignore this username and your password will remain unchanged.\n`
         };
-
-        // Otherwise, send user username via Mailgun
-        mailgun.sendEmail(existingUser.username, message);
 
         return res.status(200).json({ message: 'Please check your username for the link to reset your password.' });
       });

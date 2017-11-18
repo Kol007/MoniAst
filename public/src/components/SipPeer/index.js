@@ -52,23 +52,29 @@ class SipPeer extends PureComponent {
     selectSip(sipPeer.sip);
   };
 
-  render() {
-    const { channels, sipPeer, isSelected, isTrunk } = this.props;
-    const { login, sip, status } = sipPeer;
-
-    const SipUp =
-      channels &&
+  _isSipUp = (channels) => {
+    return channels &&
       channels.size &&
       !!channels.find(obj => obj.get('status') === CHANNEL_STATUS_UP) &&
       SIP_STATUS_IN_USE;
+  };
 
-    const SipRinging =
-      channels &&
+  _isSipRinging = (channels) => {
+    return channels &&
       channels.size &&
       !!channels.find(
         obj => obj.get('status') === CHANNEL_STATUS_OUT_RINGING
       ) &&
       SIP_STATUS_RINGING;
+  };
+
+  render() {
+    const { channels, sipPeer, isSelected, isTrunk } = this.props;
+    const { login, sip, status } = sipPeer;
+
+    const SipUp = this._isSipUp(channels);
+
+    const SipRinging = this._isSipRinging(channels);
 
     const peerStatusClass =
       statusStyle[SipUp] || statusStyle[SipRinging] || statusStyle[status];

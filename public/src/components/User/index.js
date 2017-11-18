@@ -51,7 +51,9 @@ class User extends Component {
 
   componentDidMount() {
     const { match, getUser, user, isNew } = this.props;
-    if (isNew) return;
+    if (isNew) {
+      return;
+    }
 
     const username = match.params.id;
 
@@ -75,7 +77,7 @@ class User extends Component {
     const { firstName, lastName, sip, role, username, password } = this.state;
     const { isNew, patchUser, postUser } = this.props;
 
-    if (isNew)
+    if (isNew) {
       return postUser({
         username,
         firstName,
@@ -84,6 +86,7 @@ class User extends Component {
         role,
         password
       });
+    }
 
     patchUser(username, {
       firstName,
@@ -112,7 +115,7 @@ class User extends Component {
                   name="username"
                   id="username"
                   value={this.state.username}
-                  onChange={ev => this.setState({ username: ev.target.value })}
+                  onChange={(ev) => this.setState({ username: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -128,7 +131,7 @@ class User extends Component {
                   id="password"
                   autoComplete="new-password"
                   value={this.state.password}
-                  onChange={ev =>
+                  onChange={(ev) =>
                     this.setState({ password: ev.target.value })
                   }
                 />
@@ -163,7 +166,7 @@ class User extends Component {
                   name="firstName"
                   id="firstName"
                   value={this.state.firstName}
-                  onChange={ev => this.setState({ firstName: ev.target.value })}
+                  onChange={(ev) => this.setState({ firstName: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -178,7 +181,7 @@ class User extends Component {
                   name="lastName"
                   id="lastName"
                   value={this.state.lastName}
-                  onChange={ev => this.setState({ lastName: ev.target.value })}
+                  onChange={(ev) => this.setState({ lastName: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -193,7 +196,7 @@ class User extends Component {
                   name="sip"
                   id="sip"
                   value={this.state.sip}
-                  onChange={ev => this.setState({ sip: ev.target.value })}
+                  onChange={(ev) => this.setState({ sip: ev.target.value })}
                 />
               </Col>
             </FormGroup>

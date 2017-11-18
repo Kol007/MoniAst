@@ -35,12 +35,9 @@ export default function(store) {
   });
 
   socket.on('unauthorized', function(error) {
-    if (
-      error.data.type === 'UnauthorizedError' ||
-      error.data.code === 'invalid_token'
-    ) {
+    if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
       // redirect user to login page perhaps?
-      console.log("User's token has expired");
+      console.log(`User's token has expired`);
     }
   });
 

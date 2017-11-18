@@ -6,9 +6,9 @@ module.exports = {
   'database': 'mongodb://localhost:27017/DATABASE_NAME',
   'port': process.env.PORT || 3001,
 
-  test_port: 3001,
-  test_db: 'TEST_DATABASE_NAME',
-  test_env: 'test',
+  testPort: 3001,
+  testDb: 'TEST_DATABASE_NAME',
+  testEnv: 'test',
 
   AMI: {
     port: 5038,

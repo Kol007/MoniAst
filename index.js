@@ -15,13 +15,13 @@ mongoose.connect(config.database);
 
 // Start the server
 let server;
-if (process.env.NODE_ENV !== config.test_env) {
+if (process.env.NODE_ENV !== config.testEnv) {
   const port = helpers.normalizePort(config.port);
 
   server = app.listen(port);
   console.log(`Your server is running on port ${config.port}.`);
 } else{
-  server = app.listen(config.test_port);
+  server = app.listen(config.testPort);
 }
 
 // Setting up basic middleware for all Express requests

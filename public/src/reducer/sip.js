@@ -59,9 +59,7 @@ export default (state = defaultState, action) => {
         .setIn(['entities', payload.sip, 'status'], payload.status)
         .setIn(['entities', payload.sip, 'online'], payload.online)
         .update('entities', entities =>
-          entities
-            .sort((a, b) => a.sip - b.sip)
-            .sort((a, b) => b.online - a.online)
+          entities.sort((a, b) => a.sip - b.sip).sort((a, b) => b.online - a.online)
         );
 
     case SIP_SELECT:
@@ -78,10 +76,7 @@ export default (state = defaultState, action) => {
         .setIn(['sipSpy', 'message'], response.reason)
         .setIn(['sipSpy', 'status'], response.status);
     case SIP_SPY + FAIL:
-      return state
-        .setIn(['sipSpy', 'isError'], true)
-        .setIn(['sipSpy', 'message'], 'Ошибка API.');
-
+      return state.setIn(['sipSpy', 'isError'], true).setIn(['sipSpy', 'message'], 'Ошибка API.');
   }
 
   return state;
