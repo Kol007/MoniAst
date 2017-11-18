@@ -25,7 +25,9 @@ export function webSocketMiddleware(store) {
 
 export default function(store) {
   const token = localStorage.token;
-  if (!token) return;
+  if (!token) {
+    return;
+  }
 
   const url = `${location.protocol}//${location.hostname}:${location.port}`;
   const socket = io.connect(url, {

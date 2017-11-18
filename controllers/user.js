@@ -4,10 +4,10 @@ const setUserInfo = require('../helpers').setUserInfo;
 //= =======================================
 // User Routes
 //= =======================================
-exports.viewProfile = function (req, res, next) {
+exports.viewProfile = function(req, res, next) {
   const username = req.params.username;
 
-  User.findOne({username}, (err, user) => {
+  User.findOne({ username }, (err, user) => {
     if (err) {
       res.status(400).json({ error: 'No user could be found for this ID.' });
       return next(err);
@@ -19,7 +19,7 @@ exports.viewProfile = function (req, res, next) {
   });
 };
 
-exports.allUsers = function (req, res, next) {
+exports.allUsers = function(req, res, next) {
   User.find({}, (err, users) => {
     if (err) {
       res.status(400).json({ error: 'No user could be found for this ID.' });
@@ -32,53 +32,56 @@ exports.allUsers = function (req, res, next) {
   });
 };
 
-
-exports.patchUser = function (req, res, next) {
+exports.patchUser = function(req, res, next) {
   const username = req.params.username;
 
-  User.findOne({username}, (err, user) => {
+  User.findOne({ username }, (err, user) => {
     if (err) {
       res.status(400).json({ error: 'No user could be found for this ID.' });
       return next(err);
     }
 
-    if (req.body.password === '') delete req.body.password;
+    if (req.body.password === '') {
+      delete req.body.password;
+    }
 
     user = Object.assign(user, req.body);
     user.profile = {
       lastName: req.body.lastName,
-      firstName: req.body.firstName,
+      firstName: req.body.firstName
     };
 
     delete user.lastName;
     delete user.firstName;
 
-    user.save((err) => {
+    user.save(err => {
       // If error in saving token, return it
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
 
       return res.status(200).json(setUserInfo(user));
     });
   });
 };
 
-exports.deleteUser = function (req, res, next) {
+exports.deleteUser = function(req, res, next) {
   const username = req.params.username;
 
-  User.remove({username}, (err) => {
+  User.remove({ username }, err => {
     if (err) {
       res.status(400).json({ error: 'No user could be found for this ID.' });
       return next(err);
     }
 
-    return res.status(200).json({status: 'success'});
+    return res.status(200).json({ status: 'success' });
   });
 };
 
 //= =======================================
 // Registration Route
 //= =======================================
-exports.postUser = function (req, res, next) {
+exports.postUser = function(req, res, next) {
   // Check for registration errors
   const username = req.body.username;
   const firstName = req.body.firstName;
@@ -107,7 +110,9 @@ exports.postUser = function (req, res, next) {
   }
 
   User.findOne({ username }, (err, existingUser) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
 
     // If user is not unique, return error
     if (existingUser) {
@@ -124,7 +129,9 @@ exports.postUser = function (req, res, next) {
     });
 
     user.save((err, user) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
 
       // Subscribe member to Mailchimp list
       // mailchimp.subscribeToNewsletter(user.username);

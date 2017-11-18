@@ -67,7 +67,7 @@ class SipPeerChannel extends Component {
 
   handleStopInterval = () => {
     clearInterval(this.state.intervalId);
-    this.intervalId = undefined;
+    this.intervalId = null;
   };
 
   render() {

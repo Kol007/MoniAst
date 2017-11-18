@@ -62,10 +62,14 @@ class User extends Component {
     const username = match.params.id;
 
     const {} = this.props;
-    if (!user) return getUser(username);
+    if (!user) {
+      return getUser(username);
+    }
 
     const { _id, isLoading } = user;
-    if (!_id && !isLoading) return getUser(username);
+    if (!_id && !isLoading) {
+      return getUser(username);
+    }
 
     this.setState({
       firstName: user.firstName,
@@ -229,7 +233,9 @@ User.propTypes = {
 function mapStateToProps(state, { match }) {
   const username = match.params.id;
 
-  if (username === 'register') return { isNew: true };
+  if (username === 'register') {
+    return { isNew: true };
+  }
 
   return {
     user: state.user.getIn(['entities', username]),

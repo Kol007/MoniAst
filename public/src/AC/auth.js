@@ -21,7 +21,7 @@ export function loginUser({ username, password, path }) {
 
 export function logOutUser() {
   localStorage.removeItem('token');
-  return {type: LOG_OUT}
+  return { type: LOG_OUT };
 }
 
 // export function errorHandler(dispatch, error, type) {
