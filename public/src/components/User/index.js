@@ -34,10 +34,14 @@ class User extends Component {
 
     const username = match.params.id;
 
-    if (!user) return getUser(username);
+    if (!user) {
+      return getUser(username);
+    }
 
     const { _id, isLoading } = user;
-    if (!_id && !isLoading) return getUser(username);
+    if (!_id && !isLoading) {
+      return getUser(username);
+    }
 
     this.setState({
       firstName: user.firstName,

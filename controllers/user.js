@@ -36,7 +36,6 @@ exports.allUsers = function (req, res, next) {
 exports.patchUser = function (req, res, next) {
   const username = req.params.username;
 
-  console.log('---', username, req.body);
   User.findOne({username}, (err, user) => {
     if (err) {
       res.status(400).json({ error: 'No user could be found for this ID.' });
@@ -54,8 +53,6 @@ exports.patchUser = function (req, res, next) {
     delete user.lastName;
     delete user.firstName;
 
-    console.log('-patchUser--', user);
-
     user.save((err) => {
       // If error in saving token, return it
       if (err) { return next(err); }
@@ -67,8 +64,6 @@ exports.patchUser = function (req, res, next) {
 
 exports.deleteUser = function (req, res, next) {
   const username = req.params.username;
-
-  console.log('---', username, req.body);
 
   User.remove({username}, (err) => {
     if (err) {

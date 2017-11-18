@@ -142,7 +142,7 @@ exports.forgotPassword = function (req, res, next) {
           text: `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://'}${req.headers.host}/reset-password/${resetToken}\n\n` +
-          `If you did not request this, please ignore this username and your password will remain unchanged.\n`
+          'If you did not request this, please ignore this username and your password will remain unchanged.\n'
         };
 
         return res.status(200).json({ message: 'Please check your username for the link to reset your password.' });

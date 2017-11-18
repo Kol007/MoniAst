@@ -24,8 +24,8 @@ class SipPeerChannel extends Component {
     super(props);
 
     this.state = {
-      intervalId: undefined,
-      duration: undefined
+      intervalId: null,
+      duration: null
     };
   }
 

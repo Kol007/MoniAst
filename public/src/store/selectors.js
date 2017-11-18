@@ -1,10 +1,7 @@
 import { createSelector } from 'reselect';
 // import moment from 'moment';
 
-import {
-  SIP_FILTER_ONLINE,
-  SIP_FILTER_ALL
-} from '../constants';
+import { SIP_FILTER_ONLINE, SIP_FILTER_ALL } from '../constants';
 
 const filters = {
   [SIP_FILTER_ONLINE]: el => el.online,
@@ -17,9 +14,7 @@ const getSipFilter = state => state.sip.get('filter');
 export const getFilteredSipsState = createSelector(
   [getFilteredSips, getSipFilter],
   (sip, filter) => {
-    return sip
-      .filter(sip => sip.login)
-      .filter(filters[filter]);
+    return sip.filter(sip => sip.login).filter(filters[filter]);
   }
 );
 

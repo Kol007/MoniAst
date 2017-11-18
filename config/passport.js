@@ -9,7 +9,7 @@ const passport = require('passport'),
 
 // Setting up local login strategy
 const localLogin = new LocalStrategy(function(username, password, done) {
-  User.findOne({ username: username }, function(err, user) {
+  User.findOne({ username }, function(err, user) {
     if(err) { return done(err); }
 
     if(!user) { return done(null, false, { error: 'Your login details could not be verified. Please try again.' }); }

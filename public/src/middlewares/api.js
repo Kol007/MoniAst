@@ -2,16 +2,11 @@ import { START, SUCCESS, FAIL, LOG_OUT } from '../constants';
 import { paramsForAPI, UserException } from '../common';
 
 export default store => next => action => {
-  const {
-    callAPI,
-    methodAPI,
-    needAuth,
-    payload,
-    params,
-    type,
-    ...rest
-  } = action;
-  if (!callAPI) return next(action);
+  const { callAPI, methodAPI, needAuth, payload, params, type, ...rest } = action;
+
+  if (!callAPI) {
+    return next(action);
+  }
 
   next({ ...rest, type: type + START, payload });
 

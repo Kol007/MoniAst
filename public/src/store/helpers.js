@@ -1,12 +1,10 @@
-import { Map } from 'immutable'
+import { Map } from 'immutable';
 
-export function arrayToMap(arr, mapper = (f) => f) {
+export function arrayToMap(arr, mapper = f => f) {
   return arr.reduce((acc, entity) => acc.set(entity.id, mapper(entity)), new Map({}));
 }
 
 export function arrayToMapCustomKey(arr, mapper = f => f, idKey) {
-  console.log('---', arr);
-
   return arr.reduce((acc, entity) => {
     const key = typeof idKey === 'function' ? idKey(entity) : entity[idKey];
 

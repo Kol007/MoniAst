@@ -14,8 +14,8 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 const requireLogin = passport.authenticate('local', { session: false });
 
 // Constants for role types
-const REQUIRE_ADMIN = "Admin",
-  REQUIRE_CLIENT = "Client";
+const REQUIRE_ADMIN = 'Admin',
+  REQUIRE_CLIENT = 'Client';
 
 module.exports = function(app) {
   // Initializing route groups
@@ -74,18 +74,33 @@ module.exports = function(app) {
 
   userRoutes.patch('/:username', requireAuth, UserController.patchUser);
 
-  userRoutes.post('/register', requireAuth, AuthenticationController.roleAuthorization(ROLE_ADMIN), UserController.postUser);
+  userRoutes.post(
+    '/register',
+    requireAuth,
+    AuthenticationController.roleAuthorization(ROLE_ADMIN),
+    UserController.postUser
+  );
 
-  userRoutes.delete('/:username', requireAuth, AuthenticationController.roleAuthorization(ROLE_ADMIN), UserController.deleteUser);
+  userRoutes.delete(
+    '/:username',
+    requireAuth,
+    AuthenticationController.roleAuthorization(ROLE_ADMIN),
+    UserController.deleteUser
+  );
 
   // Test protected route
   apiRoutes.get('/protected', requireAuth, (req, res) => {
     res.send({ content: 'The protected test route is functional!' });
   });
 
-  apiRoutes.get('/admins-only', requireAuth, AuthenticationController.roleAuthorization(ROLE_ADMIN), (req, res) => {
-    res.send({ content: 'Admin dashboard is working.' });
-  });
-// Set url for API group routes
+  apiRoutes.get(
+    '/admins-only',
+    requireAuth,
+    AuthenticationController.roleAuthorization(ROLE_ADMIN),
+    (req, res) => {
+      res.send({ content: 'Admin dashboard is working.' });
+    }
+  );
+  // Set url for API group routes
   app.use('/api', apiRoutes);
 };

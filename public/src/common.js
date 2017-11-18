@@ -1,6 +1,6 @@
 export function secToHuman(sec) {
   if (!sec) {
-    return `00:00:00`;
+    return '00:00:00';
   }
 
   const secNum = parseInt(sec, 10); // don't forget the second param

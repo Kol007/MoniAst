@@ -59,7 +59,8 @@ exports.getChannels = function (req, res, next) {
         return item;
       }
 
-      return undefined;
+      // return undefined;
+      return null;
     });
 
     return res.json(list);
@@ -115,6 +116,7 @@ exports.spyChannel = function(req, res, next) {
     });
   });
 };
+
 // // STATUS OF SIP EXTENSION IS CHANGED
 // AMI.on('extensionstatus', function(evt) {
 //   global.io.emit('change-sip-status', {

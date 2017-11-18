@@ -9,7 +9,8 @@ const Schema = mongoose.Schema;
 //= ===============================
 // User Schema
 //= ===============================
-const UserSchema = new Schema({
+const UserSchema = new Schema(
+  {
     username: {
       type: String,
       lowercase: true,
@@ -35,38 +36,39 @@ const UserSchema = new Schema({
   },
   {
     timestamps: true
-  });
+  }
+);
 
 //= ===============================
 // User ORM Methods
 //= ===============================
 
 // Pre-save of user to database, hash password if password is modified or new
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', function(next) {
   const user = this,
     SALT_FACTOR = 5;
 
-  if (!user.isModified('password')) return next();
+  if (!user.isModified('password')) {
+    return next();
+  }
 
   bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
     if (err) return next(err);
 
     bcrypt.hash(user.password, salt, null, (err, hash) => {
       if (err) return next(err);
-      console.log('--pre-', user.password);
       user.password = hash;
-      console.log('--pre-', user.password);
       next();
     });
   });
 });
 
 // Method to compare password for login
-UserSchema.methods.comparePassword = function (candidatePassword, cb) {
-  console.log('---', candidatePassword, this.password);
-
+UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    if (err) { return cb(err); }
+    if (err) {
+      return cb(err);
+    }
 
     cb(null, isMatch);
   });

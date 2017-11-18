@@ -8,7 +8,8 @@ import {
   FAIL,
   SIP_FILTER,
   SIP_SPY,
-  SIP_SPY_WHISPER
+  SIP_SPY_WHISPER,
+  BRIDGE_STOP
 } from '../constants';
 
 export function loadSipPeers() {

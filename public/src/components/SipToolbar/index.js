@@ -42,8 +42,7 @@ class SipToolbar extends Component {
       disabled: !selectedSip
     };
 
-    const filterStateText =
-      filter === SIP_FILTER_ALL ? 'Show online' : 'Show all';
+    const filterStateText = filter === SIP_FILTER_ALL ? 'Show online' : 'Show all';
 
     return (
       <div style={{ margin: '10px 10px 10px 20px' }}>
@@ -51,12 +50,7 @@ class SipToolbar extends Component {
           <Button outline color="info" onClick={this.handleToggleOnline}>
             {filterStateText}
           </Button>
-          <Button
-            outline
-            color="info"
-            disabled={buttonSpy.disabled}
-            onClick={this.handleSpy}
-          >
+          <Button outline color="info" disabled={buttonSpy.disabled} onClick={this.handleSpy}>
             <FontAwesome name="user-secret" />
           </Button>
 
