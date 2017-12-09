@@ -1,3 +1,7 @@
+body {
+  background-color: #f3f3f3;
+}
+
 .selected-sip {
   box-shadow: 0px 0px 1px 2px rgb(220, 53, 69);
 }

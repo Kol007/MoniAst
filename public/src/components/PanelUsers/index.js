@@ -12,7 +12,9 @@ import {
   Button,
   Nav,
   NavItem,
-  NavLink
+  NavLink,
+  Card,
+  CardBody
 } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 
@@ -38,28 +40,17 @@ class PanelUsers extends Component {
       return (
         <tr key={user._id}>
           <td>
-            <RRNavLink to={`/users/${user.username}`}>
-              {user.username}
-            </RRNavLink>
+            <RRNavLink to={`/users/${user.username}`}>{user.username}</RRNavLink>
           </td>
           <td>{user.sip}</td>
           <td>{user.role}</td>
           <td>{`${user.firstName} ${user.lastName}`}</td>
           <td>
             <ButtonGroup>
-              <Button
-                tag={RRNavLink}
-                to={`/users/${user.username}`}
-                outline
-                color="info"
-              >
+              <Button tag={RRNavLink} to={`/users/${user.username}`} outline color="info">
                 Edit
               </Button>
-              <Button
-                outline
-                color="danger"
-                onClick={() => this._handleDeleteUser(user.username)}
-              >
+              <Button outline color="danger" onClick={() => this._handleDeleteUser(user.username)}>
                 Delete
               </Button>
             </ButtonGroup>
@@ -71,26 +62,28 @@ class PanelUsers extends Component {
     return (
       <Container>
         <Row>
-          <Nav>
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/users/register">
-                Add User
-              </NavLink>
-            </NavItem>
-          </Nav>
+          <Card body={false} style={{ margin: '20px auto', padding: '20px', width: '100%' }}>
+            <Nav>
+              <NavItem>
+                <NavLink tag={RRNavLink} to="/users/register" style={{ margin: '20px' }}>
+                  Add User
+                </NavLink>
+              </NavItem>
+            </Nav>
 
-          <Table bordered hover striped>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>SIP</th>
-                <th>Role</th>
-                <th>FullName</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>{usersComponent}</tbody>
-          </Table>
+            <Table bordered hover striped>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>SIP</th>
+                  <th>Role</th>
+                  <th>FullName</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>{usersComponent}</tbody>
+            </Table>
+          </Card>
         </Row>
       </Container>
     );

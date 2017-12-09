@@ -19,11 +19,11 @@ class Header extends PureComponent {
     isOpen: false
   };
 
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen
     });
-  }
+  };
 
   handleLogOut = () => {
     this.props.logOutUser();
@@ -37,7 +37,7 @@ class Header extends PureComponent {
             MoniAst
           </NavbarBrand>
 
-          <NavbarToggler onClick={() => this.toggle} />
+          <NavbarToggler onClick={this.toggle} />
 
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="mr-auto" navbar>

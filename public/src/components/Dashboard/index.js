@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import PanelTrunk from '../PanelTrunk';
 import PanelSip from '../PanelSip';
@@ -21,6 +20,5 @@ export class Dashboard extends Component {
     );
   }
 }
-
 
 export default Dashboard;

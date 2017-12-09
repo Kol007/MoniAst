@@ -29,7 +29,10 @@ export default function(store) {
     return;
   }
 
-  const url = `${location.protocol}//${location.hostname}:${location.port}`;
+  // const wsPort = 3001; // TODO for dev
+  const wsPort = location.port;
+
+  const url = `${location.protocol}//${location.hostname}:${wsPort}`;
   const socket = io.connect(url, {
     query: {
       token: token.split(' ')[1]

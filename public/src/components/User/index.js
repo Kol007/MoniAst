@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { getUser, patchUser, postUser } from '../../AC/user';
+import { NavLink as RRNavLink } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
+
 import {
   Container,
   Row,
@@ -11,7 +14,9 @@ import {
   FormGroup,
   Label,
   Input,
-  Col
+  Col,
+  Breadcrumb,
+  BreadcrumbItem
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
@@ -110,23 +115,35 @@ class User extends Component {
 
     return (
       <Container>
+        <Breadcrumb style={{ margin: '20px' }}>
+          <BreadcrumbItem>
+            <RRNavLink to="/users/">Users</RRNavLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem active>
+            {isNew && 'Create new user'}
+            {!isNew && this.state.username}
+          </BreadcrumbItem>
+        </Breadcrumb>
+
         <div style={{ margin: '20px' }}>
           <Form onSubmit={this.handleSubmitForm}>
-            <FormGroup row>
-              <Label for="username" md={2}>
-                Username
-              </Label>
-              <Col md={10}>
-                <Input
-                  disabled={!isNew}
-                  type="text"
-                  name="username"
-                  id="username"
-                  value={this.state.username}
-                  onChange={(ev) => this.setState({ username: ev.target.value })}
-                />
-              </Col>
-            </FormGroup>
+            {isNew && (
+              <FormGroup row>
+                <Label for="username" md={2}>
+                  Username
+                </Label>
+                <Col md={10}>
+                  <Input
+                    disabled={!isNew}
+                    type="text"
+                    name="username"
+                    id="username"
+                    value={this.state.username}
+                    onChange={ev => this.setState({ username: ev.target.value })}
+                  />
+                </Col>
+              </FormGroup>
+            )}
 
             <FormGroup row>
               <Label for="password" md={2}>
@@ -139,9 +156,7 @@ class User extends Component {
                   id="password"
                   autoComplete="new-password"
                   value={this.state.password}
-                  onChange={(ev) =>
-                    this.setState({ password: ev.target.value })
-                  }
+                  onChange={ev => this.setState({ password: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -156,7 +171,7 @@ class User extends Component {
                   name="role"
                   id="role"
                   value={this.state.role}
-                  onChange={(ev) => this.setState({ role: ev.target.value })}
+                  onChange={ev => this.setState({ role: ev.target.value })}
                 >
                   <option value={'Admin'}>Admin</option>
                   <option value={'Client'}>Client</option>
@@ -174,7 +189,7 @@ class User extends Component {
                   name="firstName"
                   id="firstName"
                   value={this.state.firstName}
-                  onChange={(ev) => this.setState({ firstName: ev.target.value })}
+                  onChange={ev => this.setState({ firstName: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -189,7 +204,7 @@ class User extends Component {
                   name="lastName"
                   id="lastName"
                   value={this.state.lastName}
-                  onChange={(ev) => this.setState({ lastName: ev.target.value })}
+                  onChange={ev => this.setState({ lastName: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -204,7 +219,7 @@ class User extends Component {
                   name="sip"
                   id="sip"
                   value={this.state.sip}
-                  onChange={(ev) => this.setState({ sip: ev.target.value })}
+                  onChange={ev => this.setState({ sip: ev.target.value })}
                 />
               </Col>
             </FormGroup>
@@ -214,9 +229,7 @@ class User extends Component {
             {!isNew && (
               <Button disabled={!user}>
                 Change &nbsp;
-                {(!user || user.isLoading) && (
-                  <FontAwesome name="circle-o-notch" spin />
-                )}
+                {(!user || user.isLoading) && <FontAwesome name="circle-o-notch" spin />}
               </Button>
             )}
           </Form>

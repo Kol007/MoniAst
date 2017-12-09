@@ -61,7 +61,7 @@ PanelSip.propTypes = {
 
   isLoading: PropTypes.bool,
   isLoaded: PropTypes.bool,
-  selectSip: PropTypes.string,
+  selectSip: PropTypes.func,
 
   sipSpyStatus: PropTypes.object,
 };
