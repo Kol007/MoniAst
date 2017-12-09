@@ -21,11 +21,12 @@ function getSipInfo(item, callback) {
 
   AMI.action({ action: 'SIPshowpeer', Peer: item.objectname }, (err, res) => {
     let login = res.callerid.match(/"(\w+)"/);
+    login = login ? login[1] : '';
 
     callback(null, {
       id: item.objectname,
       sip: item.objectname,
-      login: login ? login[1] : '',
+      login: login,
       status,
       online
     });

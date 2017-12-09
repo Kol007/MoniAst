@@ -4,6 +4,8 @@
 
 Simple Asterisk operator monitoring
 
+![Demo](https://raw.githubusercontent.com/Kol007/barber/master/2017-12-09_13-41-50.png)
+
 - [Requirements](#requirements)
 - [Install](#install)
 - [Start application](#start-application)
@@ -49,7 +51,7 @@ Fill config.js with you Config data (AMI user, MongoDB url, fill secret)
 module.exports = {
   'secret': 'Super Secret String',
   'database': 'mongodb://localhost:27017/MoniAst',
-  'port': 3020 || 3001,
+  'port': process.env.PORT || 3001,
   
   AMI: {
     port: 5038,
