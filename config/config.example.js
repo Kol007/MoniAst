@@ -1,6 +1,3 @@
-const jwt = require('jsonwebtoken'),
-  User = require('../models/user');
-
 module.exports = {
   'port': process.env.PORT || 3001,
 
