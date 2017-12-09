@@ -1,19 +1,22 @@
-#MoniAst
+# MoniAst
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df6ee9e8cbf34393b728f3640449210b)](https://www.codacy.com/app/nromankevich/MoniAst?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kol007/MoniAst&amp;utm_campaign=Badge_Grade)
-
-[![Join the chat at https://gitter.im/MoniAst/Lobby](https://badges.gitter.im/MoniAst/Lobby.svg)](https://gitter.im/MoniAst/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df6ee9e8cbf34393b728f3640449210b)](https://www.codacy.com/app/nromankevich/MoniAst?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kol007/MoniAst&amp;utm_campaign=Badge_Grade) [![Join the chat at https://gitter.im/MoniAst/Lobby](https://badges.gitter.im/MoniAst/Lobby.svg)](https://gitter.im/MoniAst/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Simple Asterisk operator monitoring
 
-##Requirements
+- [Requirements](#requirements)
+- [Install](#install)
+- [Start application](#start-application)
+- [WebServer config example](#nginx-example)
+
+## Requirements
 
 Can run on virtually all platforms where Node.js can (Windows, Mac, Linux, etc.).
 
 - Node.js
 - MongoDB
 
-##Install
+## Install
 
 git clone https://github.com/Kol007/MoniAst.git
 
@@ -58,7 +61,7 @@ module.exports = {
 
 
 ```
-##Start application
+## Start application
 
 node index.js
 
