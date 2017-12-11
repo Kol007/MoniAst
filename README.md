@@ -4,7 +4,12 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/df6ee9e8cbf34393b728f3640449210b)](https://www.codacy.com/app/nromankevich/MoniAst?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kol007/MoniAst&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/MoniAst/Lobby](https://badges.gitter.im/MoniAst/Lobby.svg)](https://gitter.im/MoniAst/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Simple Asterisk operator monitoring
+Features:
+- See who is available or not
+- See agent status
+- Real-time monitoring state of agents and trunks
+- Listening to current calls (spy)
+- Prompter (whisper)
 
 ![Demo](https://raw.githubusercontent.com/Kol007/barber/master/2017-12-09_13-41-50.png)
 
@@ -73,6 +78,7 @@ or with pm2: pm2 start ecosystem.config.js --env production
 
 Application will start on 127.0.0.1:3001
 
+Default login/password admin/admin
 
 ### Nginx example
 Simple on 80 port:
