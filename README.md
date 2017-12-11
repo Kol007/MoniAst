@@ -5,9 +5,7 @@
 [![Join the chat at https://gitter.im/MoniAst/Lobby](https://badges.gitter.im/MoniAst/Lobby.svg)](https://gitter.im/MoniAst/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Features:
-- See who is available or not
-- See agent status
-- Real-time monitoring state of agents and trunks
+- Real-time monitoring status of agents and trunks
 - Listening to current calls (spy)
 - Prompter (whisper)
 
