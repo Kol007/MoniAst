@@ -26,7 +26,7 @@ function getSipInfo(item, callback) {
     callback(null, {
       id: item.objectname,
       sip: item.objectname,
-      login: login,
+      login,
       status,
       online
     });
