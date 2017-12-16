@@ -1,5 +1,5 @@
 import { Record, Map } from 'immutable';
-import { AUTH_USER, SUCCESS, START, FAIL, LOG_OUT } from '../constants';
+import { AUTH_USER, SUCCESS, START, FAIL, LOG_OUT } from '../helpers/constants';
 
 const localStorageToken = localStorage.getItem('token');
 const localStorageSip = localStorage.getItem('sip');

@@ -27,7 +27,6 @@
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
-    "pm2": "^2.7.2",
     "rx": "^4.1.0",
     "socket.io": "^2.0.4",
     "socketio-jwt": "^4.5.0"

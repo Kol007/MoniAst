@@ -1,5 +1,6 @@
-import { START, SUCCESS, FAIL, LOG_OUT } from '../constants';
-import { paramsForAPI, UserException } from '../common';
+import { START, SUCCESS, FAIL, LOG_OUT } from '../helpers/constants';
+import { paramsForAPI, UserException } from '../helpers/common';
+import axios from 'axios';
 
 export default store => next => action => {
   const { callAPI, methodAPI, needAuth, payload, params, type, ...rest } = action;
@@ -17,38 +18,40 @@ export default store => next => action => {
   if (methodAPI === 'POST' || methodAPI === 'PUT' || methodAPI === 'PATCH') {
     options.headers = {
       Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+      'Content-Type': 'application/json;charset=utf-8', //axios
     };
 
     options.body = params ? paramsForAPI(params) : paramsForAPI(payload);
+    options.data = params ? (params) : (payload);
   }
 
   if (needAuth) {
-    const token = store.getState().auth.get('token');
-    options.headers = Object.assign({}, options.headers, {
-      Authorization: `${token}`
-    });
+    axios.defaults.headers.common['Authorization'] = store.getState().auth.get('token');
   }
 
-  fetch(callAPI, options)
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
 
-      throw new UserException(res.statusText, res.status);
-    })
-    .then(response => next({ ...rest, type: type + SUCCESS, response, payload }))
+  options.url = callAPI;
+  // FIXME for DEV
+  options.url = process.env.NODE_ENV !== 'production' ? `${location.protocol}//${location.hostname}:3002${options.url}`: options.url;
+
+  axios(options)
+    .then(
+      response => next({ ...rest, type: type + SUCCESS, response: response.data, payload }),
+    )
     .catch(error => {
-      if (error.status === 403 || error.status === 401) {
+      console.log('---', error, error.response);
+      if (error.response.status === 403 || error.response.status === 401) {
         next({ ...rest, payload, type: LOG_OUT });
       }
 
       return next({
         ...rest,
         type: type + FAIL,
-        errorMessage: error.message,
-        errorCode: error.status
+        response: {
+          errorMessage: error.response.data.errorMessage,
+          field: error.response.data.field,
+          errorCode: error.response.status
+        }
       });
     });
 };

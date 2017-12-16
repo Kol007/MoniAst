@@ -1,8 +1,8 @@
 // Importing Node packages required for schema
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
-const ROLE_CLIENT = require('../constants').ROLE_CLIENT;
-const ROLE_ADMIN = require('../constants').ROLE_ADMIN;
+const ROLE_CLIENT = require('../helpers/constants').ROLE_CLIENT;
+const ROLE_ADMIN = require('../helpers/constants').ROLE_ADMIN;
 
 const Schema = mongoose.Schema;
 

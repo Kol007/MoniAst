@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { secToHuman } from '../../common';
+import { secToHuman } from 'helpers/common';
 
 import './sipPeerChannel.css';
 
@@ -14,7 +14,7 @@ import {
   CHANNEL_STATUS_OUT_RINGING,
   CHANNEL_STATUS_IN_RINGING,
   CHANNEL_STATUS_BUSY
-} from '../../constants';
+} from 'helpers/constants';
 
 import FontAwesome from 'react-fontawesome';
 

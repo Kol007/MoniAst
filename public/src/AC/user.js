@@ -3,13 +3,13 @@ import {
   POST_USER,
   LOAD_USERS,
   PATCH_USER,
-  DELETE_USER
-} from '../constants';
+  DELETE_USER,
+  REDIRECT_COMPLETE
+} from '../helpers/constants';
 
 export function getUsers() {
   return {
     type: LOAD_USERS,
-    // payload: { username, password, path },
     callAPI: `${API_URL}/users`,
     needAuth: true
   };
@@ -54,4 +54,10 @@ export function deleteUser(username) {
     needAuth: true,
     methodAPI: 'DELETE',
   };
+}
+
+export function redirectComplete() {
+  return {
+    type: REDIRECT_COMPLETE
+  }
 }

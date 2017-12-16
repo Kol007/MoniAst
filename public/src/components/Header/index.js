@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { NavLink as RRNavLink } from 'react-router-dom';
+import { NavLink as RRNavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import {
@@ -12,9 +12,9 @@ import {
   NavLink
 } from 'reactstrap';
 
-import { logOutUser } from '../../AC/auth';
+import { logOutUser } from 'AC/auth';
 
-class Header extends PureComponent {
+class Header extends PureComponent{
   state = {
     isOpen: false
   };
@@ -31,7 +31,7 @@ class Header extends PureComponent {
 
   render() {
     return (
-      <header>
+      <header >
         <Navbar color="primary" dark expand="md">
           <NavbarBrand tag={RRNavLink} to="/dashboard">
             MoniAst
@@ -42,7 +42,7 @@ class Header extends PureComponent {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/dashboard">
+                <NavLink tag={RRNavLink} to="/dashboard" >
                   Dashboard
                 </NavLink>
               </NavItem>
@@ -52,7 +52,6 @@ class Header extends PureComponent {
                 </NavLink>
               </NavItem>
             </Nav>
-
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <NavLink onClick={this.handleLogOut} href="#">
@@ -71,4 +70,4 @@ function mapStateToProps() {
   return {};
 }
 
-export default connect(() => ({}), { logOutUser })(Header);
+export default withRouter(connect(() => ({}), { logOutUser })(Header));

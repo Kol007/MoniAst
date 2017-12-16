@@ -1,40 +1,40 @@
-const AMI = require('../ami');
+const AMI = require('../helpers/ami');
 const async = require('async');
-const getList = require('../helpers').getList;
+const getList = require('../helpers/helpers').getList;
 
-const SIP_STATUS = require('../constants').SIP_STATUS;
-const SIP_STATUS_IDLE = require('../constants').SIP_STATUS_IDLE;
-const SIP_STATUS_IN_USE = require('../constants').SIP_STATUS_IN_USE;
-const SIP_STATUS_BUSY = require('../constants').SIP_STATUS_BUSY;
-const SIP_STATUS_UNAVAILABLE = require('../constants').SIP_STATUS_UNAVAILABLE;
-const SIP_STATUS_RINGING = require('../constants').SIP_STATUS_RINGING;
-const SIP_STATUS_ON_HOLDSIP_STATUS_CODE_IDLE = require('../constants').SIP_STATUS_ON_HOLDSIP_STATUS_CODE_IDLE;
-const SIP_STATUS_CODE_IN_USE = require('../constants').SIP_STATUS_CODE_IN_USE;
-const SIP_STATUS_CODE_BUSY = require('../constants').SIP_STATUS_CODE_BUSY;
-const SIP_STATUS_CODE_UNAVAILABLE = require('../constants').SIP_STATUS_CODE_UNAVAILABLE;
-const SIP_STATUS_CODE_RINGING = require('../constants').SIP_STATUS_CODE_RINGING;
-const SIP_STATUS_CODE_ON_HOLD = require('../constants').SIP_STATUS_CODE_ON_HOLD;
+const SIP_STATUS = require('../helpers/constants').SIP_STATUS;
+const SIP_STATUS_IDLE = require('../helpers/constants').SIP_STATUS_IDLE;
+const SIP_STATUS_IN_USE = require('../helpers/constants').SIP_STATUS_IN_USE;
+const SIP_STATUS_BUSY = require('../helpers/constants').SIP_STATUS_BUSY;
+const SIP_STATUS_UNAVAILABLE = require('../helpers/constants').SIP_STATUS_UNAVAILABLE;
+const SIP_STATUS_RINGING = require('../helpers/constants').SIP_STATUS_RINGING;
+const SIP_STATUS_ON_HOLDSIP_STATUS_CODE_IDLE = require('../helpers/constants').SIP_STATUS_ON_HOLDSIP_STATUS_CODE_IDLE;
+const SIP_STATUS_CODE_IN_USE = require('../helpers/constants').SIP_STATUS_CODE_IN_USE;
+const SIP_STATUS_CODE_BUSY = require('../helpers/constants').SIP_STATUS_CODE_BUSY;
+const SIP_STATUS_CODE_UNAVAILABLE = require('../helpers/constants').SIP_STATUS_CODE_UNAVAILABLE;
+const SIP_STATUS_CODE_RINGING = require('../helpers/constants').SIP_STATUS_CODE_RINGING;
+const SIP_STATUS_CODE_ON_HOLD = require('../helpers/constants').SIP_STATUS_CODE_ON_HOLD;
 
 
-const CHANNEL_STATUS_DOWN_AVAILABLE = require('../constants').CHANNEL_STATUS_DOWN_AVAILABLE;
-const CHANNEL_STATUS_DOWN_RESERVED = require('../constants').CHANNEL_STATUS_DOWN_RESERVED;
-const CHANNEL_STATUS_OFF_HOOK = require('../constants').CHANNEL_STATUS_OFF_HOOK;
-const CHANNEL_STATUS_DIGITS_DIALED = require('../constants').CHANNEL_STATUS_DIGITS_DIALED;
-const CHANNEL_STATUS_OUT_RINGING = require('../constants').CHANNEL_STATUS_OUT_RINGING;
-const CHANNEL_STATUS_IN_RINGING = require('../constants').CHANNEL_STATUS_IN_RINGING;
-const CHANNEL_STATUS_UP = require('../constants').CHANNEL_STATUS_UP;
-const CHANNEL_STATUS_BUSY = require('../constants').CHANNEL_STATUS_BUSY;
+const CHANNEL_STATUS_DOWN_AVAILABLE = require('../helpers/constants').CHANNEL_STATUS_DOWN_AVAILABLE;
+const CHANNEL_STATUS_DOWN_RESERVED = require('../helpers/constants').CHANNEL_STATUS_DOWN_RESERVED;
+const CHANNEL_STATUS_OFF_HOOK = require('../helpers/constants').CHANNEL_STATUS_OFF_HOOK;
+const CHANNEL_STATUS_DIGITS_DIALED = require('../helpers/constants').CHANNEL_STATUS_DIGITS_DIALED;
+const CHANNEL_STATUS_OUT_RINGING = require('../helpers/constants').CHANNEL_STATUS_OUT_RINGING;
+const CHANNEL_STATUS_IN_RINGING = require('../helpers/constants').CHANNEL_STATUS_IN_RINGING;
+const CHANNEL_STATUS_UP = require('../helpers/constants').CHANNEL_STATUS_UP;
+const CHANNEL_STATUS_BUSY = require('../helpers/constants').CHANNEL_STATUS_BUSY;
 
-const CHANNEL_STATUS_CODE_DOWN_AVAILABLE = require('../constants').CHANNEL_STATUS_CODE_DOWN_AVAILABLE;
-const CHANNEL_STATUS_CODE_DOWN_RESERVED = require('../constants').CHANNEL_STATUS_CODE_DOWN_RESERVED;
-const CHANNEL_STATUS_CODE_OFF_HOOK = require('../constants').CHANNEL_STATUS_CODE_OFF_HOOK;
-const CHANNEL_STATUS_CODE_DIGITS_DIALED = require('../constants').CHANNEL_STATUS_CODE_DIGITS_DIALED;
-const CHANNEL_STATUS_CODE_OUT_RINGING = require('../constants').CHANNEL_STATUS_CODE_OUT_RINGING;
-const CHANNEL_STATUS_CODE_IN_RINGING = require('../constants').CHANNEL_STATUS_CODE_IN_RINGING;
-const CHANNEL_STATUS_CODE_UP = require('../constants').CHANNEL_STATUS_CODE_UP;
-const CHANNEL_STATUS_CODE_BUSY = require('../constants').CHANNEL_STATUS_CODE_BUSY;
+const CHANNEL_STATUS_CODE_DOWN_AVAILABLE = require('../helpers/constants').CHANNEL_STATUS_CODE_DOWN_AVAILABLE;
+const CHANNEL_STATUS_CODE_DOWN_RESERVED = require('../helpers/constants').CHANNEL_STATUS_CODE_DOWN_RESERVED;
+const CHANNEL_STATUS_CODE_OFF_HOOK = require('../helpers/constants').CHANNEL_STATUS_CODE_OFF_HOOK;
+const CHANNEL_STATUS_CODE_DIGITS_DIALED = require('../helpers/constants').CHANNEL_STATUS_CODE_DIGITS_DIALED;
+const CHANNEL_STATUS_CODE_OUT_RINGING = require('../helpers/constants').CHANNEL_STATUS_CODE_OUT_RINGING;
+const CHANNEL_STATUS_CODE_IN_RINGING = require('../helpers/constants').CHANNEL_STATUS_CODE_IN_RINGING;
+const CHANNEL_STATUS_CODE_UP = require('../helpers/constants').CHANNEL_STATUS_CODE_UP;
+const CHANNEL_STATUS_CODE_BUSY = require('../helpers/constants').CHANNEL_STATUS_CODE_BUSY;
 
-const CHANNEL_STATUS = require('../constants').CHANNEL_STATUS;
+const CHANNEL_STATUS = require('../helpers/constants').CHANNEL_STATUS;
 
 const socketioJwt = require('socketio-jwt'); // аутентификация по JWT для socket.io
 const config = require('../config/config');

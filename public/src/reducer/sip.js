@@ -6,9 +6,9 @@ import {
   FAIL,
   SIP_SPY,
   SIP_SPY_WHISPER
-} from '../constants';
+} from '../helpers/constants';
 
-import { SIP_STATUS_UNAVAILABLE, SIP_SELECT, SIP_FILTER, SIP_FILTER_ALL } from '../constants';
+import { SIP_STATUS_UNAVAILABLE, SIP_SELECT, SIP_FILTER, SIP_FILTER_ALL } from '../helpers/constants';
 import { Record, Map, OrderedMap } from 'immutable';
 import { arrayToMap } from '../store/helpers';
 

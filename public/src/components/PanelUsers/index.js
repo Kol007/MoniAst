@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getUsers, deleteUser } from '../../AC/user';
+import { getUsers, deleteUser } from 'AC/user';
 import {
   Container,
   Row,
@@ -63,13 +63,13 @@ class PanelUsers extends Component {
       <Container>
         <Row>
           <Card body={false} style={{ margin: '20px auto', padding: '20px', width: '100%' }}>
-            <Nav>
-              <NavItem>
-                <NavLink tag={RRNavLink} to="/users/register" style={{ margin: '20px' }}>
-                  Add User
-                </NavLink>
-              </NavItem>
-            </Nav>
+
+            <NavLink tag={RRNavLink} to="/users/register">
+              <Button outline color="primary">
+                Add User
+              </Button>
+            </NavLink>
+
 
             <Table bordered hover striped>
               <thead>

@@ -7,7 +7,7 @@ import {
   LOAD_ALL_CHANNELS,
   NEW_CHANNEL,
   REMOVE_CHANNEL
-} from '../constants';
+} from '../helpers/constants';
 
 import io from 'socket.io-client';
 
@@ -29,8 +29,9 @@ export default function(store) {
     return;
   }
 
-  // const wsPort = 3001; // TODO for dev
-  const wsPort = location.port;
+  const wsPort = process.env.NODE_ENV !== 'production' ? 3002 : location.port;
+  // const wsPort = 3002; // TODO for dev
+  // const wsPort = location.port;
 
   const url = `${location.protocol}//${location.hostname}:${wsPort}`;
   const socket = io.connect(url, {

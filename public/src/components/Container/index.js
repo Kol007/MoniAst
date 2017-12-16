@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import store from '../../store';
+import store from 'store';
 
-import '../App/css/bootstrap/bootstrap.min.css';
-import '../App/css/main.css';
+import 'Component/App/css/bootstrap/bootstrap.min.css';
+import 'Component/App/css/main.css';
 
 class Container extends Component {
   render() {

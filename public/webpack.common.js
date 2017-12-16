@@ -5,6 +5,14 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
+  resolve: {
+    modules: ['src', 'node_modules'],
+    alias: {
+      AC: path.resolve(__dirname, 'src/AC/'),
+      Reducer: path.resolve(__dirname, 'src/reducer/'),
+      Component: path.resolve(__dirname, 'src/components/'),
+    }
+  },
   entry: ['./src/app.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -27,6 +35,4 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-  ]
 };

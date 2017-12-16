@@ -13,9 +13,9 @@ module.exports = merge(common, {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    // new UglifyJSPlugin({
-    //   sourceMap: true
-    // }),
+    new UglifyJSPlugin({
+      sourceMap: true
+    }),
   ]
 });
 

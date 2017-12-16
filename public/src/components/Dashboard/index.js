@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import PanelTrunk from '../PanelTrunk';
-import PanelSip from '../PanelSip';
+import PanelTrunk from 'Component/PanelTrunk';
+import PanelSip from 'Component/PanelSip';
 
 export class Dashboard extends Component {
   render () {

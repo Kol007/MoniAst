@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { getUser, patchUser, postUser } from '../../AC/user';
+import { getUser, patchUser, postUser, redirectComplete } from 'AC/user';
 import { NavLink as RRNavLink } from 'react-router-dom';
+import { Redirect } from 'react-router'
 
 import PropTypes from 'prop-types';
 
@@ -12,6 +13,7 @@ import {
   Button,
   Form,
   FormGroup,
+  FormFeedback,
   Label,
   Input,
   Col,
@@ -111,7 +113,13 @@ class User extends Component {
   };
 
   render() {
-    const { user, isNew } = this.props;
+    const { user, isNew, isError, errorMessage, errorField, shouldRedirect, redirectComplete } = this.props;
+    const invalidFields = { [errorField]: { valid: false } };
+
+    if (shouldRedirect) {
+      redirectComplete();
+      return <Redirect to={shouldRedirect}/>
+    }
 
     return (
       <Container>
@@ -139,8 +147,12 @@ class User extends Component {
                     name="username"
                     id="username"
                     value={this.state.username}
+                    {...invalidFields['username']}
+                    // required={true}
                     onChange={ev => this.setState({ username: ev.target.value })}
                   />
+                  {isError &&
+                  errorField === 'username' && <FormFeedback>{errorMessage}</FormFeedback>}
                 </Col>
               </FormGroup>
             )}
@@ -156,8 +168,12 @@ class User extends Component {
                   id="password"
                   autoComplete="new-password"
                   value={this.state.password}
+                  {...invalidFields['password']}
+                  // required={true}
                   onChange={ev => this.setState({ password: ev.target.value })}
                 />
+                {isError &&
+                errorField === 'password' && <FormFeedback>{errorMessage}</FormFeedback>}
               </Col>
             </FormGroup>
 
@@ -171,11 +187,13 @@ class User extends Component {
                   name="role"
                   id="role"
                   value={this.state.role}
+                  {...invalidFields['role']}
                   onChange={ev => this.setState({ role: ev.target.value })}
                 >
                   <option value={'Admin'}>Admin</option>
                   <option value={'Client'}>Client</option>
                 </Input>
+                {isError && errorField === 'role' && <FormFeedback>{errorMessage}</FormFeedback>}{' '}
               </Col>
             </FormGroup>
 
@@ -189,8 +207,11 @@ class User extends Component {
                   name="firstName"
                   id="firstName"
                   value={this.state.firstName}
+                  {...invalidFields['firstName']}
+                  // required={true}
                   onChange={ev => this.setState({ firstName: ev.target.value })}
                 />
+                {isError && errorField === 'firstName' && <FormFeedback>{errorMessage}</FormFeedback>}{' '}
               </Col>
             </FormGroup>
 
@@ -204,8 +225,11 @@ class User extends Component {
                   name="lastName"
                   id="lastName"
                   value={this.state.lastName}
+                  {...invalidFields['lastName']}
+                  // required={true}
                   onChange={ev => this.setState({ lastName: ev.target.value })}
                 />
+                {isError && errorField === 'lastName' && <FormFeedback>{errorMessage}</FormFeedback>}{' '}
               </Col>
             </FormGroup>
 
@@ -219,8 +243,11 @@ class User extends Component {
                   name="sip"
                   id="sip"
                   value={this.state.sip}
+                  {...invalidFields['sip']}
+                  // required={true}
                   onChange={ev => this.setState({ sip: ev.target.value })}
                 />
+                {isError && errorField === 'sip' && <FormFeedback>{errorMessage}</FormFeedback>}{' '}
               </Col>
             </FormGroup>
 
@@ -236,6 +263,7 @@ class User extends Component {
         </div>
       </Container>
     );
+
   }
 }
 
@@ -246,14 +274,17 @@ User.propTypes = {
 function mapStateToProps(state, { match }) {
   const username = match.params.id;
 
-  if (username === 'register') {
-    return { isNew: true };
-  }
+  const isNew = username === 'register';
+  const user = !isNew ? state.user.getIn(['entities', username]) : null;
 
   return {
-    user: state.user.getIn(['entities', username]),
-    isNew: false
+    user,
+    isNew,
+    isError: state.user.get('isError'),
+    errorMessage: state.user.get('errorMessage'),
+    errorField: state.user.get('errorField'),
+    shouldRedirect: state.user.get('shouldRedirect'),
   };
 }
 
-export default connect(mapStateToProps, { getUser, patchUser, postUser })(User);
+export default connect(mapStateToProps, { getUser, patchUser, postUser, redirectComplete })(User);

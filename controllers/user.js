@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const setUserInfo = require('../helpers').setUserInfo;
+const setUserInfo = require('../helpers/helpers').setUserInfo;
 
 //= =======================================
 // User Routes
@@ -92,21 +92,27 @@ exports.postUser = function(req, res, next) {
 
   // Return error if no username provided
   if (!username) {
-    return res.status(422).send({ error: 'You must enter an username address.' });
-  }
-
-  // Return error if full name not provided
-  if (!firstName || !lastName) {
-    return res.status(422).send({ error: 'You must enter your full name.' });
+    return res.status(422).send({ errorMessage: 'You must enter an username address.', field: 'username' });
   }
 
   // Return error if no password provided
   if (!password) {
-    return res.status(422).send({ error: 'You must enter a password.' });
+    return res.status(422).send({ errorMessage: 'You must enter a password.', field: 'password' });
   }
+
+  // Return error if firstName not provided
+  if (!firstName) {
+    return res.status(422).send({ errorMessage: 'You must enter your full name.', field: 'firstName' });
+  }
+
+  // Return error if lastName not provided
+  if (!lastName) {
+    return res.status(422).send({ errorMessage: 'You must enter your full name.', field: 'lastName' });
+  }
+
   // Return error if no SIP provided
   if (!sip) {
-    return res.status(422).send({ error: 'You must enter a SIP number.' });
+    return res.status(422).send({ errorMessage: 'You must enter a SIP number.', field: 'sip' });
   }
 
   User.findOne({ username }, (err, existingUser) => {
@@ -116,7 +122,7 @@ exports.postUser = function(req, res, next) {
 
     // If user is not unique, return error
     if (existingUser) {
-      return res.status(422).send({ error: 'That username address is already in use.' });
+      return res.status(422).send({ errorMessage: 'That username is already in use.', field: 'username' });
     }
 
     // If username is unique and password was provided, create account

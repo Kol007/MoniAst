@@ -1,6 +1,6 @@
-const AMI = require('../ami');
-const getList = require('../helpers').getList;
-const convertDurationToSeconds = require('../helpers').convertDurationToSeconds;
+const AMI = require('../helpers/ami');
+const getList = require('../helpers/helpers').getList;
+const convertDurationToSeconds = require('../helpers/helpers').convertDurationToSeconds;
 
 // 0 Channel is down and available
 // 1 Channel is down, but reserved

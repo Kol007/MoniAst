@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { Button, ButtonGroup } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
-import { filterSip, spySip } from '../../AC/sip';
+import { filterSip, spySip } from 'AC/sip';
 
-import { SIP_FILTER_ALL, SIP_FILTER_ONLINE } from '../../constants';
-import { getFilteredSipsState } from '../../store/selectors';
+import { SIP_FILTER_ALL, SIP_FILTER_ONLINE  } from 'helpers/constants';
+import { getFilteredSipsState } from 'store/selectors';
 
 class SipToolbar extends Component {
   handleToggleOnline = ev => {

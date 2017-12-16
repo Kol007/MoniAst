@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 // import moment from 'moment';
 
-import { SIP_FILTER_ONLINE, SIP_FILTER_ALL } from '../constants';
+import { SIP_FILTER_ONLINE, SIP_FILTER_ALL } from '../helpers/constants';
 
 const filters = {
   [SIP_FILTER_ONLINE]: el => el.online,

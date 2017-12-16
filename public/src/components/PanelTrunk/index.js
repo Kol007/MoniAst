@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
-import { getFilteredTrunksState } from '../../store/selectors';
+import { getFilteredTrunksState } from 'store/selectors';
 
-import { loadSipPeers, selectSip, filterSip, spySip } from '../../AC/sip';
-import { loadChannels } from '../../AC/channels';
+import { loadSipPeers, spySip } from 'AC/sip';
+import { loadChannels } from 'AC/channels';
 
-import { Card, CardText, CardBody, Button, Row, Col } from 'reactstrap';
-import SipPeer from '../SipPeer';
-import SipToolbar from '../SipToolbar';
-
-import { SIP_FILTER_ONLINE, SIP_FILTER_ALL } from '../../constants';
+import { Card, CardBody, Row, Col } from 'reactstrap';
+import SipPeer from 'Component/SipPeer';
 
 class PanelTrunk extends Component {
   componentDidMount() {

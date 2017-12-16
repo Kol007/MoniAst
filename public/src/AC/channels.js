@@ -8,7 +8,7 @@ import {
   FAIL,
   NEW_CHANNEL,
   REMOVE_CHANNEL
-} from '../constants';
+} from '../helpers/constants';
 
 export function loadChannels() {
   return {

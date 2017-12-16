@@ -1,9 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { secToHuman } from '../../common';
-
-import { selectSip } from '../../AC/sip';
 import {
   Card,
   Button,
@@ -14,7 +11,7 @@ import {
   Col
 } from 'reactstrap';
 
-import SipPeerChannel from '../SipPeerChannel';
+import SipPeerChannel from 'Component/SipPeerChannel';
 
 import {
   SIP_STATUS_UNAVAILABLE,
@@ -32,7 +29,7 @@ import {
   CHANNEL_STATUS_OUT_RINGING,
   CHANNEL_STATUS_IN_RINGING,
   CHANNEL_STATUS_BUSY
-} from '../../constants';
+} from 'helpers/constants';
 
 const statusStyle = {
   SIP_STATUS_IDLE: 'success',

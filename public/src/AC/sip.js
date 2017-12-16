@@ -10,7 +10,7 @@ import {
   SIP_SPY,
   SIP_SPY_WHISPER,
   BRIDGE_STOP
-} from '../constants';
+} from '../helpers/constants';
 
 export function loadSipPeers() {
   return {
