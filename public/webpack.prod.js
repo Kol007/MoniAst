@@ -14,7 +14,7 @@ module.exports = merge(common, {
       }
     }),
     new UglifyJSPlugin({
-      sourceMap: true
+      // sourceMap: true
     }),
   ]
 });

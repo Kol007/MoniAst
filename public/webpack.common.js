@@ -4,7 +4,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',
   resolve: {
     modules: ['src', 'node_modules'],
     alias: {
