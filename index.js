@@ -11,19 +11,18 @@ const express = require('express'),
 const path = require('path');
 const debug = require('debug')('mon-gen:server');
 
-
 // Database Setup
 if (process.env.NODE_ENV !== config.testEnv) {
   mongoose.connect(config.database, {
-    useMongoClient: true,
+    useMongoClient: true
   });
-} else{
+} else {
   mongoose.connect(config.testDb, {
-    useMongoClient: true,
+    useMongoClient: true
   });
 }
 
-mongoose.connection.on("connected", function(ref) {
+mongoose.connection.on('connected', function(ref) {
   helpers.isAdminExists();
 });
 
@@ -34,18 +33,20 @@ if (process.env.NODE_ENV !== config.testEnv) {
   const host = config.port || '0.0.0.0';
 
   server = app.listen(port, host);
-} else{
+} else {
   server = app.listen(config.testPort);
 }
 
 // If the connection throws an error
-mongoose.connection.on("error", function(err) {
+mongoose.connection.on('error', function(err) {
   console.error('Failed to connect to DB on startup ');
   process.exit(0);
 });
 
 server.on('listening', function() {
-  console.log(`Express server started on port ${server.address().port} at ${server.address().address}`);
+  console.log(
+    `Express server started on port ${server.address().port} at ${server.address().address}`
+  );
 });
 
 // Setting up basic middleware for all Express requests
@@ -53,13 +54,15 @@ app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
 app.use(bodyParser.json()); // Send JSON responses
 app.use(logger('dev')); // Log requests to API using morgan
 
-
 // Enable CORS from client-side
 app.use((req, res, next) => {
   // res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials'
+  );
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
@@ -71,7 +74,6 @@ app.use(express.static(`${__dirname}/public`));
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
-
 
 const socketIO = require('socket.io');
 let io = socketIO(server);

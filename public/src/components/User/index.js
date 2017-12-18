@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getUser, patchUser, postUser, redirectComplete } from 'AC/user';
 import { NavLink as RRNavLink } from 'react-router-dom';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
 
 import PropTypes from 'prop-types';
 
@@ -118,7 +118,7 @@ class User extends Component {
 
     if (shouldRedirect) {
       redirectComplete();
-      return <Redirect to={shouldRedirect}/>
+      return <Redirect to={shouldRedirect}/>;
     }
 
     return (

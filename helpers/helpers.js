@@ -4,17 +4,6 @@ const User = require('../models/user');
 const ROLE_CLIENT = require('./constants').ROLE_CLIENT;
 const ROLE_ADMIN = require('./constants').ROLE_ADMIN;
 
-exports.isAdminExists = function isAdminExists() {
-  User.find({}, (err, users) => {
-    if (err) {
-      return console.log('Error with DB!');
-    }
-
-    if (users.length === 0) {
-      createDefaultAdmin();
-    }
-  });
-};
 
 function createDefaultAdmin() {
   const username = 'admin';
@@ -41,6 +30,18 @@ function createDefaultAdmin() {
   });
 
 }
+
+exports.isAdminExists = function isAdminExists() {
+  User.find({}, (err, users) => {
+    if (err) {
+      return console.log('Error with DB!');
+    }
+
+    if (users.length === 0) {
+      createDefaultAdmin();
+    }
+  });
+};
 
 exports.getList = function getList(ami, action, lastEvent, callback) {
   let stream = new Rx.Subject();

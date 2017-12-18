@@ -59,5 +59,5 @@ export function deleteUser(username) {
 export function redirectComplete() {
   return {
     type: REDIRECT_COMPLETE
-  }
+  };
 }

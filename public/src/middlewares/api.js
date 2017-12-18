@@ -39,7 +39,6 @@ export default store => next => action => {
       response => next({ ...rest, type: type + SUCCESS, response: response.data, payload }),
     )
     .catch(error => {
-      console.log('---', error, error.response);
       if (error.response.status === 403 || error.response.status === 401) {
         next({ ...rest, payload, type: LOG_OUT });
       }
