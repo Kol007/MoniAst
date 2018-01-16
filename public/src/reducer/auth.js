@@ -22,14 +22,8 @@ export default function(state = defaultState, action) {
 
   switch (type) {
     case AUTH_USER + SUCCESS:
-      // const isNotExpired   = (moment(response.expires, "YYYY-MM-DD HH:mm:ssZZ").unix()) > moment().unix();
-
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('sip', response.user.sip);
-
       return (
         state
-          // .set('expires', moment(response.expires, "YYYY-MM-DD HH:mm:ssZZ").unix())
           .set('token', response.token)
           .set('sip', response.user.sip)
           .set('isLoggedIn', true)

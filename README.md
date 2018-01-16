@@ -1,29 +1,30 @@
 # MoniAst
 
 [![GitHub release](https://img.shields.io/github/release/Kol007/MoniAst.svg)](https://github.com/Kol007/MoniAst/releases)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df6ee9e8cbf34393b728f3640449210b)](https://www.codacy.com/app/nromankevich/MoniAst?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kol007/MoniAst&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df6ee9e8cbf34393b728f3640449210b)](https://www.codacy.com/app/nromankevich/MoniAst?utm_source=github.com&utm_medium=referral&utm_content=Kol007/MoniAst&utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/MoniAst/Lobby](https://badges.gitter.im/MoniAst/Lobby.svg)](https://gitter.im/MoniAst/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 MoniAst - real-time monitoring for you agents.
 
 Features:
-- Real-time monitoring status of agents and trunks
-- Listening to current calls (spy)
-- Prompter (whisper)
+
+* Real-time monitoring status of agents and trunks
+* Listening to current calls (spy)
+* Prompter (whisper)
 
 ![Demo](https://raw.githubusercontent.com/Kol007/barber/master/2017-12-09_13-41-50.png)
 
-- [Requirements](#requirements)
-- [Install](#install)
-- [Start application](#start-application)
-- [WebServer config example](#nginx-example)
+* [Requirements](#requirements)
+* [Install](#install)
+* [Start application](#start-application)
+* [WebServer config example](#nginx-example)
 
 ## Requirements
 
 Can run on virtually all platforms where Node.js can (Windows, Mac, Linux, etc.).
 
-- Node.js
-- MongoDB
+* Node.js
+* MongoDB
 
 ## Install
 
@@ -35,7 +36,8 @@ npm install
 
 rename config.example.js -> config.js
 
-Create manager in asterisk for MoniAst or use exist 
+Create manager in asterisk for MoniAst or use exist
+
 ```
 #/etc/asterisk/manager.conf
 [general]
@@ -50,16 +52,16 @@ deny=0.0.0.0/0.0.0.0
 permit=127.0.0.1/255.255.255.0
 read = system,call,log,verbose,command,agent,user,config,dtmf,reporting,cdr,dialplan,originate,message
 write = system,call,log,verbose,command,agent,user,config,dtmf,reporting,cdr,dialplan,originate,message
-
 ```
 
 Fill config.js with you Config data (AMI user, MongoDB url, fill secret)
+
 ```js
 module.exports = {
-  'secret': 'Super Secret String',
-  'database': 'mongodb://localhost:27017/MoniAst',
-  'port': process.env.PORT || 3001,
-  
+  secret: 'Super Secret String',
+  database: 'mongodb://localhost:27017/MoniAst',
+  port: process.env.PORT || 3001,
+
   AMI: {
     port: 5038,
     ip: '127.0.0.1',
@@ -67,9 +69,8 @@ module.exports = {
     pass: 'superPassword'
   }
 };
-
-
 ```
+
 ## Start application
 
 node index.js
@@ -81,27 +82,31 @@ Application will start on 127.0.0.1:3001
 Default login/password admin/admin
 
 ### Nginx example
+
 Simple on 80 port:
- ```nginx
- server {
-     listen 80;
-     server_name moniast.domain.com;
- 
-     access_log  /var/log/nginx/moniast.access.log;
-     error_log  /var/log/nginx/moniast.error.log;
-      
-     location / {
-        proxy_pass http://127.0.0.1:3001/;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   Host $http_host;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-     }
- }
- ```
- or secure on 443 port:
- [Gist for gzip and ssl](https://gist.github.com/Kol007/8dfac7b2a06a0ffa637954cc1ad563c5)
+
+```nginx
+server {
+    listen 80;
+    server_name moniast.domain.com;
+
+    access_log  /var/log/nginx/moniast.access.log;
+    error_log  /var/log/nginx/moniast.error.log;
+
+    location / {
+       proxy_pass http://127.0.0.1:3001/;
+       proxy_set_header   X-Real-IP $remote_addr;
+       proxy_set_header   Host $http_host;
+       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection $connection_upgrade;
+    }
+}
+```
+
+or secure on 443 port:
+[Gist for gzip and ssl](https://gist.github.com/Kol007/8dfac7b2a06a0ffa637954cc1ad563c5)
+
 ```nginx
 server {
     listen 80;
@@ -135,8 +140,3 @@ server {
     }
 }
 ```
-
-
-
-
-

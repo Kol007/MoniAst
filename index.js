@@ -64,6 +64,7 @@ app.use((req, res, next) => {
     'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials'
   );
   res.header('Access-Control-Allow-Credentials', 'true');
+
   next();
 });
 // Import routes to be served
