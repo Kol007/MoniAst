@@ -1,5 +1,6 @@
 # MoniAst
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![GitHub release](https://img.shields.io/github/release/Kol007/MoniAst.svg)](https://github.com/Kol007/MoniAst/releases)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/df6ee9e8cbf34393b728f3640449210b)](https://www.codacy.com/app/nromankevich/MoniAst?utm_source=github.com&utm_medium=referral&utm_content=Kol007/MoniAst&utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/MoniAst/Lobby](https://badges.gitter.im/MoniAst/Lobby.svg)](https://gitter.im/MoniAst/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
