@@ -94,6 +94,10 @@ server {
     access_log  /var/log/nginx/moniast.access.log;
     error_log  /var/log/nginx/moniast.error.log;
 
+    location ~ \.(png|html|js) {
+        root /*Path to application*/MoniAst/public;
+    }
+
     location / {
        proxy_pass http://127.0.0.1:3001/;
        proxy_set_header   X-Real-IP $remote_addr;
@@ -131,6 +135,10 @@ server {
     ssl_certificate /etc/ssl/nginx.bundle;
     ssl_certificate_key /etc/ssl/ssl.key;
 
+    location ~ \.(png|html|js) {
+        root /*Path to application*/MoniAst/public;
+    }
+    
     location / {
       proxy_pass http://127.0.0.1:3001/;
       proxy_set_header   X-Real-IP $remote_addr;
