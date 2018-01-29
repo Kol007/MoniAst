@@ -21,11 +21,12 @@ export function loginUser({ username, password, path }) {
       type: AUTH_USER + START
     });
 
-    const url = `${API_URL}/auth/login`;
+    const url = process.env.NODE_ENV === 'production' ? `${API_URL}/auth/login` : `${location.protocol}//${location.hostname}:3002${API_URL}/auth/login`;
+    // const url = `${API_URL}/auth/login`;
 
     axios({
+      url,
       method: 'post',
-      url: url,
       data: { username, password }
     })
       .then(response => {
@@ -43,9 +44,9 @@ export function loginUser({ username, password, path }) {
           type: AUTH_USER + FAIL,
           payload: { username, password, path },
           response: {
-            errorMessage: error.response.data.errorMessage,
-            field: error.response.data.field,
-            errorCode: error.response.status
+            errorMessage: error.response ? error.response.data : 'No response',
+            field: error.response ? error.response.data.field : '',
+            errorCode: error.response ? error.response.status : 0
           }
         });
       });

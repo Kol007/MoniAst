@@ -19,3 +19,12 @@ body {
   height: 10px;
   display: inline-block;
 }
+
+.extensions-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.col-sip {
+  margin-bottom: 5px;
+}

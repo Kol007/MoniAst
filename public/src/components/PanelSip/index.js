@@ -25,12 +25,11 @@ class PanelSip extends Component {
     const { sip, channels, selectedSip, selectSip } = this.props;
 
     const peers = sip.map(sipPeer => {
-      const channelsBySip =
-        channels && channels.filter(item => item.sip === sipPeer.sip);
+      const channelsBySip = channels && channels.filter(item => item.sip === sipPeer.sip);
       const isSelected = selectedSip && selectedSip === sipPeer.sip;
 
       return (
-        <Col key={sipPeer.sip} md="4" style={{ marginBottom: '5px' }}>
+        <Col key={sipPeer.sip} md="4" className="col-sip">
           <SipPeer
             sipPeer={sipPeer}
             channels={channelsBySip}
@@ -61,7 +60,7 @@ PanelSip.propTypes = {
   isLoaded: PropTypes.bool,
   selectSip: PropTypes.func,
 
-  sipSpyStatus: PropTypes.object,
+  sipSpyStatus: PropTypes.object
 };
 
 function mapStateToProps(state) {
@@ -75,7 +74,6 @@ function mapStateToProps(state) {
     isLoaded: sip.get('isLoaded'),
     selectedSip: sip.get('selectedSip'),
 
-    // filter: sip.get('filter'),
     sipSpyStatus: sip.get('sipSpy').toJSON()
   };
 }

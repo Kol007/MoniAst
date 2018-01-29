@@ -1,15 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  Card,
-  Button,
-  CardHeader,
-  CardBody,
-  CardText,
-  Row,
-  Col
-} from 'reactstrap';
+import { Card, CardHeader, CardBody } from 'reactstrap';
 
 import SipPeerChannel from 'Component/SipPeerChannel';
 
@@ -41,7 +33,7 @@ const statusStyle = {
 };
 
 class SipPeer extends PureComponent {
-  handleSelectSip = (ev) => {
+  handleSelectSip = ev => {
     ev.preventDefault();
 
     const { selectSip, sipPeer } = this.props;
@@ -49,20 +41,22 @@ class SipPeer extends PureComponent {
     selectSip(sipPeer.sip);
   };
 
-  _isSipUp = (channels) => {
-    return channels &&
+  _isSipUp = channels => {
+    return (
+      channels &&
       channels.size &&
       !!channels.find(obj => obj.get('status') === CHANNEL_STATUS_UP) &&
-      SIP_STATUS_IN_USE;
+      SIP_STATUS_IN_USE
+    );
   };
 
-  _isSipRinging = (channels) => {
-    return channels &&
+  _isSipRinging = channels => {
+    return (
+      channels &&
       channels.size &&
-      !!channels.find(
-        obj => obj.get('status') === CHANNEL_STATUS_OUT_RINGING
-      ) &&
-      SIP_STATUS_RINGING;
+      !!channels.find(obj => obj.get('status') === CHANNEL_STATUS_OUT_RINGING) &&
+      SIP_STATUS_RINGING
+    );
   };
 
   render() {
@@ -73,8 +67,7 @@ class SipPeer extends PureComponent {
 
     const SipRinging = this._isSipRinging(channels);
 
-    const peerStatusClass =
-      statusStyle[SipUp] || statusStyle[SipRinging] || statusStyle[status];
+    const peerStatusClass = statusStyle[SipUp] || statusStyle[SipRinging] || statusStyle[status];
 
     const sipChannels =
       channels && channels.size
@@ -87,11 +80,7 @@ class SipPeer extends PureComponent {
           })
         : '';
 
-    const sipChannelsElement = sipChannels ? (
-      <CardBody>{sipChannels}</CardBody>
-    ) : (
-      ''
-    );
+    const sipChannelsElement = sipChannels ? <CardBody>{sipChannels}</CardBody> : '';
 
     const additionalClass = isSelected ? 'selected-sip' : '';
 
@@ -102,14 +91,10 @@ class SipPeer extends PureComponent {
         } text-${peerStatusClass}`}
       >
         <CardHeader
-          className={isTrunk ? '' : 'cursor-pointer'}
-          onClick={isTrunk ? () => {} : this.handleSelectSip}
+          className={!isTrunk && 'cursor-pointer'}
+          onClick={!isTrunk && this.handleSelectSip}
         >
-          <div
-            className={`rounded-circle bg-${
-              peerStatusClass
-            } sip-status-indicator`}
-          />
+          <div className={`rounded-circle bg-${peerStatusClass} sip-status-indicator`} />
           {` ${sip} ${login}`}
         </CardHeader>
         {sipChannelsElement}

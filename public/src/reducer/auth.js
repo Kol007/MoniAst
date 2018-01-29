@@ -18,7 +18,7 @@ const defaultState = new Map({
 });
 
 export default function(state = defaultState, action) {
-  const { type, payload, response, errorMessage, errorCode } = action;
+  const { type, payload, response } = action;
 
   switch (type) {
     case AUTH_USER + SUCCESS:
@@ -43,8 +43,8 @@ export default function(state = defaultState, action) {
         .set('isLoggedIn', false)
         .set('isError', true)
         .set('expires', 0)
-        .set('errorCode', errorCode)
-        .set('errorMessage', errorMessage)
+        .set('errorCode', response.errorCode)
+        .set('errorMessage', response.errorMessage)
         .set('isLoading', false);
 
     case LOG_OUT:

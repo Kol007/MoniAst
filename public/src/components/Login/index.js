@@ -26,25 +26,29 @@ class Login extends Component {
     if (nextProps.isLoggedIn) {
       const locationState = nextProps.location.state;
 
-      this.props.history.push(
-        locationState ? locationState.from.pathname : '/dashboard'
-      );
+      this.props.history.push(locationState ? locationState.from.pathname : '/dashboard');
     }
   }
 
   render() {
-    const { isError, isLoading } = this.props;
+    const { isError, isLoading, errorCode } = this.props;
+
+    let errorMessage = '';
+    if (isError) {
+      errorMessage = (errorCode === 401 || errorCode === 403) ? 'Wrong username or password' : 'Error has occurred';
+    }
 
     return (
       <div className="container">
         <form className="form-signin" onSubmit={this.handleSubmitForm}>
           <h2 className="form-signin-heading">Please sign in</h2>
 
-          { isError &&
+          {isError && (
             <div className="alert alert-danger" role="alert">
-              Wrong username or password
+              {errorMessage}
             </div>
-          }
+          )}
+
           <label htmlFor="inputUsername" className="sr-only">
             Username
           </label>
@@ -74,7 +78,7 @@ class Login extends Component {
 
           <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={isLoading}>
             Sign in &nbsp;
-            {isLoading && <i className="fa fa-circle-o-notch fa-spin" style={{fontSize: '24px'}}></i> }
+            {isLoading && <i className="fa fa-circle-o-notch fa-spin login-spinner" />}
           </button>
         </form>
       </div>
@@ -97,7 +101,7 @@ class Login extends Component {
 Login.propTypes = {
   isError: PropTypes.bool,
   isLoading: PropTypes.bool,
-  isLoggedIn: PropTypes.bool,
+  isLoggedIn: PropTypes.bool
 };
 
 function mapStateToProps(state) {
@@ -107,7 +111,7 @@ function mapStateToProps(state) {
 
     isError: state.auth.get('isError'),
     errorCode: state.auth.get('errorCode'),
-    errorMessage: state.auth.get('errorMessage'),
+    errorMessage: state.auth.get('errorMessage')
   };
 }
 

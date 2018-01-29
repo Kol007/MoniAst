@@ -7,7 +7,7 @@ export class Dashboard extends Component {
   render () {
     return (
       <div className="container-fluid">
-        <div className="row" style={{marginTop: '10px', marginBottom: '10px'}}>
+        <div className="row extensions-container">
           <div className="col-9">
             <PanelSip />
           </div>

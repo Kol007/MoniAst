@@ -59,6 +59,7 @@ class SipToolbar extends Component {
             color="info"
             disabled={buttonSpy.disabled}
             onClick={this.handleSpyAndWhisper}
+            title=""
           >
             <FontAwesome name="microphone" />
           </Button>
@@ -74,7 +75,6 @@ SipToolbar.propTypes = {
   filter: PropTypes.string,
   sipSpyStatus: PropTypes.object,
   snackBarActions: PropTypes.object
-  // channelsDefault: PropTypes.object
 };
 
 function mapStateToProps(state) {

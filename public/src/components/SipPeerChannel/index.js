@@ -24,7 +24,6 @@ class SipPeerChannel extends Component {
     super(props);
 
     this.state = {
-      intervalId: null,
       duration: null
     };
   }
@@ -66,7 +65,7 @@ class SipPeerChannel extends Component {
   };
 
   handleStopInterval = () => {
-    clearInterval(this.state.intervalId);
+    clearInterval(this.intervalId);
     this.intervalId = null;
   };
 
@@ -78,10 +77,6 @@ class SipPeerChannel extends Component {
     const durationHuman = channel.status === CHANNEL_STATUS_UP
       ? secToHuman(duration)
       : '';
-
-    // const statusIcon = channel.status === CHANNEL_STATUS_UP
-    //   ? 'O: '
-    //   : 'R: ';
 
     const statusIcon = channel.status === CHANNEL_STATUS_UP
       ? <FontAwesome name="phone" />
@@ -103,7 +98,6 @@ class SipPeerChannel extends Component {
 
 SipPeerChannel.propTypes = {
   channel: PropTypes.object.isRequired,
-  // sip: PropTypes.string
 };
 
 export default SipPeerChannel;
