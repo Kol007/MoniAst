@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -S --ui bdd --require ./tests/spec_helper.js --recursive ./tests --reporter spec",
-    "dev": "NODE_ENV=development nodemon index.js"
+    "dev": "NODE_ENV=development nodemon index.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "asterisk",
@@ -29,6 +31,8 @@
     "passport-local": "^1.0.0",
     "rx": "^4.1.0",
     "socket.io": "^2.0.4",
-    "socketio-jwt": "^4.5.0"
-  }
+    "socketio-jwt": "^4.5.0",
+    "snyk": "^1.83.0"
+  },
+  "snyk": true
 }
