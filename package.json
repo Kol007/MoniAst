@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -S --ui bdd --require ./tests/spec_helper.js --recursive ./tests --reporter spec",
+    "test2": "react-scripts test --env=jsdom",
     "dev": "NODE_ENV=development nodemon index.js",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
