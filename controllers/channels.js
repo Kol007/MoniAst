@@ -50,7 +50,10 @@ exports.getChannels = function (req, res, next) {
 
     list.map((item) => {
       item.id = item.uniqueid;
-      item.sip = item.channel.match(/\/(\w+)-/)[1];
+
+      item.sip = item.channel.match(/\/(\w+)-/);
+      item.sip = item.sip ? item.sip[1] : '';
+
       item.duration = convertDurationToSeconds(item.duration);
       item.date = new Date();
       item.status = CHANNEL_STATUS[item.channelstate]; // 6 is UP
