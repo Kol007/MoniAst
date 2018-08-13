@@ -9,9 +9,9 @@ patch:
     - passport-jwt > jsonwebtoken > joi > topo > hoek:
         patched: '2018-06-22T22:34:15.018Z'
     - passport-jwt > jsonwebtoken > joi > hoek:
-        patched: '2018-08-13T13:10:51.595Z'
+        patched: '2018-08-13T13:12:30.417Z'
     - passport-jwt > jsonwebtoken > joi > topo > hoek:
-        patched: '2018-08-13T13:10:51.595Z'
+        patched: '2018-08-13T13:12:30.417Z'
   'npm:ms:20170412':
     - socketio-jwt > jsonwebtoken > ms:
-        patched: '2018-08-13T13:10:51.595Z'
+        patched: '2018-08-13T13:12:30.417Z'
