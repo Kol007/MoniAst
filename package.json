@@ -1,7 +1,7 @@
 {
-  "name": "mon-server",
+  "name": "moniast",
   "version": "0.5.0",
-  "description": "API server for MonAst, powered by Express.",
+  "description": "MoniAst - real-time monitoring for you agents (Asterisk)",
   "main": "index.js",
   "scripts": {
     "test": "mocha -S --ui bdd --require ./tests/spec_helper.js --recursive ./tests --reporter spec",
@@ -11,11 +11,13 @@
   },
   "keywords": [
     "asterisk",
-    "monitor",
-    "api",
-    "server-side"
+    "monitor"
   ],
-  "author": "Nikita Romankevich",
+  "author": "Kol007",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Kol007/MoniAst.git"
+  },
   "license": "MIT",
   "dependencies": {
     "asterisk-manager": "^0.1.16",

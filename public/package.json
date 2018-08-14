@@ -1,5 +1,5 @@
 {
-  "name": "mon-refactor",
+  "name": "moniast-frontend",
   "version": "0.1.0",
   "description": "",
   "main": "src/app.js",
@@ -16,6 +16,7 @@
     "ui"
   ],
   "author": "Kol007",
+
   "license": "MIT",
   "dependencies": {
     "axios": "^0.17.1",
