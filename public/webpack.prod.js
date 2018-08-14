@@ -14,7 +14,12 @@ module.exports = merge(common, {
       }
     }),
     new UglifyJSPlugin({
-      // sourceMap: true
+      uglifyOptions: {
+        beautify: false,
+        ecma: 8,
+        compress: true,
+        comments: false
+      }
     }),
   ]
 });
