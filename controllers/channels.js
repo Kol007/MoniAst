@@ -108,7 +108,8 @@ exports.spyChannel = function(req, res, next) {
         }
       };
 
-      AMI.on(event, f);
+      let listener = AMI.on(event, f);
+      listener.removeListener('managerevent', f);
     });
   });
 

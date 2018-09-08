@@ -46,7 +46,7 @@ module.exports = function(app) {
   apiRoutes.use('/sip', sipRoutes);
 
   // View user profile route
-  sipRoutes.get('/', requireAuth, SipController.getSip);
+  sipRoutes.get('/', requireAuth, SipController.getSip, SipController.getSipResponse);
 
   //= ========================
   // Channels Routes

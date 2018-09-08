@@ -13,13 +13,9 @@ const debug = require('debug')('mon-gen:server');
 
 // Database Setup
 if (process.env.NODE_ENV !== config.testEnv) {
-  mongoose.connect(config.database, {
-    useMongoClient: true
-  });
+  mongoose.connection.openUri(config.database);
 } else {
-  mongoose.connect(config.testDb, {
-    useMongoClient: true
-  });
+  mongoose.connection.openUri(config.database);
 }
 
 mongoose.connection.on('connected', function(ref) {
@@ -30,7 +26,7 @@ mongoose.connection.on('connected', function(ref) {
 let server;
 if (process.env.NODE_ENV !== config.testEnv) {
   const port = helpers.normalizePort(config.port);
-  const host = config.port || '0.0.0.0';
+  const host = config.host || '0.0.0.0';
 
   server = app.listen(port, host);
 } else {
