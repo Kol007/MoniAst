@@ -1,5 +1,5 @@
 import { START, SUCCESS, FAIL, LOG_OUT } from '../helpers/constants';
-import { paramsForAPI, UserException } from '../helpers/common';
+import { paramsForAPI } from '../helpers/common';
 import axios from 'axios';
 
 export default store => next => action => {

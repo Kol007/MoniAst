@@ -1,4 +1,4 @@
-const Rx = require('rx');
+// const Rx = require('rx');
 const User = require('../models/user');
 
 const ROLE_CLIENT = require('./constants').ROLE_CLIENT;
@@ -41,47 +41,6 @@ exports.isAdminExists = function isAdminExists() {
       createDefaultAdmin();
     }
   });
-};
-
-exports.getList = function getList(ami, action, lastEvent, callback) {
-  let stream = new Rx.Subject();
-
-  ami.action(
-    {
-      action
-    },
-    function(err, res) {
-      if (err) {
-        return callback(err, null);
-      }
-
-      const f = function(evt) {
-        if (evt.actionid === res.actionid) {
-          if (evt.event === lastEvent) {
-            stream.onCompleted();
-          } else {
-            stream.onNext(evt);
-          }
-        }
-      };
-
-      ami.on('managerevent', f);
-
-      let stream2 = stream.toArray();
-
-      stream2.subscribe(
-        function(x) {
-          callback(null, x);
-        },
-        function(e) {
-          callback(e, null);
-        },
-        function() {
-          ami.removeListener('managerevent', f);
-        }
-      );
-    }
-  );
 };
 
 exports.convertDurationToSeconds = function convertDurationToSeconds(str) {
@@ -130,12 +89,10 @@ exports.normalizePort = function normalizePort(val) {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
-    // named pipe
     return val;
   }
 
   if (port >= 0) {
-    // port number
     return port;
   }
 

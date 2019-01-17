@@ -8,11 +8,11 @@ export class Dashboard extends Component {
     return (
       <div className="container-fluid">
         <div className="row extensions-container">
-          <div className="col-9">
+          <div className="col-md-9">
             <PanelSip />
           </div>
 
-          <div className="col-3">
+          <div className="col-md-3">
             <PanelTrunk />
           </div>
         </div>

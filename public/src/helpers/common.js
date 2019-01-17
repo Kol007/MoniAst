@@ -3,7 +3,7 @@ export function secToHuman(sec) {
     return '00:00:00';
   }
 
-  const secNum = parseInt(sec, 10); // don't forget the second param
+  const secNum = parseInt(sec, 10);
   let hours   = Math.floor(secNum / 3600);
   let minutes = Math.floor((secNum - (hours * 3600)) / 60);
   let seconds = secNum - (hours * 3600) - (minutes * 60);
@@ -13,11 +13,6 @@ export function secToHuman(sec) {
   if (seconds < 10) {seconds = `0${seconds}`;}
 
   return `${hours}:${minutes}:${seconds}`;
-}
-
-export function UserException(message, status) {
-  this.message = message;
-  this.status = status;
 }
 
 export function paramsForAPI(params) {

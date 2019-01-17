@@ -14,25 +14,28 @@ const ChannelModel = Record({
 
 const defaultState = new Map({});
 
-export default (channels = defaultState, action) => {
+export default (state = defaultState, action) => {
   const { type, payload, response } = action;
 
   switch (type) {
+    case LOAD_ALL_CHANNELS + START:
+      return state;
+
     case LOAD_ALL_CHANNELS + SUCCESS:
-      return channels.merge(arrayToMap(response, channel => new ChannelModel(channel)));
+      return state.merge(arrayToMap(response, channel => new ChannelModel(channel)));
 
     case LOAD_ALL_CHANNELS + FAIL:
-      return channels;
+      return state;
 
     case NEW_CHANNEL:
-      return channels.setIn(
+      return state.setIn(
         [payload.channel.channel.id],
         new ChannelModel({ ...payload.channel.channel })
       );
 
     case REMOVE_CHANNEL:
-      return channels.delete(payload.id);
+      return state.delete(payload.id);
   }
 
-  return channels;
+  return state;
 };

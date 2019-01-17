@@ -47,6 +47,11 @@ class Header extends PureComponent{
                 </NavLink>
               </NavItem>
               <NavItem>
+                <NavLink tag={RRNavLink} to="/queues" >
+                  Queues
+                </NavLink>
+              </NavItem>
+              <NavItem>
                 <NavLink tag={RRNavLink} to="/users">
                   Users
                 </NavLink>
@@ -64,10 +69,6 @@ class Header extends PureComponent{
       </header>
     );
   }
-}
-
-function mapStateToProps() {
-  return {};
 }
 
 export default withRouter(connect(() => ({}), { logOutUser })(Header));

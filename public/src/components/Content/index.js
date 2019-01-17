@@ -4,7 +4,7 @@ import Header from 'Component/Header/index';
 
 import './content.css';
 
-class Container extends Component {
+class Content extends Component {
   render() {
     return (
         <div>
@@ -18,4 +18,4 @@ class Container extends Component {
   }
 }
 
-export default Container;
+export default Content;

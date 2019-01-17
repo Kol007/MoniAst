@@ -1,5 +1,6 @@
-const AMI = require('../helpers/ami');
-const getList = require('../helpers/helpers').getList;
+const AMI                      = require('../helpers/ami');
+// const getList                  = require('../helpers/helpers').getList;
+const getListEvents            = require('./common').getListEvents;
 const convertDurationToSeconds = require('../helpers/helpers').convertDurationToSeconds;
 
 // 0 Channel is down and available
@@ -11,22 +12,22 @@ const convertDurationToSeconds = require('../helpers/helpers').convertDurationTo
 // 6 Line is up
 // 7 Line is busy
 const CHANNEL_STATUS_DOWN_AVAILABLE = 'CHANNEL_STATUS_DOWN_AVAILABLE';
-const CHANNEL_STATUS_DOWN_RESERVED = 'CHANNEL_STATUS_DOWN_RESERVED';
-const CHANNEL_STATUS_OFF_HOOK = 'CHANNEL_STATUS_OFF_HOOK';
-const CHANNEL_STATUS_DIGITS_DIALED = 'CHANNEL_STATUS_DIGITS_DIALED';
-const CHANNEL_STATUS_OUT_RINGING = 'CHANNEL_STATUS_OUT_RINGING';
-const CHANNEL_STATUS_IN_RINGING = 'CHANNEL_STATUS_IN_RINGING';
-const CHANNEL_STATUS_UP = 'CHANNEL_STATUS_UP';
-const CHANNEL_STATUS_BUSY = 'CHANNEL_STATUS_BUSY';
+const CHANNEL_STATUS_DOWN_RESERVED  = 'CHANNEL_STATUS_DOWN_RESERVED';
+const CHANNEL_STATUS_OFF_HOOK       = 'CHANNEL_STATUS_OFF_HOOK';
+const CHANNEL_STATUS_DIGITS_DIALED  = 'CHANNEL_STATUS_DIGITS_DIALED';
+const CHANNEL_STATUS_OUT_RINGING    = 'CHANNEL_STATUS_OUT_RINGING';
+const CHANNEL_STATUS_IN_RINGING     = 'CHANNEL_STATUS_IN_RINGING';
+const CHANNEL_STATUS_UP             = 'CHANNEL_STATUS_UP';
+const CHANNEL_STATUS_BUSY           = 'CHANNEL_STATUS_BUSY';
 
 const CHANNEL_STATUS_CODE_DOWN_AVAILABLE = 0;
-const CHANNEL_STATUS_CODE_DOWN_RESERVED = 1;
-const CHANNEL_STATUS_CODE_OFF_HOOK = 2;
-const CHANNEL_STATUS_CODE_DIGITS_DIALED = 3;
-const CHANNEL_STATUS_CODE_OUT_RINGING = 4;
-const CHANNEL_STATUS_CODE_IN_RINGING = 5;
-const CHANNEL_STATUS_CODE_UP = 6;
-const CHANNEL_STATUS_CODE_BUSY = 7;
+const CHANNEL_STATUS_CODE_DOWN_RESERVED  = 1;
+const CHANNEL_STATUS_CODE_OFF_HOOK       = 2;
+const CHANNEL_STATUS_CODE_DIGITS_DIALED  = 3;
+const CHANNEL_STATUS_CODE_OUT_RINGING    = 4;
+const CHANNEL_STATUS_CODE_IN_RINGING     = 5;
+const CHANNEL_STATUS_CODE_UP             = 6;
+const CHANNEL_STATUS_CODE_BUSY           = 7;
 
 const CHANNEL_STATUS = {
   0: 'CHANNEL_STATUS_DOWN_AVAILABLE',
@@ -39,53 +40,84 @@ const CHANNEL_STATUS = {
   7: 'CHANNEL_STATUS_BUSY'
 };
 
-exports.getChannels = function (req, res, next) {
-  getList(AMI, 'CoreShowChannels', 'CoreShowChannelsComplete', function(
-    err,
-    list
-  ) {
-    if (!list) {
-      return res.json([]);
-    }
+exports.getChannels = async function (req, res, next) {
+    AMI.action({ action: 'CoreShowChannels' }, async function (err, res) {
+      if (!err) {
+        let response = await getListEvents(AMI, res.actionid, 'CoreShowChannelsComplete');
+        response.map((item) => {
+          item.id = item.uniqueid;
 
-    list.map((item) => {
-      item.id = item.uniqueid;
+          item.sip = item.channel.match(/\/(\w+)-/);
+          item.sip = item.sip ? item.sip[1] : '';
 
-      item.sip = item.channel.match(/\/(\w+)-/);
-      item.sip = item.sip ? item.sip[1] : '';
+          item.duration = convertDurationToSeconds(item.duration);
+          item.date     = new Date();
+          item.status   = CHANNEL_STATUS[item.channelstate]; // 6 is UP
 
-      item.duration = convertDurationToSeconds(item.duration);
-      item.date = new Date();
-      item.status = CHANNEL_STATUS[item.channelstate]; // 6 is UP
+          if (item.channelstate === CHANNEL_STATUS_UP) {
+            return item;
+          }
 
-      if (item.channelstate === CHANNEL_STATUS_UP) {
-        return item;
+          return null;
+        });
+
+        req.data = response;
+        next()
+      } else {
+        req.data = [];
+        next()
       }
-
-      // return undefined;
-      return null;
     });
-
-    return res.json(list);
-  });
 };
 
+//
+// getList(AMI, 'CoreShowChannels', 'CoreShowChannelsComplete', function (
+//   err,
+//   list
+// ) {
+//   if (!list) {
+//     return res.json([]);
+//   }
+//
+//   list.map((item) => {
+//     item.id = item.uniqueid;
+//
+//     item.sip = item.channel.match(/\/(\w+)-/);
+//     item.sip = item.sip ? item.sip[1] : '';
+//
+//     item.duration = convertDurationToSeconds(item.duration);
+//     item.date     = new Date();
+//     item.status   = CHANNEL_STATUS[item.channelstate]; // 6 is UP
+//
+//     if (item.channelstate === CHANNEL_STATUS_UP) {
+//       return item;
+//     }
+//
+//     // return undefined;
+//     return null;
+//   });
+//
+//   return res.json(list);
+// });
+// }
+// ;
+
 // router.get('/channelSpy/:recipient/:sip', function(req, res, next) {
-exports.spyChannel = function(req, res, next) {
-  const mode = req.params.whisper ? 'qwEx' : 'qEx';
+exports.spyChannel = function (req, res, next) {
+  const mode      = req.params.whisper ? 'qwEx' : 'qEx';
   const recipient = req.params.recipient;
   const spyingSip = req.params.sip;
 
   const action = {
-    action: 'Originate',
-    channel: `SIP/${recipient}`,
+    action     : 'Originate',
+    channel    : `SIP/${recipient}`,
     application: 'ChanSpy',
-    data: `SIP/${req.params.sip},${mode}`,
-    async: 'yes',
-    priority: 1,
-    exten: req.params.sip,
-    context: 'from-internal',
-    callerid: `Spy-${spyingSip} <${spyingSip}>`
+    data       : `SIP/${req.params.sip},${mode}`,
+    async      : 'yes',
+    priority   : 1,
+    exten      : req.params.sip,
+    context    : 'from-internal',
+    callerid   : `Spy-${spyingSip} <${spyingSip}>`
   };
 
   const event = 'originateresponse';
@@ -99,7 +131,7 @@ exports.spyChannel = function(req, res, next) {
   };
 
   const promise = new Promise((resolve, reject) => {
-    AMI.action(action, function(err2, res2) {
+    AMI.action(action, function (err2, res2) {
       const f = evt => {
         if (evt.actionid === res2.actionid) {
           AMI.removeListener(event, f);
@@ -113,7 +145,7 @@ exports.spyChannel = function(req, res, next) {
     });
   });
 
-  promise.then(function(result) {
+  promise.then(function (result) {
     res.json({
       status: result.response,
       reason: Reason[result.reason]

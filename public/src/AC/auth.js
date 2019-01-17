@@ -21,7 +21,10 @@ export function loginUser({ username, password, path }) {
       type: AUTH_USER + START
     });
 
-    const url = process.env.NODE_ENV === 'production' ? `${API_URL}/auth/login` : `${location.protocol}//${location.hostname}:3002${API_URL}/auth/login`;
+    const url =
+      process.env.NODE_ENV === 'production'
+        ? `${API_URL}/auth/login`
+        : `${location.protocol}//${location.hostname}:3002${API_URL}/auth/login`;
     // const url = `${API_URL}/auth/login`;
 
     axios({

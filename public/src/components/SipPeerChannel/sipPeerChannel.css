@@ -1,13 +1,19 @@
-@keyframes ringing_animation {
-    0%   { color: #3c763d; }
-    25%  { color: #a94442; }
-    50%  { color: #3c763d; }
-    75%  { color: #a94442; }
-    100% { color: #3c763d; }
+.sip-peer-body.card-body {
+    padding: 5px 10px;
 }
 
 .channel-ringing {
-    animation-name: ringing_animation;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+    will-change: transform;
+    animation: shake 0.1s ease-in-out 0.1s infinite alternate;
+}
+
+@-webkit-keyframes shake {
+    from {
+        transform: rotate(7deg);
+    }
+    to {
+        transform-origin:center center;
+        transform: rotate(-7deg);
+    }
+
 }

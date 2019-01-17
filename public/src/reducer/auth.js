@@ -22,8 +22,8 @@ export default function(state = defaultState, action) {
 
   switch (type) {
     case AUTH_USER + SUCCESS:
-      return (
-        state
+      return state.withMutations(s =>
+        s
           .set('token', response.token)
           .set('sip', response.user.sip)
           .set('isLoggedIn', true)
@@ -32,29 +32,35 @@ export default function(state = defaultState, action) {
       );
 
     case AUTH_USER + START:
-      return state
-        .set('isError', false)
-        .set('isLoggedIn', false)
-        .set('expires', 0)
-        .set('isLoading', true);
+      return state.withMutations(s =>
+        s
+          .set('isError', false)
+          .set('isLoggedIn', false)
+          .set('expires', 0)
+          .set('isLoading', true)
+      );
 
     case AUTH_USER + FAIL:
-      return state
-        .set('isLoggedIn', false)
-        .set('isError', true)
-        .set('expires', 0)
-        .set('errorCode', response.errorCode)
-        .set('errorMessage', response.errorMessage)
-        .set('isLoading', false);
+      return state.withMutations(s =>
+        s
+          .set('isLoggedIn', false)
+          .set('isError', true)
+          .set('expires', 0)
+          .set('errorCode', response.errorCode)
+          .set('errorMessage', response.errorMessage)
+          .set('isLoading', false)
+      );
 
     case LOG_OUT:
-      return state
-        .set('isLoggedIn', false)
-        .set('isError', false)
-        .set('token', '')
-        .set('sip', '')
-        .set('expires', 0)
-        .set('isLoading', false);
+      return state.withMutations(s =>
+        s
+          .set('isLoggedIn', false)
+          .set('isError', false)
+          .set('token', '')
+          .set('sip', '')
+          .set('expires', 0)
+          .set('isLoading', false)
+      );
   }
 
   return state;

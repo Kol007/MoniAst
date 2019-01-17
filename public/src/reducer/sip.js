@@ -5,10 +5,13 @@ import {
   SUCCESS,
   FAIL,
   SIP_SPY,
-  SIP_SPY_WHISPER
+  SIP_SPY_WHISPER,
+  SIP_STATUS_UNAVAILABLE,
+  SIP_SELECT,
+  SIP_FILTER,
+  SIP_FILTER_ONLINE
 } from '../helpers/constants';
 
-import { SIP_STATUS_UNAVAILABLE, SIP_SELECT, SIP_FILTER, SIP_FILTER_ALL } from '../helpers/constants';
 import { Record, Map, OrderedMap } from 'immutable';
 import { arrayToMap } from '../store/helpers';
 
@@ -16,15 +19,23 @@ const SipModel = Record({
   login: 'Default',
   sip: 0,
   online: false,
+  isTrunk: false,
   status: SIP_STATUS_UNAVAILABLE
+});
+
+const SipSimpleModel = Record({
+  sip: 0,
+  online: false,
+  isTrunk: false
 });
 
 const defaultState = new Map({
   entities: new OrderedMap({}),
+  entitiesSimple: new OrderedMap({}),
   isLoading: false,
   isLoaded: false,
   selectedSip: '',
-  filter: SIP_FILTER_ALL,
+  filter: SIP_FILTER_ONLINE,
 
   sipSpy: new Map({
     isError: false,
@@ -41,26 +52,28 @@ export default (state = defaultState, action) => {
       return state.set('isLoading', true);
 
     case LOAD_ALL_SIPS + SUCCESS:
-      return state
-        .update('entities', entities =>
-          entities
-            .merge(arrayToMap(response, sip => new SipModel(sip)))
-            .sort((a, b) => a.sip - b.sip)
-            .sort((a, b) => b.online - a.online)
-        )
-        .set('isLoading', false)
-        .set('isLoaded', true);
+      return state.withMutations(s =>
+        s
+          .update('entities', entities =>
+            entities.merge(arrayToMap(response, sip => new SipModel(sip)))
+          )
+          .update('entitiesSimple', entitiesSimple=>
+            entitiesSimple.merge(arrayToMap(response, sip => new SipSimpleModel(sip)))
+          )
+          .set('isLoading', false)
+          .set('isLoaded', true)
+      );
 
     case LOAD_ALL_SIPS + FAIL:
       return state;
 
     case CHANGE_SIP_STATUS:
-      return state
-        .setIn(['entities', payload.sip, 'status'], payload.status)
-        .setIn(['entities', payload.sip, 'online'], payload.online)
-        .update('entities', entities =>
-          entities.sort((a, b) => a.sip - b.sip).sort((a, b) => b.online - a.online)
-        );
+      return state.withMutations(s =>
+        s
+          .setIn(['entities', payload.sip, 'status'], payload.status)
+          .setIn(['entities', payload.sip, 'online'], payload.online)
+          .setIn(['entitiesSimple', payload.sip, 'online'], payload.online)
+      );
 
     case SIP_SELECT:
       return state.set('selectedSip', payload.sip);
@@ -71,12 +84,16 @@ export default (state = defaultState, action) => {
     case SIP_SPY + START:
       return state;
     case SIP_SPY + SUCCESS:
-      return state
-        .setIn(['sipSpy', 'isError'], response.status === 'Failure')
-        .setIn(['sipSpy', 'message'], response.reason)
-        .setIn(['sipSpy', 'status'], response.status);
+      return state.withMutations(s =>
+        s
+          .setIn(['sipSpy', 'isError'], response.status === 'Failure')
+          .setIn(['sipSpy', 'message'], response.reason)
+          .setIn(['sipSpy', 'status'], response.status)
+      );
     case SIP_SPY + FAIL:
-      return state.setIn(['sipSpy', 'isError'], true).setIn(['sipSpy', 'message'], 'Ошибка API.');
+      return state.withMutations(s =>
+        s.setIn(['sipSpy', 'isError'], true).setIn(['sipSpy', 'message'], 'Error at API.')
+      );
   }
 
   return state;

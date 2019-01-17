@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import PropTypes from 'prop-types';
-import { getFilteredSipsState } from 'store/selectors';
+import PropTypes from "prop-types";
+import { getFilteredSipsState } from "store/selectors";
 
-import { loadSipPeers, selectSip, filterSip, spySip } from 'AC/sip';
-import { loadChannels } from 'AC/channels';
+import { loadSipPeers, selectSip } from "AC/sip";
+import { loadChannels } from "AC/channels";
 
-import { Card, CardText, CardBody, Button, Row, Col } from 'reactstrap';
-import SipPeer from 'Component/SipPeer';
-import SipToolbar from 'Component/SipToolbar';
+import { Card, CardBody, Col, Row } from "reactstrap";
+import SipPeer from "Component/SipPeer";
+import SipToolbar from "Component/SipToolbar";
 
 class PanelSip extends Component {
   componentDidMount() {
@@ -22,17 +22,15 @@ class PanelSip extends Component {
   }
 
   render() {
-    const { sip, channels, selectedSip, selectSip } = this.props;
+    const { sip, selectedSip, selectSip, isLoaded, isLoading } = this.props;
 
-    const peers = sip.map(sipPeer => {
-      const channelsBySip = channels && channels.filter(item => item.sip === sipPeer.sip);
+    const peers = sip.entrySeq().map(([key, sipPeer]) => {
       const isSelected = selectedSip && selectedSip === sipPeer.sip;
 
       return (
         <Col key={sipPeer.sip} md="4" className="col-sip">
           <SipPeer
             sipPeer={sipPeer}
-            channels={channelsBySip}
             selectSip={selectSip}
             isSelected={!!isSelected}
           />
@@ -43,7 +41,6 @@ class PanelSip extends Component {
     return (
       <Card>
         <SipToolbar />
-
         <CardBody>
           <Row>{peers}</Row>
         </CardBody>
@@ -53,35 +50,29 @@ class PanelSip extends Component {
 }
 
 PanelSip.propTypes = {
-  sip: PropTypes.array,
-  channels: PropTypes.object,
+  sip: PropTypes.object,
 
   isLoading: PropTypes.bool,
   isLoaded: PropTypes.bool,
-  selectSip: PropTypes.func,
-
-  sipSpyStatus: PropTypes.object
+  selectSip: PropTypes.func
 };
 
 function mapStateToProps(state) {
-  const { sip, channels } = state;
+  const { sip } = state;
 
   return {
     sip: getFilteredSipsState(state),
-    channels,
-
-    isLoading: sip.get('isLoading'),
-    isLoaded: sip.get('isLoaded'),
-    selectedSip: sip.get('selectedSip'),
-
-    sipSpyStatus: sip.get('sipSpy').toJSON()
+    isLoading: sip.get("isLoading"),
+    isLoaded: sip.get("isLoaded"),
+    selectedSip: sip.get("selectedSip")
   };
 }
 
-export default connect(mapStateToProps, {
-  loadSipPeers,
-  loadChannels,
-  selectSip,
-  filterSip,
-  spySip
-})(PanelSip);
+export default connect(
+  mapStateToProps,
+  {
+    loadSipPeers,
+    loadChannels,
+    selectSip
+  }
+)(PanelSip);

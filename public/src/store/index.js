@@ -9,11 +9,12 @@ import startWS, { webSocketMiddleware } from '../middlewares/socketMiddleware';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 let middleware = [ thunk, api, webSocketMiddleware ];
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && false) {
   const logger = createLogger();
 
   middleware = [ ...middleware, logger ];
 }
+
 const enhancer = composeEnhancers(applyMiddleware(...middleware));
 
 const store = createStore(reducer, {}, enhancer);

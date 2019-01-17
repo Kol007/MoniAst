@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import { Button, ButtonGroup } from 'reactstrap';
-import FontAwesome from 'react-fontawesome';
+import { Button, ButtonGroup } from "reactstrap";
+import FontAwesome from "react-fontawesome";
 
-import { filterSip, spySip } from 'AC/sip';
+import { filterSip, spySip } from "AC/sip";
 
-import { SIP_FILTER_ALL, SIP_FILTER_ONLINE  } from 'helpers/constants';
-import { getFilteredSipsState } from 'store/selectors';
+import { SIP_FILTER_ALL, SIP_FILTER_ONLINE } from "helpers/constants";
+import { getFilteredSipsState } from "store/selectors";
 
 class SipToolbar extends Component {
   handleToggleOnline = ev => {
@@ -36,21 +36,30 @@ class SipToolbar extends Component {
   };
 
   render() {
-    const { selectedSip, filter } = this.props;
+    const { selectedSip, filter, queueEntity } = this.props;
 
     const buttonSpy = {
       disabled: !selectedSip
     };
 
-    const filterStateText = filter === SIP_FILTER_ALL ? 'Show online' : 'Show all';
+    const filterStateText =
+      filter === SIP_FILTER_ALL ? "Show online" : "Show all";
 
     return (
-      <div style={{ margin: '10px 10px 10px 20px' }}>
+      <div style={{ margin: "10px 10px 10px 20px" }}>
         <ButtonGroup>
-          <Button outline color="info" onClick={this.handleToggleOnline}>
-            {filterStateText}
-          </Button>
-          <Button outline color="info" disabled={buttonSpy.disabled} onClick={this.handleSpy}>
+          {!queueEntity && (
+            <Button outline color="info" onClick={this.handleToggleOnline}>
+              {filterStateText}
+            </Button>
+          )}
+
+          <Button
+            outline
+            color="info"
+            disabled={buttonSpy.disabled}
+            onClick={this.handleSpy}
+          >
             <FontAwesome name="user-secret" />
           </Button>
 
@@ -64,6 +73,12 @@ class SipToolbar extends Component {
             <FontAwesome name="microphone" />
           </Button>
         </ButtonGroup>
+
+        {!!queueEntity && (
+          <ButtonGroup className="pull-right">
+            <span className="badge badge-primary">Queue - {queueEntity}</span>
+          </ButtonGroup>
+        )}
       </div>
     );
   }
@@ -84,17 +99,20 @@ function mapStateToProps(state) {
     sip: getFilteredSipsState(state),
     channels: channels,
 
-    isLoading: sip.get('isLoading'),
-    isLoaded: sip.get('isLoaded'),
-    selectedSip: sip.get('selectedSip'),
+    isLoading: sip.get("isLoading"),
+    isLoaded: sip.get("isLoaded"),
+    selectedSip: sip.get("selectedSip"),
 
-    filter: sip.get('filter'),
-    sipSpyStatus: sip.get('sipSpy').toJSON(),
-    authSIP: auth.get('sip')
+    filter: sip.get("filter"),
+    sipSpyStatus: sip.get("sipSpy").toJSON(),
+    authSIP: auth.get("sip")
   };
 }
 
-export default connect(mapStateToProps, {
-  filterSip,
-  spySip
-})(SipToolbar);
+export default connect(
+  mapStateToProps,
+  {
+    filterSip,
+    spySip
+  }
+)(SipToolbar);

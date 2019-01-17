@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
+import DurationTimer from '../DurationTimer/DurationTimer';
 
 import { secToHuman } from 'helpers/common';
 
@@ -17,79 +18,23 @@ import {
 } from 'helpers/constants';
 
 import FontAwesome from 'react-fontawesome';
+import { Card } from "reactstrap";
 
 
-class SipPeerChannel extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      duration: null
-    };
-  }
-
-  componentDidMount() {
-    this._isMounted = true;
-
-    if (this.props.channel.status === CHANNEL_STATUS_UP && !this.intervalId) {
-      this.handleStartInterval();
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.props.channel.status === CHANNEL_STATUS_UP && !this.intervalId) {
-      this.handleStartInterval();
-    }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-
-    if (this.intervalId) {
-      this.handleStopInterval();
-    }
-  }
-
-  handleStartInterval = () => {
-    const { duration, date } = this.props.channel;
-    const startDate = new Date(date);
-
-    this.intervalId = setInterval(() => {
-      if (this._isMounted) {
-        const currentDate = new Date();
-        this.setState({
-          duration: parseInt((currentDate - startDate) / 1000) + duration
-        });
-      }
-    }, 1000);
-  };
-
-  handleStopInterval = () => {
-    clearInterval(this.intervalId);
-    this.intervalId = null;
-  };
-
+class SipPeerChannel extends PureComponent {
   render() {
     const { channel } = this.props;
 
-    const { duration } = this.state;
-
-    const durationHuman = channel.status === CHANNEL_STATUS_UP
-      ? secToHuman(duration)
-      : '';
-
     const statusIcon = channel.status === CHANNEL_STATUS_UP
       ? <FontAwesome name="phone" />
-      : <span className="channel-ringing">
-          <FontAwesome name="volume-control-phone" />
-        </span>;
+      : <FontAwesome name="volume-control-phone" className="channel-ringing" />;
 
     return (
       <div title={channel.status}>
         {statusIcon} {channel.connectedlinenum}
 
         <span className="pull-right">
-          {durationHuman}
+          <DurationTimer duration={channel.duration} date={channel.date} isTicking={channel.status === CHANNEL_STATUS_UP} />
         </span>
       </div>
     );

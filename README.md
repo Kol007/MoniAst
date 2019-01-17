@@ -25,7 +25,7 @@ Features:
 
 Can run on virtually all platforms where Node.js can (Windows, Mac, Linux, etc.).
 
-* Node.js
+* Node.js 8+
 * MongoDB
 
 ## Install

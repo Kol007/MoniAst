@@ -1,15 +1,10 @@
-// import actions from './actions';
 import { newChannel, removeChannel } from '../AC/channels';
 import { changeSipStatus } from '../AC/sip';
-import {
-  BRIDGE_START,
-  BRIDGE_STOP,
-  LOAD_ALL_CHANNELS,
-  NEW_CHANNEL,
-  REMOVE_CHANNEL
-} from '../helpers/constants';
+import { changeQueueMemberStatus } from '../AC/queue';
+import { BRIDGE_STOP } from '../helpers/constants';
 
 import io from 'socket.io-client';
+import { queueJoin, queueLeave } from "AC/queue";
 
 var socket = null;
 
@@ -23,24 +18,22 @@ export function webSocketMiddleware(store) {
   };
 }
 
-export default function(store) {
+export default function (store) {
   const token = localStorage.token;
   if (!token) {
     return;
   }
 
   const wsPort = process.env.NODE_ENV !== 'production' ? 3002 : location.port;
-  // const wsPort = 3002; // TODO for dev
-  // const wsPort = location.port;
 
-  const url = `${location.protocol}//${location.hostname}:${wsPort}`;
+  const url    = `${location.protocol}//${location.hostname}:${wsPort}`;
   const socket = io.connect(url, {
     query: {
       token: token.split(' ')[1]
     }
   });
 
-  socket.on('unauthorized', function(error) {
+  socket.on('unauthorized', function (error) {
     if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
       // redirect user to login page perhaps?
     }
@@ -57,10 +50,24 @@ export default function(store) {
   socket.on('change-sip-status', data => {
     store.dispatch(
       changeSipStatus({
-        sip: data.sip,
+        sip   : data.sip,
         status: data.status,
         online: data.online
       })
     );
+  });
+
+  socket.on('change-queue-member-status', data => {
+    store.dispatch(
+      changeQueueMemberStatus(data)
+    );
+  });
+
+  socket.on('queue-join', data => {
+    store.dispatch(queueJoin({ entry: data, id: data.uniqueid }));
+  });
+
+  socket.on('queue-leave', data => {
+    store.dispatch(queueLeave({ entry: data, id: data.uniqueid }));
   });
 }

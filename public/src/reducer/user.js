@@ -42,56 +42,70 @@ export default (state = defaultState, action) => {
       return state.set('isLoading', true);
 
     case LOAD_USERS + SUCCESS:
-      return state
-        .update('entities', entities =>
-          entities.merge(arrayToMapCustomKey(response, user => new UserModel(user), 'username'))
-        )
-        .set('isLoading', false)
-        .set('isLoaded', true);
+      return state.withMutations(s =>
+        s
+          .update('entities', entities =>
+            entities.merge(arrayToMapCustomKey(response, user => new UserModel(user), 'username'))
+          )
+          .set('isLoading', false)
+          .set('isLoaded', true)
+      );
 
     case LOAD_USERS + FAIL:
-      return state
-        .set('isLoading', false)
-        .set('isLoaded', false)
-        .set('isError', true)
-        .set('errorMessage', response.errorMessage);
+      return state.withMutations(s =>
+        s
+          .set('isLoading', false)
+          .set('isLoaded', false)
+          .set('isError', true)
+          .set('errorMessage', response.errorMessage)
+      );
 
     case POST_USER + START:
       return state.set('shouldRedirect', '');
 
     case POST_USER + SUCCESS:
-      return state
-        .setIn(['entities', payload.username], new UserModel(response))
-        .set('shouldRedirect', '/user');
+      return state.withMutations(s =>
+        s
+          .setIn(['entities', payload.username], new UserModel(response))
+          .set('shouldRedirect', '/user')
+      );
 
     case POST_USER + FAIL:
-      return state
-        .set('isLoading', false)
-        .set('isLoaded', false)
-        .set('isError', true)
-        .set('errorMessage', response.errorMessage)
-        .set('errorField', response.field);
+      return state.withMutations(s =>
+        s
+          .set('isLoading', false)
+          .set('isLoaded', false)
+          .set('isError', true)
+          .set('errorMessage', response.errorMessage)
+          .set('errorField', response.field)
+      );
 
     case PATCH_USER + START:
-      return state
-        .setIn(['entities', payload.username, 'isLoading'], true)
-        .set('shouldRedirect', '')
-        .set('isError', false)
-        .set('errorMessage', '')
-        .set('errorField', '');
+      return state.withMutations(s =>
+        s
+          .setIn(['entities', payload.username, 'isLoading'], true)
+          .set('shouldRedirect', '')
+          .set('isError', false)
+          .set('errorMessage', '')
+          .set('errorField', '')
+      );
 
     case PATCH_USER + SUCCESS:
-      return state
-        .setIn(['entities', payload.username, 'isLoading'], false)
-        .setIn(['entities', payload.username], new UserModel(response))
-        .set('shouldRedirect', '/users');
+      return state.withMutations(s =>
+        s
+          .setIn(['entities', payload.username, 'isLoading'], false)
+          .setIn(['entities', payload.username], new UserModel(response))
+          .set('shouldRedirect', '/users')
+      );
 
     case PATCH_USER + FAIL:
-      return state
-        .setIn(['entities', payload.username, 'isLoading'], false)
-        .set('isError', true)
-        .set('errorMessage', response.errorMessage)
-        .set('errorField', response.field);
+      return state.withMutations(s =>
+        s
+          .setIn(['entities', payload.username, 'isLoading'], false)
+          .set('isError', true)
+          .set('errorMessage', response.errorMessage)
+          .set('errorField', response.field)
+      );
 
     case REDIRECT_COMPLETE:
       return state.set('shouldRedirect', '');

@@ -1,38 +1,41 @@
-import React, { Component, PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { getChannelsBySipState } from "store/selectors";
 
-import { Card, CardHeader, CardBody } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardFooter } from "reactstrap";
 
-import SipPeerChannel from 'Component/SipPeerChannel';
+import SipPeerChannel from "Component/SipPeerChannel";
+import SipPeerQueueDetail from "Component/SipPeer/SipPeerQueueDetail";
+import "./sipPeer.css";
 
 import {
-  SIP_STATUS_UNAVAILABLE,
-  SIP_CHANGE_STATE,
-  SIP_STATUS_BUSY,
-  SIP_STATUS_IDLE,
-  SIP_STATUS_IN_USE,
-  SIP_STATUS_RINGING,
-  SIP_STATUS_ON_HOLD,
-  CHANNEL_STATUS_DOWN_AVAILABLE,
-  CHANNEL_STATUS_DOWN_RESERVED,
-  CHANNEL_STATUS_OFF_HOOK,
-  CHANNEL_STATUS_DIGITS_DIALED,
-  CHANNEL_STATUS_UP,
   CHANNEL_STATUS_OUT_RINGING,
-  CHANNEL_STATUS_IN_RINGING,
-  CHANNEL_STATUS_BUSY
-} from 'helpers/constants';
+  CHANNEL_STATUS_UP,
+  SIP_STATUS_IN_USE,
+  SIP_STATUS_RINGING
+} from "helpers/constants";
+
+import moment from "moment";
 
 const statusStyle = {
-  SIP_STATUS_IDLE: 'success',
-  SIP_STATUS_IN_USE: 'primary', // ring
-  SIP_STATUS_BUSY: 'warning',
-  SIP_STATUS_UNAVAILABLE: 'default',
-  SIP_STATUS_RINGING: 'warning', // ringing
-  SIP_STATUS_ON_HOLD: 'success' // UP
+  SIP_STATUS_IDLE: "success",
+  SIP_STATUS_IN_USE: "primary", // ring
+  SIP_STATUS_BUSY: "warning",
+  SIP_STATUS_UNAVAILABLE: "default",
+  SIP_STATUS_RINGING: "warning", // ringing
+  SIP_STATUS_ON_HOLD: "success" // UP
 };
 
 class SipPeer extends PureComponent {
+  static propTypes = {
+    selectSip: PropTypes.func,
+    sipPeer: PropTypes.object.isRequired,
+    channels: PropTypes.object,
+    isSelected: PropTypes.bool,
+    isTrunk: PropTypes.bool
+  };
+
   handleSelectSip = ev => {
     ev.preventDefault();
 
@@ -45,7 +48,7 @@ class SipPeer extends PureComponent {
     return (
       channels &&
       channels.size &&
-      !!channels.find(obj => obj.get('status') === CHANNEL_STATUS_UP) &&
+      !!channels.find(obj => obj.get("status") === CHANNEL_STATUS_UP) &&
       SIP_STATUS_IN_USE
     );
   };
@@ -54,20 +57,31 @@ class SipPeer extends PureComponent {
     return (
       channels &&
       channels.size &&
-      !!channels.find(obj => obj.get('status') === CHANNEL_STATUS_OUT_RINGING) &&
+      !!channels.find(
+        obj => obj.get("status") === CHANNEL_STATUS_OUT_RINGING
+      ) &&
       SIP_STATUS_RINGING
     );
   };
 
   render() {
-    const { channels, sipPeer, isSelected, isTrunk } = this.props;
-    const { login, sip, status } = sipPeer;
+    const {
+      channels,
+      sipPeerDetail,
+      sipPeer,
+      isSelected,
+      isTrunk,
+      memberOfQueue
+    } = this.props;
+
+    const { login, sip, status } = sipPeerDetail;
 
     const SipUp = this._isSipUp(channels);
 
     const SipRinging = this._isSipRinging(channels);
 
-    const peerStatusClass = statusStyle[SipUp] || statusStyle[SipRinging] || statusStyle[status];
+    const peerStatusClass =
+      statusStyle[SipUp] || statusStyle[SipRinging] || statusStyle[status];
 
     const sipChannels =
       channels && channels.size
@@ -78,37 +92,65 @@ class SipPeer extends PureComponent {
               </div>
             );
           })
-        : '';
+        : "";
 
-    const sipChannelsElement = sipChannels ? <CardBody>{sipChannels}</CardBody> : '';
+    const sipChannelsElement = sipChannels ? (
+      <CardBody className={"sip-peer-body"}>{sipChannels}</CardBody>
+    ) : (
+      ""
+    );
 
-    const additionalClass = isSelected ? 'selected-sip' : '';
+    const additionalClass = isSelected ? "selected-sip" : "";
+
+    // const PeerQueueDetail = memberOfQueue ? (
+    //   <SipPeerQueueDetail sipPeerDetail={sipPeerDetail} />
+    // ) : null;
 
     return (
       <Card
         className={`${additionalClass} border border-${
-          isSelected ? 'danger' : peerStatusClass
-        } text-${peerStatusClass}`}
+          isSelected ? "danger" : peerStatusClass
+        } text-${peerStatusClass} `}
       >
         <CardHeader
-          className={!isTrunk && 'cursor-pointer'}
-          onClick={!isTrunk && this.handleSelectSip}
+          className={`${!isTrunk ? "cursor-pointer" : ""} sip-peer-header`}
+          onClick={!isTrunk ? this.handleSelectSip : null}
         >
-          <div className={`rounded-circle bg-${peerStatusClass} sip-status-indicator`} />
+          <div
+            className={`rounded-circle bg-${peerStatusClass} sip-status-indicator`}
+          />
           {` ${sip} ${login}`}
         </CardHeader>
         {sipChannelsElement}
+
+        {/*{PeerQueueDetail}*/}
       </Card>
     );
   }
 }
 
-SipPeer.propTypes = {
-  selectSip: PropTypes.func,
-  sipPeer: PropTypes.object.isRequired,
-  channels: PropTypes.object,
-  isSelected: PropTypes.bool,
-  isTrunk: PropTypes.bool
-};
+function mapStateToProps(state, props) {
+  const getSipChannels = getChannelsBySipState();
+  let sipPeerDetail;
 
-export default SipPeer;
+  if (props.memberOfQueue) {
+    sipPeerDetail = state.queue.getIn([
+      "entities",
+      props.memberOfQueue,
+      "members",
+      props.sipPeer.sip
+    ]);
+  } else {
+    sipPeerDetail = state.sip.getIn(["entities", props.sipPeer.sip]);
+  }
+
+  return {
+    channels: getSipChannels(state, props),
+    sipPeerDetail
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  {}
+)(SipPeer);

@@ -1,29 +1,32 @@
-const AuthenticationController = require('../controllers/authentication'),
-  UserController = require('../controllers/user'),
-  SipController = require('../controllers/sip'),
-  ChannelsController = require('../controllers/channels'),
-  express = require('express'),
-  passportService = require('../config/passport'),
-  passport = require('passport');
+const AuthenticationController = require('../controllers/authentication');
+const UserController           = require('../controllers/user');
+const SipController            = require('../controllers/sip');
+const ChannelsController       = require('../controllers/channels');
+const QueueController          = require('../controllers/queue');
+const CommonController         = require('../controllers/common');
+const express                  = require('express');
+const passport                 = require('passport');
+const passportService          = require('../config/passport');
 
 const ROLE_CLIENT = require('./constants').ROLE_CLIENT;
-const ROLE_ADMIN = require('./constants').ROLE_ADMIN;
+const ROLE_ADMIN  = require('./constants').ROLE_ADMIN;
 
 // Middleware to require login/auth
-const requireAuth = passport.authenticate('jwt', { session: false });
+const requireAuth  = passport.authenticate('jwt', { session: false });
 const requireLogin = passport.authenticate('local', { session: false });
 
 // Constants for role types
-const REQUIRE_ADMIN = 'Admin',
-  REQUIRE_CLIENT = 'Client';
+const REQUIRE_ADMIN  = 'Admin',
+      REQUIRE_CLIENT = 'Client';
 
-module.exports = function(app) {
+module.exports = function (app) {
   // Initializing route groups
-  const apiRoutes = express.Router(),
-    sipRoutes = express.Router(),
-    channelsRoutes = express.Router(),
-    userRoutes = express.Router(),
-    authRoutes = express.Router();
+  const apiRoutes      = express.Router(),
+        sipRoutes      = express.Router(),
+        queueRoutes    = express.Router(),
+        channelsRoutes = express.Router(),
+        userRoutes     = express.Router(),
+        authRoutes     = express.Router();
 
   //=========================
   // Auth Routes
@@ -42,11 +45,18 @@ module.exports = function(app) {
   // SIP Routes
   //= ========================
 
-  // Set user routes as a subgroup/middleware to apiRoutes
   apiRoutes.use('/sip', sipRoutes);
 
-  // View user profile route
-  sipRoutes.get('/', requireAuth, SipController.getSip, SipController.getSipResponse);
+  sipRoutes.get('/', requireAuth, SipController.getSip, CommonController.getDefaultResponse);
+
+  //= ========================
+  // QUEUE Routes
+  //= ========================
+
+  apiRoutes.use('/queue', queueRoutes);
+
+  // Get all queues
+  queueRoutes.get('/', requireAuth, QueueController.getQueues, CommonController.getDefaultResponse);
 
   //= ========================
   // Channels Routes
@@ -55,10 +65,14 @@ module.exports = function(app) {
   // Set user routes as a subgroup/middleware to apiRoutes
   apiRoutes.use('/channels', channelsRoutes);
 
-  // View user profile route
-  channelsRoutes.get('/', requireAuth, ChannelsController.getChannels);
+  channelsRoutes.get('/', requireAuth, ChannelsController.getChannels, CommonController.getDefaultResponse);
 
-  channelsRoutes.get('/spy/:recipient/:sip', requireAuth, ChannelsController.spyChannel);
+  channelsRoutes.get(
+    '/spy/:recipient/:sip',
+    requireAuth,
+    AuthenticationController.roleAuthorization(ROLE_ADMIN),
+    ChannelsController.spyChannel
+  );
 
   //= ========================
   // User Routes
@@ -72,7 +86,12 @@ module.exports = function(app) {
   // View user profile route
   userRoutes.get('/:username', requireAuth, UserController.viewProfile);
 
-  userRoutes.patch('/:username', requireAuth, UserController.patchUser);
+  userRoutes.patch(
+    '/:username',
+    requireAuth,
+    AuthenticationController.roleAuthorization(ROLE_ADMIN),
+    UserController.patchUser
+  );
 
   userRoutes.post(
     '/register',

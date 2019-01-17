@@ -16,11 +16,11 @@
     "ui"
   ],
   "author": "Kol007",
-
   "license": "MIT",
   "dependencies": {
     "axios": "^0.17.1",
     "immutable": "^3.8.2",
+    "moment": "^2.23.0",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
@@ -29,6 +29,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "reactstrap": "^5.0.0-alpha.3",
+    "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
@@ -59,7 +60,8 @@
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
     "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-dev-server": "^2.9.3",
-    "webpack-merge": "^4.1.1"
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.1.1",
+    "why-did-you-update": "^0.1.1"
   }
 }

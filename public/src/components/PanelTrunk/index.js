@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import PropTypes from 'prop-types';
 import { getFilteredTrunksState } from 'store/selectors';
 
-import { loadSipPeers, spySip } from 'AC/sip';
+import { loadSipPeers } from 'AC/sip';
 import { loadChannels } from 'AC/channels';
 
-import { Card, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardBody, CardTitle, Col, Row } from 'reactstrap';
 import SipPeer from 'Component/SipPeer';
 
 class PanelTrunk extends Component {
@@ -21,20 +19,13 @@ class PanelTrunk extends Component {
   }
 
   render() {
-    const { sip, channels, selectedSip, selectSip } = this.props;
+    const { sip } = this.props;
 
-    const peers = sip.map(sipPeer => {
-      const channelsBySip =
-        channels && channels.filter(item => item.sip === sipPeer.sip);
-      const isSelected = selectedSip && selectedSip === sipPeer.sip;
-
+    const peers = sip.entrySeq().map(([key, sipPeer]) => {
       return (
         <Col key={sipPeer.sip} md="12" style={{ marginBottom: '5px' }}>
           <SipPeer
             sipPeer={sipPeer}
-            channels={channelsBySip}
-            selectSip={selectSip}
-            isSelected={!!isSelected}
             isTrunk={true}
           />
         </Col>
@@ -44,6 +35,7 @@ class PanelTrunk extends Component {
     return (
       <Card>
         <CardBody>
+          <CardTitle>Trunks</CardTitle>
           <Row>{peers}</Row>
         </CardBody>
       </Card>
@@ -52,21 +44,17 @@ class PanelTrunk extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sip, channels } = state;
+  const { sip } = state;
 
   return {
     sip: getFilteredTrunksState(state),
-    channels: channels,
 
     isLoading: sip.get('isLoading'),
-    isLoaded: sip.get('isLoaded'),
-
-    // filter: sip.get('filter')
+    isLoaded : sip.get('isLoaded'),
   };
 }
 
 export default connect(mapStateToProps, {
   loadSipPeers,
   loadChannels,
-  spySip
 })(PanelTrunk);

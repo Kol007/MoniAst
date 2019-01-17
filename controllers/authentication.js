@@ -101,6 +101,10 @@ exports.roleAuthorization = function(requiredRole) {
       }
 
       // If user is found, check role.
+      console.log('---', getRole(foundUser.role) >= getRole(requiredRole),
+        foundUser.role, requiredRole,
+        getRole(foundUser.role),  getRole(requiredRole)
+        );
       if (getRole(foundUser.role) >= getRole(requiredRole)) {
         return next();
       }
