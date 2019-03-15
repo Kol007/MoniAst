@@ -28,9 +28,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "startl": "NODE_PATH=./src react-scripts start",
+    "start-linux": "NODE_PATH=./src react-scripts start",
     "build": "react-scripts build",
-    "buildl": "NODE_PATH=./src react-scripts build",
+    "build-linux": "NODE_PATH=./src react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

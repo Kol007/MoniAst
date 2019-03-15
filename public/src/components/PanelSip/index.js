@@ -14,7 +14,6 @@ import { loadChannels } from 'AC/channels';
 
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import SipPeer from 'components/SipPeer';
-import SipToolbar from 'components/SipToolbar';
 
 class PanelSip extends Component {
   componentDidMount() {
@@ -43,7 +42,6 @@ class PanelSip extends Component {
   render() {
     return (
       <>
-        {/*<SipToolbar />*/}
         <Card>
           <CardBody>
             <Row>{this.renderItems()}</Row>

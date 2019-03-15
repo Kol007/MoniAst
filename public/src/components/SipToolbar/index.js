@@ -120,39 +120,6 @@ class SipToolbar extends Component {
         </div>
       </div>
     );
-
-    return (
-      <div className={styles.content}>
-        <ButtonGroup>
-          {!queueEntity &&
-            !isHideFilter && (
-              <Button outline color="info" onClick={this.handleToggleOnline}>
-                {filterStateText}
-              </Button>
-            )}
-
-          <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy}>
-            <FontAwesomeIcon icon="user-secret" />
-          </Button>
-
-          <Button
-            outline
-            color="info"
-            disabled={!selectedSip}
-            onClick={this.handleSpyAndWhisper}
-            title=""
-          >
-            <FontAwesomeIcon icon="microphone" />
-          </Button>
-        </ButtonGroup>
-
-        {!!queueEntity && (
-          <ButtonGroup className="float-right">
-            <span className="badge badge-primary">Queue - {queueEntity}</span>
-          </ButtonGroup>
-        )}
-      </div>
-    );
   }
 }
 

@@ -12,8 +12,6 @@ import {
 import QueueComponent from '../Queue/QueueComponent';
 import { getSipIsLoadedState, getSipIsLoadingState } from '../../store/selectors/sip';
 import SipToolbar from '../SipToolbar';
-import { Button, ButtonGroup } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export class PanelQueues extends Component {
   componentDidMount() {
