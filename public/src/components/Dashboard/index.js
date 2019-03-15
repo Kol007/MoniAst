@@ -3,12 +3,11 @@ import React, { Component } from 'react';
 import PanelTrunk from 'components/PanelTrunk';
 import PanelSip from 'components/PanelSip';
 import SipToolbar from '../SipToolbar';
-import { Card } from 'reactstrap';
 
 export class Dashboard extends Component {
   render() {
     return (
-      <>
+      <main>
         <SipToolbar />
 
         <div className="container-fluid">
@@ -22,7 +21,7 @@ export class Dashboard extends Component {
             </div>
           </div>
         </div>
-      </>
+      </main>
     );
   }
 }

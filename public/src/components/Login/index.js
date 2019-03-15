@@ -16,7 +16,6 @@ import {
 
 class Login extends Component {
   state = {
-    redirectToReferrer: false,
     username: '',
     password: ''
   };
@@ -29,15 +28,19 @@ class Login extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.isLoggedIn) {
-      const locationState = nextProps.location.state;
+  componentDidUpdate(prevProps, prevState, prevContext) {
+    if (this.props.isLoggedIn) {
+      const locationState = this.props.location.state;
 
       this.props.history.push(
         locationState && locationState.from ? locationState.from.pathname : '/dashboard'
       );
     }
   }
+
+  handleChangeInput = ev => {
+    this.setState({ [ev.target.getAttribute('name')]: ev.target.value });
+  };
 
   render() {
     const { isError, isLoading, errorCode } = this.props;
@@ -67,12 +70,13 @@ class Login extends Component {
           <input
             type="text"
             id="inputUsername"
+            name="username"
             className="form-control"
             placeholder="Username"
             required
             autoFocus
             value={this.state.username}
-            onChange={ev => this.setState({ username: ev.target.value })}
+            onChange={this.handleChangeInput}
           />
 
           <label htmlFor="inputPassword" className="sr-only">
@@ -81,11 +85,12 @@ class Login extends Component {
           <input
             type="password"
             id="inputPassword"
+            name="password"
             className="form-control"
             placeholder="Password"
             required
             value={this.state.password}
-            onChange={ev => this.setState({ password: ev.target.value })}
+            onChange={this.handleChangeInput}
           />
 
           <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={isLoading}>

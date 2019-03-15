@@ -1,8 +1,9 @@
 // Importing Node packages required for schema
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
-const ROLE_CLIENT = require('../helpers/constants').ROLE_CLIENT;
-const ROLE_ADMIN = require('../helpers/constants').ROLE_ADMIN;
+
+const ROLE_STRING_CLIENT = require('../helpers/constants').ROLE_STRING_CLIENT;
+const ROLE_STRING_ADMIN = require('../helpers/constants').ROLE_STRING_ADMIN;
 
 const Schema = mongoose.Schema;
 
@@ -27,8 +28,8 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: [ROLE_CLIENT, ROLE_ADMIN],
-      default: ROLE_CLIENT
+      enum: [ROLE_STRING_CLIENT, ROLE_STRING_ADMIN],
+      default: ROLE_STRING_CLIENT
     },
     sip: { type: String },
     resetPasswordToken: { type: String },

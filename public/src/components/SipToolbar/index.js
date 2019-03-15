@@ -96,7 +96,7 @@ class SipToolbar extends Component {
                   </Button>
                 )}
 
-              <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy}>
+              <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy} title="Spy">
                 <FontAwesomeIcon icon="user-secret" />
               </Button>
 
@@ -105,7 +105,7 @@ class SipToolbar extends Component {
                 color="info"
                 disabled={!selectedSip}
                 onClick={this.handleSpyAndWhisper}
-                title=""
+                title="Spy & whisper"
               >
                 <FontAwesomeIcon icon="microphone" />
               </Button>
