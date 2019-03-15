@@ -6,48 +6,48 @@ import {
   QUEUE_MEMBER_STATUS,
   START,
   SUCCESS
-} from "../helpers/constants";
+} from '../helpers/constants';
 
-import { Map, Record, OrderedMap } from "immutable";
+import { Map, Record, OrderedMap } from 'immutable';
 
 const QueueParamsModel = Record({
-  queue: "",
-  max: "0",
-  strategy: "ringall",
-  calls: "1",
-  holdtime: "109",
-  talktime: "97",
-  completed: "116",
-  abandoned: "42",
-  servicelevel: "60",
-  servicelevelperf: "52.6",
-  weight: "0"
+  queue: '',
+  max: '0',
+  strategy: 'ringall',
+  calls: '1',
+  holdtime: '109',
+  talktime: '97',
+  completed: '116',
+  abandoned: '42',
+  servicelevel: '60',
+  servicelevelperf: '52.6',
+  weight: '0'
 });
 
 const QueueMemberModel = Record({
-  queue: "",
-  login: "",
-  sip: "",
-  location: "Local/143@from-queue/n",
-  penalty: "0",
-  callstaken: "5",
-  lastcall: "1536960877",
-  status: "",
-  paused: "0",
+  queue: '',
+  login: '',
+  sip: '',
+  location: 'Local/143@from-queue/n',
+  penalty: '0',
+  callstaken: '5',
+  lastcall: '1536960877',
+  status: '',
+  paused: '0',
   online: false
 });
 
 const QueueEntryModel = Record({
-  queue: "Default",
+  queue: 'Default',
   position: 0,
   channel: false,
-  calleridnum: "",
-  calleridname: "",
-  connectedlinenum: "",
-  connectedlinename: "",
-  wait: "0",
+  calleridnum: '',
+  calleridname: '',
+  connectedlinenum: '',
+  connectedlinename: '',
+  wait: '0',
   date: 0,
-  uniqueid: ""
+  uniqueid: ''
 });
 
 const defaultState = new Map({
@@ -59,51 +59,59 @@ const defaultState = new Map({
 
   sipSpy: new Map({
     isError: false,
-    status: "",
-    message: ""
+    status: '',
+    message: ''
   })
 });
 
 export default (state = defaultState, action) => {
   const { type, payload, response } = action;
+  let i = 0;
 
   switch (type) {
     case LOAD_ALL_QUEUES + START:
-      return state.set("isLoading", true);
+      return state.set('isLoading', true);
 
     case LOAD_ALL_QUEUES + SUCCESS:
       return state
-        .update("entities", entities =>
-          entities.merge(arrayToMapQueues(response))
-        )
-        .set("isLoading", false)
-        .set("isLoaded", true);
+        .update('entities', entities => entities.merge(arrayToMapQueues(response)))
+        .set('isLoading', false)
+        .set('isLoaded', true);
 
     case LOAD_ALL_QUEUES + FAIL:
       return state;
 
     case QUEUE_JOIN:
-      return state.setIn(
-        ["entities", payload.entry.queue, "entries", payload.entry.uniqueid],
-        new QueueEntryModel(payload.entry)
+      return state.withMutations(s =>
+        s
+          .setIn(
+            ['entities', payload.entry.queue, 'entries', payload.entry.uniqueid],
+            new QueueEntryModel(payload.entry)
+          )
+          .updateIn(['entities', payload.entry.queue, 'entries'], item =>
+            item.map(keyValue => keyValue.set('position', ++i))
+          )
       );
 
     case QUEUE_LEAVE:
-      return state.deleteIn([
-        "entities",
-        payload.entry.queue,
-        "entries",
-        payload.entry.uniqueid
-      ]);
+      return state.withMutations(s =>
+        s
+          .deleteIn(['entities', payload.entry.queue, 'entries', payload.entry.uniqueid])
+          .updateIn(
+            ['entities', payload.entry.queue, 'entries'],
+            item => (item ? item.map(keyValue => keyValue.set('position', ++i)) : [])
+          )
+      );
 
     case QUEUE_MEMBER_STATUS:
       return state.setIn(
-        ["entities", payload.data.queue, "members", payload.data.sip],
+        ['entities', payload.data.queue, 'members', payload.data.sip],
         new QueueMemberModel(payload.data)
       );
-  }
 
-  return state;
+    default:
+      return state;
+  }
 };
 
 function arrayToMapQueues(queues) {
@@ -120,9 +128,8 @@ function arrayToMapQueues(queues) {
           new OrderedMap({})
         ),
         entries: el.entries.reduce(
-          (acc, entity) =>
-            acc.set(entity.uniqueid, new QueueEntryModel(entity)),
-          new Map({})
+          (acc, entity) => acc.set(entity.uniqueid, new QueueEntryModel(entity)),
+          new OrderedMap({})
         )
       })
     );

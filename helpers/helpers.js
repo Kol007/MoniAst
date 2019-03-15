@@ -4,6 +4,8 @@ const User = require('../models/user');
 const ROLE_CLIENT = require('./constants').ROLE_CLIENT;
 const ROLE_ADMIN = require('./constants').ROLE_ADMIN;
 
+const ROLE_STRING_CLIENT = require('./constants').ROLE_STRING_CLIENT;
+const ROLE_STRING_ADMIN = require('./constants').ROLE_STRING_ADMIN;
 
 function createDefaultAdmin() {
   const username = 'admin';
@@ -28,7 +30,6 @@ function createDefaultAdmin() {
 
     console.log('Created default user: admin/admin');
   });
-
 }
 
 exports.isAdminExists = function isAdminExists() {
@@ -70,15 +71,14 @@ exports.setUserInfo = function setUserInfo(request) {
 };
 
 exports.getRole = function getRole(checkRole) {
-  let role;
-
   switch (checkRole) {
-    case ROLE_ADMIN: role = ROLE_ADMIN; break;
-    case ROLE_CLIENT: role = ROLE_CLIENT; break;
-    default: role = ROLE_CLIENT;
+    case ROLE_STRING_ADMIN:
+      return ROLE_ADMIN;
+    case ROLE_STRING_CLIENT:
+      return ROLE_CLIENT;
+    default:
+      return ROLE_CLIENT;
   }
-
-  return role;
 };
 
 /**
@@ -98,5 +98,3 @@ exports.normalizePort = function normalizePort(val) {
 
   return false;
 };
-
-

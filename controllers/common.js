@@ -1,4 +1,4 @@
-exports.getDefaultResponse = function (req, res, next) {
+exports.getDefaultResponse = function(req, res, next) {
   res.json(req.data);
 };
 

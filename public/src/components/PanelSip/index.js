@@ -1,15 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import PropTypes from "prop-types";
-import { getFilteredSipsState } from "store/selectors";
+import PropTypes from 'prop-types';
+import {
+  getFilteredSipsState,
+  getSipIsLoadedState,
+  getSipIsLoadingState,
+  getSipSelectedSipState
+} from 'store/selectors/sip';
 
-import { loadSipPeers, selectSip } from "AC/sip";
-import { loadChannels } from "AC/channels";
+import { loadSipPeers, selectSip } from 'AC/sip';
+import { loadChannels } from 'AC/channels';
 
-import { Card, CardBody, Col, Row } from "reactstrap";
-import SipPeer from "Component/SipPeer";
-import SipToolbar from "Component/SipToolbar";
+import { Card, CardBody, Col, Row } from 'reactstrap';
+import SipPeer from 'components/SipPeer';
+import SipToolbar from 'components/SipToolbar';
 
 class PanelSip extends Component {
   componentDidMount() {
@@ -21,30 +26,30 @@ class PanelSip extends Component {
     }
   }
 
-  render() {
-    const { sip, selectedSip, selectSip, isLoaded, isLoading } = this.props;
+  renderItems = () => {
+    const { sip, selectedSip, selectSip } = this.props;
 
-    const peers = sip.entrySeq().map(([key, sipPeer]) => {
+    return sip.entrySeq().map(([key, sipPeer]) => {
       const isSelected = selectedSip && selectedSip === sipPeer.sip;
 
       return (
         <Col key={sipPeer.sip} md="4" className="col-sip">
-          <SipPeer
-            sipPeer={sipPeer}
-            selectSip={selectSip}
-            isSelected={!!isSelected}
-          />
+          <SipPeer sipPeer={sipPeer} selectSip={selectSip} isSelected={!!isSelected} />
         </Col>
       );
     });
+  };
 
+  render() {
     return (
-      <Card>
-        <SipToolbar />
-        <CardBody>
-          <Row>{peers}</Row>
-        </CardBody>
-      </Card>
+      <>
+        {/*<SipToolbar />*/}
+        <Card>
+          <CardBody>
+            <Row>{this.renderItems()}</Row>
+          </CardBody>
+        </Card>
+      </>
     );
   }
 }
@@ -58,13 +63,11 @@ PanelSip.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { sip } = state;
-
   return {
     sip: getFilteredSipsState(state),
-    isLoading: sip.get("isLoading"),
-    isLoaded: sip.get("isLoaded"),
-    selectedSip: sip.get("selectedSip")
+    isLoading: getSipIsLoadingState(state),
+    isLoaded: getSipIsLoadedState(state),
+    selectedSip: getSipSelectedSipState(state)
   };
 }
 

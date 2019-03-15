@@ -1,0 +1,8 @@
+.container {
+  width: 100%;
+  padding: 8px;
+}
+
+.content {
+  padding-left: 30px !important;
+}

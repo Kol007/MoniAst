@@ -3,10 +3,17 @@ import { connect } from 'react-redux';
 import { getQueues } from 'AC/queue';
 import { loadSipPeers } from 'AC/sip';
 import { loadChannels } from 'AC/channels';
-import Queue from 'components/Queue';
 
-import { getQueuesKeysState} from 'store/selectors';
-
+import {
+  getQueuesKeysState,
+  getQueuesIsLoadedState,
+  getQueuesIsLoadingState
+} from 'store/selectors/queue';
+import QueueComponent from '../Queue/QueueComponent';
+import { getSipIsLoadedState, getSipIsLoadingState } from '../../store/selectors/sip';
+import SipToolbar from '../SipToolbar';
+import { Button, ButtonGroup } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export class PanelQueues extends Component {
   componentDidMount() {
@@ -17,8 +24,10 @@ export class PanelQueues extends Component {
     }
 
     if (!isLoadedSip && !isLoadingSip) {
-      this.props.loadSipPeers();
-      this.props.loadChannels();
+      const { loadSipPeers, loadChannels } = this.props;
+
+      loadSipPeers();
+      loadChannels();
     }
   }
 
@@ -28,19 +37,19 @@ export class PanelQueues extends Component {
     const { isLoaded, isLoadedSip } = this.props;
 
     if (!isLoaded || !isLoadedSip) {
-      return (<h1>Loading..</h1>)
+      return <h1>Loading..</h1>;
     }
 
     const queuesComponent = queues.entrySeq().map(([key, item]) => {
-      return (
-        <Queue key={key} entity={key}>{key}</Queue>
-      )
+      return <QueueComponent key={key} entity={key} />;
     });
 
     return (
       <div className="container-fluid">
-        <div className="row extensions-container">
-          <div className="col-12">
+        <div className="row">
+          <SipToolbar isHideFilter={true} />
+
+          <div className="col-12" style={{ marginTop: '10px' }}>
             {queuesComponent}
           </div>
         </div>
@@ -52,12 +61,14 @@ export class PanelQueues extends Component {
 function mapStateToProps(state) {
   return {
     queues: getQueuesKeysState(state),
-    isLoading: state.queue.get('isLoading'),
-    isLoaded: state.queue.get('isLoaded'),
+    isLoading: getQueuesIsLoadingState(state),
+    isLoaded: getQueuesIsLoadedState(state),
 
-    isLoadingSip: state.sip.get('isLoading'),
-    isLoadedSip: state.sip.get('isLoaded'),
-  }
+    isLoadingSip: getSipIsLoadingState(state),
+    isLoadedSip: getSipIsLoadedState(state)
+  };
 }
-export default connect(mapStateToProps, { getQueues, loadSipPeers, loadChannels })(PanelQueues);
-
+export default connect(
+  mapStateToProps,
+  { getQueues, loadSipPeers, loadChannels }
+)(PanelQueues);

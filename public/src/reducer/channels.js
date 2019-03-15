@@ -1,4 +1,11 @@
-import { LOAD_ALL_CHANNELS, START, SUCCESS, FAIL, NEW_CHANNEL, REMOVE_CHANNEL } from '../helpers/constants';
+import {
+  LOAD_ALL_CHANNELS,
+  START,
+  SUCCESS,
+  FAIL,
+  NEW_CHANNEL,
+  REMOVE_CHANNEL
+} from '../helpers/constants';
 import { Record, Map } from 'immutable';
 import { arrayToMap } from '../store/helpers';
 
@@ -35,7 +42,8 @@ export default (state = defaultState, action) => {
 
     case REMOVE_CHANNEL:
       return state.delete(payload.id);
-  }
 
-  return state;
+    default:
+      return state;
+  }
 };

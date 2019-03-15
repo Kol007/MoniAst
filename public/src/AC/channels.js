@@ -1,11 +1,11 @@
 import {
   API_URL,
-  BRIDGE_START,
-  BRIDGE_STOP,
+  // BRIDGE_START,
+  // BRIDGE_STOP,
   LOAD_ALL_CHANNELS,
-  START,
-  SUCCESS,
-  FAIL,
+  // START,
+  // SUCCESS,
+  // FAIL,
   NEW_CHANNEL,
   REMOVE_CHANNEL
 } from '../helpers/constants';

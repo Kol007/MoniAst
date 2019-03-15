@@ -3,13 +3,9 @@ import {
   SIP_SELECT,
   LOAD_ALL_SIPS,
   CHANGE_SIP_STATUS,
-  START,
-  SUCCESS,
-  FAIL,
   SIP_FILTER,
   SIP_SPY,
-  SIP_SPY_WHISPER,
-  BRIDGE_STOP
+  RESET_ERROR
 } from '../helpers/constants';
 
 export function loadSipPeers() {
@@ -48,7 +44,6 @@ export function filterSip(filter) {
       filter
     },
     needAuth: true
-
   };
 }
 
@@ -56,16 +51,14 @@ export function spySip(recipient, sip, whisper) {
   return {
     type: SIP_SPY,
     payload: { recipient, sip, whisper },
+    params: { whisper },
     callAPI: `${API_URL}/channels/spy/${recipient}/${sip}`,
     needAuth: true
   };
 }
 
-//// TESTS
-export function stopBridgeTest() {
-  const action = {
-    type: BRIDGE_STOP
+export function spySipResetError() {
+  return {
+    type: SIP_SPY + RESET_ERROR
   };
-
-  return action;
 }

@@ -1,14 +1,13 @@
-import { Record, Map } from 'immutable';
+import { Record, Map, fromJS } from 'immutable';
 import {
   LOAD_USERS,
   POST_USER,
-  ADD_USER,
-  DELETE_USER,
   PATCH_USER,
   SUCCESS,
   START,
   FAIL,
-  REDIRECT_COMPLETE
+  DELETE_USER,
+  LOAD_USER
 } from '../helpers/constants';
 import { arrayToMapCustomKey } from '../store/helpers';
 
@@ -60,17 +59,67 @@ export default (state = defaultState, action) => {
           .set('errorMessage', response.errorMessage)
       );
 
+    case LOAD_USER + START:
+      return state.set('isLoading', true);
+
+    case LOAD_USER + SUCCESS:
+      return state.withMutations(s =>
+        s
+          .update('entities', entities =>
+            entities.merge(fromJS({ [response.username]: new UserModel(response) }))
+          )
+          .set('isLoading', false)
+          .set('isLoaded', true)
+      );
+
+    case LOAD_USER + FAIL:
+      return state.withMutations(s =>
+        s
+          .set('isLoading', false)
+          .set('isLoaded', false)
+          .set('isError', true)
+          .set('errorMessage', response.errorMessage)
+      );
+
     case POST_USER + START:
-      return state.set('shouldRedirect', '');
+      return state
+        .set('submitSuccess', false)
+        .set('isError', false)
+        .set('errorMessage', '')
+        .set('errorField', '');
 
     case POST_USER + SUCCESS:
       return state.withMutations(s =>
         s
           .setIn(['entities', payload.username], new UserModel(response))
-          .set('shouldRedirect', '/user')
+          .set('isLoading', false)
+          .set('isLoaded', true)
+          .set('isError', false)
+          .set('errorMessage', '')
+          .set('errorField', '')
+          .set('submitSuccess', true)
       );
 
     case POST_USER + FAIL:
+      return state
+        .set('isLoading', false)
+        .set('isLoaded', false)
+        .set('isError', true)
+        .set('errorMessage', response.errorMessage)
+        .set('errorField', response.field)
+        .set('submitSuccess', false);
+
+    case DELETE_USER + START:
+      return state.set('submitSuccess', false);
+
+    case DELETE_USER + SUCCESS:
+      return state.withMutations(s =>
+        s
+          .removeIn(['entities', payload.username], new UserModel(response))
+          .set('submitSuccess', true)
+      );
+
+    case DELETE_USER + FAIL:
       return state.withMutations(s =>
         s
           .set('isLoading', false)
@@ -78,16 +127,17 @@ export default (state = defaultState, action) => {
           .set('isError', true)
           .set('errorMessage', response.errorMessage)
           .set('errorField', response.field)
+          .set('submitSuccess', false)
       );
 
     case PATCH_USER + START:
       return state.withMutations(s =>
         s
           .setIn(['entities', payload.username, 'isLoading'], true)
-          .set('shouldRedirect', '')
           .set('isError', false)
           .set('errorMessage', '')
           .set('errorField', '')
+          .set('submitSuccess', false)
       );
 
     case PATCH_USER + SUCCESS:
@@ -95,7 +145,7 @@ export default (state = defaultState, action) => {
         s
           .setIn(['entities', payload.username, 'isLoading'], false)
           .setIn(['entities', payload.username], new UserModel(response))
-          .set('shouldRedirect', '/users')
+          .set('submitSuccess', true)
       );
 
     case PATCH_USER + FAIL:
@@ -105,11 +155,10 @@ export default (state = defaultState, action) => {
           .set('isError', true)
           .set('errorMessage', response.errorMessage)
           .set('errorField', response.field)
+          .set('submitSuccess', false)
       );
 
-    case REDIRECT_COMPLETE:
-      return state.set('shouldRedirect', '');
+    default:
+      return state;
   }
-
-  return state;
 };

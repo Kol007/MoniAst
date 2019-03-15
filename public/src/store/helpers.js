@@ -12,7 +12,6 @@ export function arrayToMapCustomKey(arr, mapper = f => f, idKey) {
   }, new Map({}));
 }
 
-
 export function arrayToMapQueues(arr, mapper = f => f) {
   return arr.reduce((acc, entity) => acc.set(entity.id, mapper(entity)), new Map({}));
 }

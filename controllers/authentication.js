@@ -37,7 +37,7 @@ exports.register = function(req, res, next) {
 
   // Return error if no username provided
   if (!username) {
-    return res.status(422).send({ error: 'You must enter an username address.' });
+    return res.status(422).send({ error: 'You must enter an username.' });
   }
 
   // Return error if full name not provided
@@ -101,15 +101,11 @@ exports.roleAuthorization = function(requiredRole) {
       }
 
       // If user is found, check role.
-      console.log('---', getRole(foundUser.role) >= getRole(requiredRole),
-        foundUser.role, requiredRole,
-        getRole(foundUser.role),  getRole(requiredRole)
-        );
-      if (getRole(foundUser.role) >= getRole(requiredRole)) {
+      if (getRole(foundUser.role) >= requiredRole) {
         return next();
       }
 
-      return res.status(401).json({ error: 'You are not authorized to view this content.' });
+      return res.status(423).json({ errorMessage: 'You are not authorized to do this' });
     });
   };
 };
@@ -120,13 +116,16 @@ exports.roleAuthorization = function(requiredRole) {
 
 exports.verifyToken = function(req, res, next) {
   User.findOne(
-    { resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } },
+    {
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    },
     (err, resetUser) => {
       // If query returned no results, token expired or was invalid. Return error.
       if (!resetUser) {
-        res
-          .status(422)
-          .json({ error: 'Your token has expired. Please attempt to reset your password again.' });
+        res.status(422).json({
+          error: 'Your token has expired. Please attempt to reset your password again.'
+        });
       }
 
       // Otherwise, save new password and clear resetToken from database
@@ -147,9 +146,9 @@ exports.verifyToken = function(req, res, next) {
             'If you did not request this change, please contact us immediately.'
         };
 
-        return res
-          .status(200)
-          .json({ message: 'Password changed successfully. Please login with your new password.' });
+        return res.status(200).json({
+          message: 'Password changed successfully. Please login with your new password.'
+        });
       });
     }
   );

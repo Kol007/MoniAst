@@ -1,16 +1,60 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import { Button, ButtonGroup } from "reactstrap";
-import FontAwesome from "react-fontawesome";
+import { Button, ButtonGroup } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
 
-import { filterSip, spySip } from "AC/sip";
+import { filterSip, spySip, spySipResetError } from 'AC/sip';
 
-import { SIP_FILTER_ALL, SIP_FILTER_ONLINE } from "helpers/constants";
-import { getFilteredSipsState } from "store/selectors";
+import { SIP_FILTER_ALL, SIP_FILTER_ONLINE } from 'helpers/constants';
+import {
+  getFilteredSipsState,
+  getSipFilterState,
+  getSipIsLoadedState,
+  getSipIsLoadingState,
+  getSipSelectedSipState,
+  getSipSpyIsErrorState,
+  getSipSpyStatusState,
+  getSipSpyMessageState
+} from 'store/selectors/sip';
+import { getAuthSipState } from '../../store/selectors/auth';
+import { getChannelsState } from '../../store/selectors/channels';
+
+import styles from './SipToolbar.module.css';
 
 class SipToolbar extends Component {
+  static propTypes = {
+    selectedSip: PropTypes.string,
+    filterSip: PropTypes.func,
+    spySip: PropTypes.func,
+    filter: PropTypes.string,
+    snackBarActions: PropTypes.object,
+
+    sipSpyIsError: PropTypes.bool,
+    sipSpyStatus: PropTypes.string,
+    sipSpyMessage: PropTypes.string,
+
+    isHideFilter: PropTypes.bool
+  };
+
+  componentDidUpdate(prevProps, prevState, prevContext) {
+    if (this.props.sipSpyIsError && prevProps.sipSpyIsError !== true) {
+      toast.error(this.props.sipSpyMessage || 'An error has occurred');
+
+      prevProps.spySipResetError();
+    }
+
+    if (
+      !this.props.sipSpyIsError &&
+      this.props.sipSpyStatus !== prevProps.sipSpyStatus &&
+      this.props.sipSpyMessage
+    ) {
+      toast.info(this.props.sipSpyMessage);
+    }
+  }
+
   handleToggleOnline = ev => {
     ev.preventDefault();
 
@@ -36,46 +80,74 @@ class SipToolbar extends Component {
   };
 
   render() {
-    const { selectedSip, filter, queueEntity } = this.props;
+    const { selectedSip, filter, queueEntity, isHideFilter } = this.props;
 
-    const buttonSpy = {
-      disabled: !selectedSip
-    };
-
-    const filterStateText =
-      filter === SIP_FILTER_ALL ? "Show online" : "Show all";
+    const filterStateText = filter === SIP_FILTER_ALL ? 'Show online' : 'Show all';
 
     return (
-      <div style={{ margin: "10px 10px 10px 20px" }}>
-        <ButtonGroup>
-          {!queueEntity && (
-            <Button outline color="info" onClick={this.handleToggleOnline}>
-              {filterStateText}
-            </Button>
-          )}
+      <div className={`nav-scroller bg-white shadow-sm ${styles.container}`}>
+        <div className={`col-md-12 ${styles.content}`}>
+          <nav className="nav nav-underline">
+            <ButtonGroup>
+              {!queueEntity &&
+                !isHideFilter && (
+                  <Button outline color="info" onClick={this.handleToggleOnline}>
+                    {filterStateText}
+                  </Button>
+                )}
 
-          <Button
-            outline
-            color="info"
-            disabled={buttonSpy.disabled}
-            onClick={this.handleSpy}
-          >
-            <FontAwesome name="user-secret" />
+              <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy}>
+                <FontAwesomeIcon icon="user-secret" />
+              </Button>
+
+              <Button
+                outline
+                color="info"
+                disabled={!selectedSip}
+                onClick={this.handleSpyAndWhisper}
+                title=""
+              >
+                <FontAwesomeIcon icon="microphone" />
+              </Button>
+            </ButtonGroup>
+
+            {!!queueEntity && (
+              <ButtonGroup className="float-right">
+                <span className="badge badge-primary">Queue - {queueEntity}</span>
+              </ButtonGroup>
+            )}
+          </nav>
+        </div>
+      </div>
+    );
+
+    return (
+      <div className={styles.content}>
+        <ButtonGroup>
+          {!queueEntity &&
+            !isHideFilter && (
+              <Button outline color="info" onClick={this.handleToggleOnline}>
+                {filterStateText}
+              </Button>
+            )}
+
+          <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy}>
+            <FontAwesomeIcon icon="user-secret" />
           </Button>
 
           <Button
             outline
             color="info"
-            disabled={buttonSpy.disabled}
+            disabled={!selectedSip}
             onClick={this.handleSpyAndWhisper}
             title=""
           >
-            <FontAwesome name="microphone" />
+            <FontAwesomeIcon icon="microphone" />
           </Button>
         </ButtonGroup>
 
         {!!queueEntity && (
-          <ButtonGroup className="pull-right">
+          <ButtonGroup className="float-right">
             <span className="badge badge-primary">Queue - {queueEntity}</span>
           </ButtonGroup>
         )}
@@ -84,28 +156,21 @@ class SipToolbar extends Component {
   }
 }
 
-SipToolbar.propTypes = {
-  selectedSip: PropTypes.string,
-  filterSip: PropTypes.func,
-  filter: PropTypes.string,
-  sipSpyStatus: PropTypes.object,
-  snackBarActions: PropTypes.object
-};
-
 function mapStateToProps(state) {
-  const { sip, channels, auth } = state;
-
   return {
     sip: getFilteredSipsState(state),
-    channels: channels,
+    channels: getChannelsState(state),
 
-    isLoading: sip.get("isLoading"),
-    isLoaded: sip.get("isLoaded"),
-    selectedSip: sip.get("selectedSip"),
+    isLoading: getSipIsLoadingState(state),
+    isLoaded: getSipIsLoadedState(state),
+    selectedSip: getSipSelectedSipState(state),
 
-    filter: sip.get("filter"),
-    sipSpyStatus: sip.get("sipSpy").toJSON(),
-    authSIP: auth.get("sip")
+    filter: getSipFilterState(state),
+    authSIP: getAuthSipState(state),
+
+    sipSpyIsError: getSipSpyIsErrorState(state),
+    sipSpyStatus: getSipSpyStatusState(state),
+    sipSpyMessage: getSipSpyMessageState(state)
   };
 }
 
@@ -113,6 +178,7 @@ export default connect(
   mapStateToProps,
   {
     filterSip,
-    spySip
+    spySip,
+    spySipResetError
   }
 )(SipToolbar);

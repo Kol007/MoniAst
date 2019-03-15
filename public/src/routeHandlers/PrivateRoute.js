@@ -1,29 +1,37 @@
-import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router';
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { getAuthIsLoggedInState } from '../store/selectors/auth';
 
-class PrivateRoute extends Component {
-  render() {
-    const { exact } = this.props;
+function PrivateRoute({ component: Component, ...rest }) {
+  const { isLoggedIn } = rest;
 
-    return this.props.isLoggedIn ? (
-      <Route exact={exact} path={this.props.path} component={this.props.component} />
-    ) : (
-      <Redirect
-        to={{
-          pathname: '/login',
-          state: { from: this.props.path }
-        }}
-      />
-    );
-  }
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isLoggedIn ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
 }
 
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.auth.get('isLoggedIn')
+    isLoggedIn: getAuthIsLoggedInState(state)
   };
 }
 
-export default withRouter(connect(mapStateToProps, {})(PrivateRoute));
+export default connect(
+  mapStateToProps,
+  {}
+)(PrivateRoute);

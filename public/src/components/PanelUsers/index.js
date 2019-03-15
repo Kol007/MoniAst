@@ -4,83 +4,96 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getUsers, deleteUser } from 'AC/user';
-import {
-  Container,
-  Row,
-  Table,
-  ButtonGroup,
-  Button,
-  Nav,
-  NavItem,
-  NavLink,
-  Card,
-  CardBody
-} from 'reactstrap';
+import { Container, Row, Table, ButtonGroup, Button, NavLink, Card } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
+import {
+  getUserIsLoadedState,
+  getUserIsLoadingState,
+  getUsersState
+} from '../../store/selectors/user';
+
+import styles from './PanelUsers.module.css';
 
 class PanelUsers extends Component {
-  componentDidMount() {
-    const { isLoaded, isLoading, getUsers } = this.props;
+  static propTypes = {
+    entities: PropTypes.object,
+    isLoading: PropTypes.bool,
+    isLoaded: PropTypes.bool
+  };
 
-    if (!isLoaded && !isLoading) {
+  componentDidMount() {
+    const { isLoading, getUsers } = this.props;
+
+    if (!isLoading) {
       getUsers();
     }
   }
 
-  _handleDeleteUser(username) {
-    if (confirm(`Delete ${username}?`)) {
+  _handleDeleteUser = username => () => {
+    if (window.confirm(`Delete ${username}?`)) {
       this.props.deleteUser(username);
     }
+  };
+
+  _renderTableHeader() {
+    return (
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>SIP</th>
+          <th>Role</th>
+          <th>Full Name</th>
+          <th />
+        </tr>
+      </thead>
+    );
+  }
+  _renderTableItem(user) {
+    if (!user) {
+      return null;
+    }
+
+    return (
+      <tr key={user._id}>
+        <td>
+          <RRNavLink to={`/users/${user.username}`}>{user.username}</RRNavLink>
+        </td>
+        <td>{user.sip}</td>
+        <td>{user.role}</td>
+        <td>
+          {user.firstName} {user.lastName}
+        </td>
+        <td>
+          <ButtonGroup>
+            <Button tag={RRNavLink} to={`/users/${user.username}`} outline color="info">
+              Edit
+            </Button>
+            <Button outline color="danger" onClick={this._handleDeleteUser(user.username)}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        </td>
+      </tr>
+    );
   }
 
   render() {
-    const { entities: users, isLoaded, isLoading } = this.props;
+    const { entities: users } = this.props;
 
-    const usersComponent = users.map(user => {
-      return (
-        <tr key={user._id}>
-          <td>
-            <RRNavLink to={`/users/${user.username}`}>{user.username}</RRNavLink>
-          </td>
-          <td>{user.sip}</td>
-          <td>{user.role}</td>
-          <td>{`${user.firstName} ${user.lastName}`}</td>
-          <td>
-            <ButtonGroup>
-              <Button tag={RRNavLink} to={`/users/${user.username}`} outline color="info">
-                Edit
-              </Button>
-              <Button outline color="danger" onClick={() => this._handleDeleteUser(user.username)}>
-                Delete
-              </Button>
-            </ButtonGroup>
-          </td>
-        </tr>
-      );
-    });
+    const usersComponent = users.entrySeq().map(([key, user]) => this._renderTableItem(user));
 
     return (
       <Container>
         <Row>
-          <Card body={false} style={{ margin: '20px auto', padding: '20px', width: '100%' }}>
-
+          <Card body={false} className={styles.content}>
             <NavLink tag={RRNavLink} to="/users/register">
               <Button outline color="primary">
                 Add User
               </Button>
             </NavLink>
 
-
-            <Table bordered hover striped>
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>SIP</th>
-                  <th>Role</th>
-                  <th>FullName</th>
-                  <th />
-                </tr>
-              </thead>
+            <Table bordered hover striped responsive>
+              {this._renderTableHeader()}
               <tbody>{usersComponent}</tbody>
             </Table>
           </Card>
@@ -90,20 +103,15 @@ class PanelUsers extends Component {
   }
 }
 
-PanelUsers.propTypes = {
-  entities: PropTypes.array,
-  isLoading: PropTypes.bool,
-  isLoaded: PropTypes.bool
-};
-
 function mapStateToProps(state) {
-  const { user } = state;
-
   return {
-    entities: user.get('entities').toArray(),
-    isLoading: user.get('isLoading'),
-    isLoaded: user.get('isLoaded')
+    entities: getUsersState(state),
+    isLoading: getUserIsLoadingState(state),
+    isLoaded: getUserIsLoadedState(state)
   };
 }
 
-export default connect(mapStateToProps, { getUsers, deleteUser })(PanelUsers);
+export default connect(
+  mapStateToProps,
+  { getUsers, deleteUser }
+)(PanelUsers);

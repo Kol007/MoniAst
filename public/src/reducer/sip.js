@@ -5,11 +5,12 @@ import {
   SUCCESS,
   FAIL,
   SIP_SPY,
-  SIP_SPY_WHISPER,
+  // SIP_SPY_WHISPER,
   SIP_STATUS_UNAVAILABLE,
   SIP_SELECT,
   SIP_FILTER,
-  SIP_FILTER_ONLINE
+  SIP_FILTER_ONLINE,
+  RESET_ERROR
 } from '../helpers/constants';
 
 import { Record, Map, OrderedMap } from 'immutable';
@@ -57,7 +58,7 @@ export default (state = defaultState, action) => {
           .update('entities', entities =>
             entities.merge(arrayToMap(response, sip => new SipModel(sip)))
           )
-          .update('entitiesSimple', entitiesSimple=>
+          .update('entitiesSimple', entitiesSimple =>
             entitiesSimple.merge(arrayToMap(response, sip => new SipSimpleModel(sip)))
           )
           .set('isLoading', false)
@@ -92,9 +93,17 @@ export default (state = defaultState, action) => {
       );
     case SIP_SPY + FAIL:
       return state.withMutations(s =>
-        s.setIn(['sipSpy', 'isError'], true).setIn(['sipSpy', 'message'], 'Error at API.')
+        s
+          .setIn(['sipSpy', 'isError'], true)
+          .setIn(['sipSpy', 'message'], response.errorMessage || 'An error occurred in the API.')
       );
-  }
 
-  return state;
+    case SIP_SPY + RESET_ERROR:
+      return state.withMutations(s =>
+        s.setIn(['sipSpy', 'isError'], false).setIn(['sipSpy', 'message'], '')
+      );
+
+    default:
+      return state;
+  }
 };

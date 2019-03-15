@@ -1,17 +1,4 @@
-import {
-  API_URL,
-  AUTH_USER,
-  AUTH_ERROR,
-  UNAUTH_USER,
-  PROTECTED_TEST,
-  LOG_OUT,
-  LOAD_USERS,
-  ADD_USER,
-  DELETE_USER,
-  START,
-  SUCCESS,
-  FAIL
-} from '../helpers/constants';
+import { API_URL, AUTH_USER, LOG_OUT, START, SUCCESS, FAIL } from '../helpers/constants';
 
 import axios from 'axios';
 
@@ -24,7 +11,9 @@ export function loginUser({ username, password, path }) {
     const url =
       process.env.NODE_ENV === 'production'
         ? `${API_URL}/auth/login`
-        : `${location.protocol}//${location.hostname}:3002${API_URL}/auth/login`;
+        : // FIXME for DEV
+          // eslint-disable-next-line
+          `${location.protocol}//${location.hostname}:3002${API_URL}/auth/login`;
     // const url = `${API_URL}/auth/login`;
 
     axios({

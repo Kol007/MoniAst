@@ -4,7 +4,7 @@ import { changeQueueMemberStatus } from '../AC/queue';
 import { BRIDGE_STOP } from '../helpers/constants';
 
 import io from 'socket.io-client';
-import { queueJoin, queueLeave } from "AC/queue";
+import { queueJoin, queueLeave } from 'AC/queue';
 
 var socket = null;
 
@@ -18,22 +18,29 @@ export function webSocketMiddleware(store) {
   };
 }
 
-export default function (store) {
+export default function(store) {
   const token = localStorage.token;
   if (!token) {
     return;
   }
 
+  // FIXME for DEV
+  // eslint-disable-next-line
   const wsPort = process.env.NODE_ENV !== 'production' ? 3002 : location.port;
 
-  const url    = `${location.protocol}//${location.hostname}:${wsPort}`;
-  const socket = io.connect(url, {
-    query: {
-      token: token.split(' ')[1]
+  // FIXME for DEV
+  // eslint-disable-next-line
+  const url = `${location.protocol}//${location.hostname}:${wsPort}`;
+  const socket = io.connect(
+    url,
+    {
+      query: {
+        token: token.split(' ')[1]
+      }
     }
-  });
+  );
 
-  socket.on('unauthorized', function (error) {
+  socket.on('unauthorized', function(error) {
     if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
       // redirect user to login page perhaps?
     }
@@ -50,7 +57,7 @@ export default function (store) {
   socket.on('change-sip-status', data => {
     store.dispatch(
       changeSipStatus({
-        sip   : data.sip,
+        sip: data.sip,
         status: data.status,
         online: data.online
       })
@@ -58,9 +65,7 @@ export default function (store) {
   });
 
   socket.on('change-queue-member-status', data => {
-    store.dispatch(
-      changeQueueMemberStatus(data)
-    );
+    store.dispatch(changeQueueMemberStatus(data));
   });
 
   socket.on('queue-join', data => {

@@ -54,163 +54,143 @@ module.exports = function(io) {
   );
 
   io.on('connection', function(socket) {
-    // in socket.io 1.0
     console.log('hello! ', socket.decoded_token.username);
   });
 
-  let listener = AMI.on('managerevent', function(evt) {
-    if (
-      evt.event !== 'Newexten' &&
-      evt.event !== 'Newstate' &&
-      evt.event !== 'Bridge' &&
-      evt.event !== 'ExtensionStatus' &&
-      evt.event !== 'Newchannel' &&
-      evt.event !== 'PeerStatus' &&
-      evt.event !== 'RTCPReceived' &&
-      evt.event !== 'RTCPSent' &&
-      evt.event !== 'VarSet' &&
-      evt.event !== 'DTMF' &&
-      evt.event !== 'Hangup' &&
-      evt.event !== 'NewAccountCode' &&
-      evt.event !== 'Registry' &&
-      evt.event !== 'SoftHangupRequest' &&
-      evt.event !== 'HangupRequest' &&
-      // evt.event !== 'QueueMemberStatus' &&
-      evt.event !== 'NewCallerid' &&
-      evt.event !== 'CoreShowChannel' &&
-      evt.event !== 'LocalBridge' &&
-      evt.event !== 'PeerEntry' &&
-      evt.event !== 'Dial'
-    ) {
-      console.log('---', evt);
-    }
+  AMI.on('managerevent', function(evt) {
+    // if (evt.event !== 'RTCPReceived' && evt.event !== 'RTCPSent' ) {
+    //   console.log('---', evt);
+    // }
 
     switch (evt.event) {
       case 'ExtensionStatus':
-        return sipStatusChangedEvent(io, evt);
+        sipStatusChangedEvent(io, evt);
+        break;
       case 'Dial':
-        return dialEvent(io, evt);
+        dialEvent(io, evt);
+        break;
       case 'Hangup':
-        return hangupEvent(io, evt);
+        hangupEvent(io, evt);
+        break;
       case 'Newchannel':
-        return newChannelEvent(io, evt);
+        newChannelEvent(io, evt);
+        break;
       case 'Bridge':
-        return bridgeEvent(io, evt);
+        bridgeEvent(io, evt);
+        break;
       case 'QueueMemberStatus':
-        return QueueMemberStatusChangedEvent(io, evt);
+        QueueMemberStatusChangedEvent(io, evt);
+        break;
       case 'QueueCallerJoin':
       case 'Join':
-        return queueJoinEvent(io, evt);
+        queueJoinEvent(io, evt);
+        break;
       case 'Leave':
       case 'QueueCallerLeave':
-        return queueLeaveEvent(io, evt);
+        queueLeaveEvent(io, evt);
+        break;
+      default:
+        break;
     }
   });
+};
 
-  function queueJoinEvent(io, evt) {
-    evt.wait = '0';
-    // evt.date = ((new Date())) * 1000;
-    evt.date = new Date();
-    io.emit('queue-join', {
-      entry: evt
-    });
-  }
+function newChannelEvent(io, evt) {
+  evt.date = new Date();
+  const chn1 = evt.channel.match('/([^-]+)')[1];
 
-  function queueLeaveEvent(io, evt) {
-    evt.wait = '0';
-    io.emit('queue-leave', {
-      entry: evt
-    });
-  }
-
-  // // STATUS OF SIP EXTENSION IS CHANGED
-  function sipStatusChangedEvent(io, evt) {
-    if (evt.exten.substr(0, 3) !== '*47') {
-      io.emit('change-sip-status', {
-        sip: evt.exten,
-        status: SIP_STATUS[evt.status],
-        online: SIP_STATUS_CODE_UNAVAILABLE !== evt.status
-      });
-    }
-  }
-
-  // // STATUS OF SIP EXTENSION IS CHANGED
-  function QueueMemberStatusChangedEvent(io, evt) {
-    let sip = evt.location ? evt.location.match(/\d+/) : '';
-    evt.sip = sip ? sip[0] : '';
-    evt.login = evt.name || evt.membername;
-    evt.online = evt.status !== '0' && evt.status !== '5';
-
-    evt.status = QUEUE_MEMBER_STATUS[evt.status];
-
-    io.emit('change-queue-member-status', evt);
-  }
-
-  function dialEvent(io, evt) {
-    if (evt.subevent === 'Begin') {
-      io.emit('new-channel', {
-        id: evt.destuniqueid,
-        sip: evt.dialstring,
-        connectedlinenum: evt.calleridnum,
-        duration: 0,
-        date: 0,
-        status: CHANNEL_STATUS_OUT_RINGING //Ring
-      });
-    }
-  }
-
-  function hangupEvent(io, evt) {
-    io.emit('remove-channel', evt.uniqueid);
-  }
-
-  AMI.on('queuecallerjoin', function(evt) {
-    console.log('---', evt.event);
-    // io.emit('remove-channel', evt.uniqueid);
-    console.log('--queuecallerjoin-', evt, '-------------------queuecallerjoin');
+  io.emit('new-channel', {
+    id: evt.uniqueid,
+    sip: chn1,
+    connectedlinenum: evt.exten,
+    duration: 0,
+    date: evt.date,
+    status: evt.status,
+    channel: evt.channel
   });
+}
 
-  function newChannelEvent(io, evt) {
+function queueJoinEvent(io, evt) {
+  evt.wait = '0';
+  evt.date = new Date();
+  io.emit('queue-join', {
+    entry: evt
+  });
+}
+
+function queueLeaveEvent(io, evt) {
+  evt.wait = '0';
+  io.emit('queue-leave', {
+    entry: evt
+  });
+}
+
+// // STATUS OF SIP EXTENSION IS CHANGED
+function sipStatusChangedEvent(io, evt) {
+  if (evt.exten.substr(0, 3) !== '*47') {
+    io.emit('change-sip-status', {
+      sip: evt.exten,
+      status: SIP_STATUS[evt.status],
+      online: SIP_STATUS_CODE_UNAVAILABLE !== evt.status
+    });
+  }
+}
+
+// // STATUS OF SIP EXTENSION IS CHANGED
+function QueueMemberStatusChangedEvent(io, evt) {
+  let sip = evt.location ? evt.location.match(/\d+/) : '';
+  evt.sip = sip ? sip[0] : '';
+  evt.login = evt.name || evt.membername;
+  evt.online = evt.status !== '0' && evt.status !== '5';
+
+  evt.status = QUEUE_MEMBER_STATUS[evt.status];
+
+  io.emit('change-queue-member-status', evt);
+}
+
+function dialEvent(io, evt) {
+  if (evt.subevent === 'Begin') {
+    io.emit('new-channel', {
+      id: evt.destuniqueid,
+      sip: evt.dialstring,
+      connectedlinenum: evt.calleridnum,
+      duration: 0,
+      date: 0,
+      status: CHANNEL_STATUS_OUT_RINGING //Ring
+    });
+  }
+}
+
+function hangupEvent(io, evt) {
+  io.emit('remove-channel', evt.uniqueid);
+}
+
+function bridgeEvent(io, evt) {
+  const chn1 = evt.channel1.match('/([^-]+)')[1];
+  const chn2 = evt.channel2.match('/([^-]+)')[1];
+
+  if (evt.bridgestate === 'Link') {
     evt.date = new Date();
-    const chn1 = evt.channel.match('/([^-]+)')[1];
+    evt.status = CHANNEL_STATUS_UP;
 
     io.emit('new-channel', {
-      id: evt.uniqueid,
+      id: evt.uniqueid1,
       sip: chn1,
-      connectedlinenum: evt.exten,
+      connectedlinenum: evt.callerid2,
       duration: 0,
       date: evt.date,
       status: evt.status,
-      channel: evt.channel
+      channel: evt.channel1
+    });
+
+    io.emit('new-channel', {
+      id: evt.uniqueid2,
+      sip: chn2,
+      connectedlinenum: evt.callerid1,
+      duration: 0,
+      date: evt.date,
+      status: evt.status,
+      channel: evt.channel2
     });
   }
-
-  function bridgeEvent(io, evt) {
-    var chn1 = evt.channel1.match('/([^-]+)')[1];
-    var chn2 = evt.channel2.match('/([^-]+)')[1];
-
-    if (evt.bridgestate === 'Link') {
-      evt.date = new Date();
-      evt.status = CHANNEL_STATUS_UP;
-
-      io.emit('new-channel', {
-        id: evt.uniqueid1,
-        sip: chn1,
-        connectedlinenum: evt.callerid2,
-        duration: 0,
-        date: evt.date,
-        status: evt.status,
-        channel: evt.channel1
-      });
-
-      io.emit('new-channel', {
-        id: evt.uniqueid2,
-        sip: chn2,
-        connectedlinenum: evt.callerid1,
-        duration: 0,
-        date: evt.date,
-        status: evt.status,
-        channel: evt.channel2
-      });
-    }
-  }
-};
+}

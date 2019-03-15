@@ -15,40 +15,49 @@ export default store => next => action => {
     method: methodAPI || 'GET'
   };
 
+  if (options.method === 'GET' && params) {
+    options.params = params;
+  }
+
   if (methodAPI === 'POST' || methodAPI === 'PUT' || methodAPI === 'PATCH') {
     options.headers = {
       Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json;charset=utf-8', //axios
+      'Content-Type': 'application/json;charset=utf-8' //axios
     };
 
     options.body = params ? paramsForAPI(params) : paramsForAPI(payload);
-    options.data = params ? (params) : (payload);
+    options.data = params ? params : payload;
   }
 
   if (needAuth) {
-    axios.defaults.headers.common['Authorization'] = store.getState().auth.get('token');
+    axios.defaults.headers.common['Authorization'] = store.getState().getIn(['auth', 'token']);
   }
-
 
   options.url = callAPI;
   // FIXME for DEV
-  options.url = process.env.NODE_ENV !== 'production' ? `${location.protocol}//${location.hostname}:3002${options.url}`: options.url;
+  options.url =
+    process.env.NODE_ENV !== 'production'
+      ? // eslint-disable-next-line
+        `${location.protocol}//${location.hostname}:3002${options.url}`
+      : options.url;
 
   axios(options)
-    .then(
-      response => next({ ...rest, type: type + SUCCESS, response: response.data, payload }),
-    )
+    .then(response => next({ ...rest, type: type + SUCCESS, response: response.data, payload }))
     .catch(error => {
       if (error.response.status === 403 || error.response.status === 401) {
+        localStorage.removeItem('token');
         next({ ...rest, payload, type: LOG_OUT });
       }
 
       return next({
         ...rest,
         type: type + FAIL,
+        payload,
         response: {
-          errorMessage: error.response.data.errorMessage,
-          field: error.response.data.field,
+          ...(error.response.data.field && { field: error.response.data.field }),
+          ...(error.response.data.errorMessage && {
+            errorMessage: error.response.data.errorMessage
+          }),
           errorCode: error.response.status
         }
       });

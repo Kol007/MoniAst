@@ -1,0 +1,20 @@
+printWidth: 100
+proseWrap: always
+singleQuote: true
+semi: true
+bracketSpacing: true
+parser: babylon
+trailingComma: none
+overrides:
+- files:
+  - '*.ts'
+  - '*.tsx'
+  options:
+    parser: typescript
+- files: '*.md'
+  options:
+    parser: markdown
+- files: '*.json'
+  options:
+    parser: json
+    printWidth: 80

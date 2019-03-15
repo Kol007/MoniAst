@@ -92,7 +92,9 @@ exports.postUser = function(req, res, next) {
 
   // Return error if no username provided
   if (!username) {
-    return res.status(422).send({ errorMessage: 'You must enter an username address.', field: 'username' });
+    return res
+      .status(422)
+      .send({ errorMessage: 'You must enter an username.', field: 'username' });
   }
 
   // Return error if no password provided
@@ -102,12 +104,16 @@ exports.postUser = function(req, res, next) {
 
   // Return error if firstName not provided
   if (!firstName) {
-    return res.status(422).send({ errorMessage: 'You must enter your full name.', field: 'firstName' });
+    return res
+      .status(422)
+      .send({ errorMessage: 'You must enter your full name.', field: 'firstName' });
   }
 
   // Return error if lastName not provided
   if (!lastName) {
-    return res.status(422).send({ errorMessage: 'You must enter your full name.', field: 'lastName' });
+    return res
+      .status(422)
+      .send({ errorMessage: 'You must enter your full name.', field: 'lastName' });
   }
 
   // Return error if no SIP provided
@@ -122,7 +128,9 @@ exports.postUser = function(req, res, next) {
 
     // If user is not unique, return error
     if (existingUser) {
-      return res.status(422).send({ errorMessage: 'That username is already in use.', field: 'username' });
+      return res
+        .status(422)
+        .send({ errorMessage: 'That username is already in use.', field: 'username' });
     }
 
     // If username is unique and password was provided, create account

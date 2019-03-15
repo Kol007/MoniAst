@@ -1,4 +1,4 @@
-import { Record, Map } from 'immutable';
+import { Map } from 'immutable';
 import { AUTH_USER, SUCCESS, START, FAIL, LOG_OUT } from '../helpers/constants';
 
 const localStorageToken = localStorage.getItem('token');
@@ -18,7 +18,7 @@ const defaultState = new Map({
 });
 
 export default function(state = defaultState, action) {
-  const { type, payload, response } = action;
+  const { type, response } = action;
 
   switch (type) {
     case AUTH_USER + SUCCESS:
@@ -61,7 +61,8 @@ export default function(state = defaultState, action) {
           .set('expires', 0)
           .set('isLoading', false)
       );
-  }
 
-  return state;
+    default:
+      return state;
+  }
 }

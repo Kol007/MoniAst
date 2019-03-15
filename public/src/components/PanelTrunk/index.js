@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getFilteredTrunksState } from 'store/selectors';
+import {
+  getFilteredTrunksState,
+  getSipIsLoadedState,
+  getSipIsLoadingState
+} from 'store/selectors/sip';
 
 import { loadSipPeers } from 'AC/sip';
 import { loadChannels } from 'AC/channels';
 
 import { Card, CardBody, CardTitle, Col, Row } from 'reactstrap';
-import SipPeer from 'Component/SipPeer';
+import SipPeer from 'components/SipPeer';
 
 class PanelTrunk extends Component {
   componentDidMount() {
@@ -24,10 +28,7 @@ class PanelTrunk extends Component {
     const peers = sip.entrySeq().map(([key, sipPeer]) => {
       return (
         <Col key={sipPeer.sip} md="12" style={{ marginBottom: '5px' }}>
-          <SipPeer
-            sipPeer={sipPeer}
-            isTrunk={true}
-          />
+          <SipPeer sipPeer={sipPeer} isTrunk={true} />
         </Col>
       );
     });
@@ -44,17 +45,18 @@ class PanelTrunk extends Component {
 }
 
 function mapStateToProps(state) {
-  const { sip } = state;
-
   return {
     sip: getFilteredTrunksState(state),
 
-    isLoading: sip.get('isLoading'),
-    isLoaded : sip.get('isLoaded'),
+    isLoading: getSipIsLoadingState(state),
+    isLoaded: getSipIsLoadedState(state)
   };
 }
 
-export default connect(mapStateToProps, {
-  loadSipPeers,
-  loadChannels,
-})(PanelTrunk);
+export default connect(
+  mapStateToProps,
+  {
+    loadSipPeers,
+    loadChannels
+  }
+)(PanelTrunk);

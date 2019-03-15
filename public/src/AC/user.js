@@ -4,7 +4,7 @@ import {
   LOAD_USERS,
   PATCH_USER,
   DELETE_USER,
-  REDIRECT_COMPLETE
+  LOAD_USER
 } from '../helpers/constants';
 
 export function getUsers() {
@@ -17,14 +17,14 @@ export function getUsers() {
 
 export function getUser(username) {
   return {
-    type: POST_USER,
+    type: LOAD_USER,
     payload: { username },
     callAPI: `${API_URL}/users/${username}`,
     needAuth: true
   };
 }
 
-export function patchUser(username, params) {
+export function patchUser({ username, ...params }) {
   return {
     type: PATCH_USER,
     payload: { username, params },
@@ -52,12 +52,6 @@ export function deleteUser(username) {
     payload: { username },
     callAPI: `${API_URL}/users/${username}`,
     needAuth: true,
-    methodAPI: 'DELETE',
-  };
-}
-
-export function redirectComplete() {
-  return {
-    type: REDIRECT_COMPLETE
+    methodAPI: 'DELETE'
   };
 }

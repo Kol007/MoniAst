@@ -6,6 +6,13 @@ import { loginUser } from 'AC/auth';
 import { withRouter } from 'react-router-dom';
 
 import './login.css';
+import {
+  getAuthErrorCodeState,
+  getAuthErrorMessageState,
+  getAuthIsErrorState,
+  getAuthIsLoadingInState,
+  getAuthIsLoggedInState
+} from '../../store/selectors/auth';
 
 class Login extends Component {
   state = {
@@ -26,7 +33,9 @@ class Login extends Component {
     if (nextProps.isLoggedIn) {
       const locationState = nextProps.location.state;
 
-      this.props.history.push(locationState ? locationState.from.pathname : '/dashboard');
+      this.props.history.push(
+        locationState && locationState.from ? locationState.from.pathname : '/dashboard'
+      );
     }
   }
 
@@ -35,7 +44,10 @@ class Login extends Component {
 
     let errorMessage = '';
     if (isError) {
-      errorMessage = (errorCode === 401 || errorCode === 403) ? 'Wrong username or password' : 'Error has occurred';
+      errorMessage =
+        errorCode === 401 || errorCode === 403
+          ? 'Wrong username or password'
+          : 'Error has occurred';
     }
 
     return (
@@ -93,7 +105,7 @@ class Login extends Component {
     this.props.loginUser({
       username,
       password,
-      from: locationState && locationState.from.pathname
+      from: locationState && locationState.from && locationState.from.pathname
     });
   };
 }
@@ -106,13 +118,18 @@ Login.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.auth.get('isLoggedIn'),
-    isLoading: state.auth.get('isLoading'),
+    isLoggedIn: getAuthIsLoggedInState(state),
+    isLoading: getAuthIsLoadingInState(state),
 
-    isError: state.auth.get('isError'),
-    errorCode: state.auth.get('errorCode'),
-    errorMessage: state.auth.get('errorMessage')
+    isError: getAuthIsErrorState(state),
+    errorCode: getAuthErrorCodeState(state),
+    errorMessage: getAuthErrorMessageState(state)
   };
 }
 
-export default withRouter(connect(mapStateToProps, { loginUser })(Login));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { loginUser }
+  )(Login)
+);

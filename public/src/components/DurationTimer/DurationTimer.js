@@ -1,13 +1,11 @@
-import React from 'react';
-import { compose, withState, withHandlers, withProps, lifecycle } from 'recompose';
-import { CHANNEL_STATUS_UP } from '../../helpers/constants';
+import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { secToHuman } from '../../helpers/common';
 
 const enchance = compose(
   withState('duration', 'setDuration', props => {
     const startDate = new Date(props.date);
     const currentDate = new Date();
-    return parseInt((currentDate - startDate) / 1000) + props.duration
+    return parseInt((currentDate - startDate) / 1000) + props.duration;
   }),
   withState('intervalId', 'setIntervalId', null),
   withHandlers({

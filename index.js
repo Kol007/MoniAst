@@ -67,9 +67,9 @@ app.use((req, res, next) => {
 router(app);
 
 // // Serve static assets
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/public/build`));
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'public/build', 'index.html'));
 });
 
 const socketIO = require('socket.io');

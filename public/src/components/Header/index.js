@@ -2,22 +2,28 @@ import React, { PureComponent } from 'react';
 import { NavLink as RRNavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink
-} from 'reactstrap';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
 import { logOutUser } from 'AC/auth';
+import { getQueues } from 'AC/queue';
+import {
+  getQueuesIsLoadedState,
+  getQueuesIsLoadingState,
+  getQueuesKeysState
+} from '../../store/selectors/queue';
 
-class Header extends PureComponent{
+class Header extends PureComponent {
   state = {
     isOpen: false
   };
+
+  componentDidMount() {
+    const { isLoadingQueues, isLoadedQueues } = this.props;
+
+    if (!isLoadingQueues && !isLoadedQueues) {
+      this.props.getQueues();
+    }
+  }
 
   toggle = () => {
     this.setState({
@@ -25,13 +31,11 @@ class Header extends PureComponent{
     });
   };
 
-  handleLogOut = () => {
-    this.props.logOutUser();
-  };
-
   render() {
+    const { logOutUser, isQueuesExist } = this.props;
+
     return (
-      <header >
+      <header>
         <Navbar color="primary" dark expand="md">
           <NavbarBrand tag={RRNavLink} to="/dashboard">
             MoniAst
@@ -42,15 +46,17 @@ class Header extends PureComponent{
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/dashboard" >
+                <NavLink tag={RRNavLink} to="/dashboard">
                   Dashboard
                 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink tag={RRNavLink} to="/queues" >
-                  Queues
-                </NavLink>
-              </NavItem>
+              {isQueuesExist && (
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/queues">
+                    Queues
+                  </NavLink>
+                </NavItem>
+              )}
               <NavItem>
                 <NavLink tag={RRNavLink} to="/users">
                   Users
@@ -59,7 +65,7 @@ class Header extends PureComponent{
             </Nav>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink onClick={this.handleLogOut} href="#">
+                <NavLink onClick={logOutUser} href="#">
                   LogOut
                 </NavLink>
               </NavItem>
@@ -71,4 +77,19 @@ class Header extends PureComponent{
   }
 }
 
-export default withRouter(connect(() => ({}), { logOutUser })(Header));
+function mapStateToProps(state) {
+  const queues = getQueuesKeysState(state);
+
+  return {
+    isQueuesExist: queues ? !!queues.size : null,
+    isLoadingQueues: getQueuesIsLoadingState(state),
+    isLoadedQueues: getQueuesIsLoadedState(state)
+  };
+}
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { logOutUser, getQueues }
+  )(Header)
+);
