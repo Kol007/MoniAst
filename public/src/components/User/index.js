@@ -74,39 +74,6 @@ class User extends PureComponent {
     });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { getUser, user, match, isNew } = nextProps;
-  //
-  //   if (nextProps.isSubmitSuccess === true && this.props.isSubmitSuccess === false) {
-  //     toast.success('User successful created');
-  //
-  //     this.setState({ isSubmitSuccess: true });
-  //   }
-  //
-  //   if (nextProps.isError === true) {
-  //     toast.error(nextProps.errorMessage);
-  //   }
-  //
-  //   if (isNew) {
-  //     return;
-  //   }
-  //
-  //   const username = match.params.id;
-  //
-  //   if (!user) {
-  //     return getUser(username);
-  //   }
-  //
-  //   const { _id, isLoading } = user;
-  //   if (!_id && !isLoading) {
-  //     return getUser(username);
-  //   }
-  //
-  //   this.setState({
-  //     ...user
-  //   });
-  // }
-
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.user && nextProps.user.username !== prevState.username) {
       return {
@@ -197,6 +164,10 @@ class User extends PureComponent {
 
     return (
       <Container>
+        <h1 className="sr-only">
+          {isNew && 'Create new user'}
+          {!isNew && `Edit user: ${this.state.username}`}
+        </h1>
         <Breadcrumb className={styles['bread-crumbs']}>
           <BreadcrumbItem>
             <RRNavLink to="/users/">Users</RRNavLink>

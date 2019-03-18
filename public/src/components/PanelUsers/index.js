@@ -63,10 +63,21 @@ class PanelUsers extends Component {
         </td>
         <td>
           <ButtonGroup>
-            <Button tag={RRNavLink} to={`/users/${user.username}`} outline color="info">
+            <Button
+              tag={RRNavLink}
+              to={`/users/${user.username}`}
+              outline
+              color="info"
+              aria-label={`Edit user: ${user.username}`}
+            >
               Edit
             </Button>
-            <Button outline color="danger" onClick={this._handleDeleteUser(user.username)}>
+            <Button
+              outline
+              color="danger"
+              onClick={this._handleDeleteUser(user.username)}
+              aria-label={`Delete user: ${user.username}`}
+            >
               Delete
             </Button>
           </ButtonGroup>
@@ -82,6 +93,7 @@ class PanelUsers extends Component {
 
     return (
       <>
+        <h1 className="sr-only">Manage users</h1>
         <Toolbar isFluid={false}>
           <NavLink tag={RRNavLink} to="/users/register" className={styles.toolbar__link}>
             <Button outline color="primary">
@@ -92,7 +104,7 @@ class PanelUsers extends Component {
         <Container>
           <Row>
             <Card body={false} className={styles.content}>
-              <Table bordered hover striped responsive>
+              <Table bordered hover striped responsive role="presentation">
                 {this._renderTableHeader()}
                 <tbody>{usersComponent}</tbody>
               </Table>

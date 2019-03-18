@@ -55,6 +55,9 @@ class Login extends Component {
 
     return (
       <div className="container">
+        <h1 className="sr-only">
+          MoniAst - Asterisk real-time monitoring calls, agents, queues
+        </h1>
         <form className="form-signin" onSubmit={this.handleSubmitForm}>
           <h2 className="form-signin-heading">Please sign in</h2>
 
@@ -92,7 +95,7 @@ class Login extends Component {
             required
             value={this.state.password}
             onChange={this.handleChangeInput}
-            aria-label="Username"
+            aria-label="Password"
           />
 
           <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={isLoading}>

@@ -4,7 +4,7 @@ import { secToHuman } from '../../helpers/common';
 const enchance = compose(
   withState('duration', 'setDuration', props => {
     const startDate = new Date(props.date);
-    const currentDate = new Date();
+    const currentDate = Date.now();
     return parseInt((currentDate - startDate) / 1000) + props.duration;
   }),
   withState('intervalId', 'setIntervalId', null),

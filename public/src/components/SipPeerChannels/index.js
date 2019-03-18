@@ -15,9 +15,9 @@ class SipPeerChannel extends PureComponent {
 
     const statusIcon =
       channel.status === CHANNEL_STATUS_UP ? (
-        <FontAwesomeIcon icon="phone" />
+        <FontAwesomeIcon icon="phone" title="Talking" />
       ) : (
-        <FontAwesomeIcon icon="phone-volume" className="channel-ringing" />
+        <FontAwesomeIcon icon="phone-volume" className="channel-ringing" title="Ringing" />
       );
 
     return (

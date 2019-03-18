@@ -12,6 +12,7 @@ import {
 import QueueComponent from '../Queue/QueueComponent';
 import { getSipIsLoadedState, getSipIsLoadingState } from '../../store/selectors/sip';
 import SipToolbar from '../SipToolbar';
+import styles from './PanelQueues.module.css';
 
 export class PanelQueues extends Component {
   componentDidMount() {
@@ -44,12 +45,11 @@ export class PanelQueues extends Component {
 
     return (
       <div className="container-fluid">
+        <h1 className="sr-only">All queues members and queue entries</h1>
         <div className="row">
           <SipToolbar isHideFilter={true} />
 
-          <div className="col-12" style={{ marginTop: '10px' }}>
-            {queuesComponent}
-          </div>
+          <div className={`col-12 ${styles.content}`}>{queuesComponent}</div>
         </div>
       </div>
     );

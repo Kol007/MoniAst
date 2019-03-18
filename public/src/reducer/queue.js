@@ -70,7 +70,7 @@ export default (state = defaultState, action) => {
 
   switch (type) {
     case LOAD_ALL_QUEUES + START:
-      return state.set('isLoading', true);
+      return state.set('isLoading', true).set('isLoaded', false);
 
     case LOAD_ALL_QUEUES + SUCCESS:
       return state
@@ -79,7 +79,7 @@ export default (state = defaultState, action) => {
         .set('isLoaded', true);
 
     case LOAD_ALL_QUEUES + FAIL:
-      return state;
+      return state.set('isLoading', false).set('isLoaded', false);
 
     case QUEUE_JOIN:
       return state.withMutations(s =>

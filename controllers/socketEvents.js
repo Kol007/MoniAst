@@ -1,5 +1,4 @@
 const AMI = require('../helpers/ami');
-const async = require('async');
 const getList = require('../helpers/helpers').getList;
 
 const QUEUE_MEMBER_STATUS = require('../helpers/constants').QUEUE_MEMBER_STATUS;

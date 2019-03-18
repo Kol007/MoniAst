@@ -9,8 +9,8 @@ const Toolbar = ({ children, isFluid }) => {
     <div className={`nav-scroller bg-white shadow-sm ${styles.container}`}>
       <Container fluid={isFluid}>
         <div className={`col-md-12 `}>
-          <nav className="nav nav-underline">
-            <ButtonGroup>{children}</ButtonGroup>
+          <nav className="nav nav-underline" aria-label="Toolbar">
+            <ButtonGroup role="group">{children}</ButtonGroup>
           </nav>
         </div>
       </Container>

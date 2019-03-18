@@ -92,8 +92,8 @@ class SipToolbar extends Component {
             </Button>
           )}
 
-        <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy} title="Spy">
-          <FontAwesomeIcon icon="user-secret" />
+        <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy} title="Spy" aria-label="Spy">
+          <FontAwesomeIcon icon="user-secret" title="Spy" />
         </Button>
 
         <Button
@@ -101,9 +101,10 @@ class SipToolbar extends Component {
           color="info"
           disabled={!selectedSip}
           onClick={this.handleSpyAndWhisper}
-          title="Spy & whisper"
+          title="Spy & Whisper"
+          aria-label="Spy & Whisper"
         >
-          <FontAwesomeIcon icon="microphone" />
+          <FontAwesomeIcon icon="microphone" title="Spy & whisper" />
         </Button>
       </Toolbar>
     );

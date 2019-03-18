@@ -1,6 +1,6 @@
 {
   "name": "moniast",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "MoniAst - real-time monitoring for you agents (Asterisk)",
   "main": "index.js",
   "scripts": {
@@ -21,18 +21,18 @@
   "license": "MIT",
   "dependencies": {
     "asterisk-manager": "^0.1.16",
-    "async": "^2.5.0",
+    "async": "^2.6.2",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "jsonwebtoken": "^8.1.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^4.12.4",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "snyk": "^1.136.0",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.2.0",
     "socketio-jwt": "^4.5.0"
   },
   "snyk": true

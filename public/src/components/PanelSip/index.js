@@ -42,6 +42,7 @@ class PanelSip extends Component {
   render() {
     return (
       <>
+        <h1 className="sr-only">All sips and trunks</h1>
         <Card>
           <CardBody>
             <Row>{this.renderItems()}</Row>
