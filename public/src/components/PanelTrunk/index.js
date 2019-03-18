@@ -9,7 +9,7 @@ import {
 import { loadSipPeers } from 'AC/sip';
 import { loadChannels } from 'AC/channels';
 
-import { Card, CardBody, CardTitle, Col, Row } from 'reactstrap';
+import { Card, CardBody, CardTitle, Col, Row, Badge } from 'reactstrap';
 import SipPeer from 'components/SipPeer';
 
 class PanelTrunk extends Component {
@@ -36,7 +36,10 @@ class PanelTrunk extends Component {
     return (
       <Card>
         <CardBody>
-          <CardTitle>Trunks</CardTitle>
+          <CardTitle>
+            <Badge color="primary">Trunks</Badge>
+          </CardTitle>
+
           <Row>{peers}</Row>
         </CardBody>
       </Card>

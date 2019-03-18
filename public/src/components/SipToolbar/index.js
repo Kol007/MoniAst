@@ -19,10 +19,9 @@ import {
   getSipSpyStatusState,
   getSipSpyMessageState
 } from 'store/selectors/sip';
-import { getAuthSipState } from '../../store/selectors/auth';
-import { getChannelsState } from '../../store/selectors/channels';
-
-import styles from './SipToolbar.module.css';
+import { getAuthSipState } from 'store/selectors/auth';
+import { getChannelsState } from 'store/selectors/channels';
+import Toolbar from 'components/Toolbar';
 
 class SipToolbar extends Component {
   static propTypes = {
@@ -85,40 +84,28 @@ class SipToolbar extends Component {
     const filterStateText = filter === SIP_FILTER_ALL ? 'Show online' : 'Show all';
 
     return (
-      <div className={`nav-scroller bg-white shadow-sm ${styles.container}`}>
-        <div className={`col-md-12 ${styles.content}`}>
-          <nav className="nav nav-underline">
-            <ButtonGroup>
-              {!queueEntity &&
-                !isHideFilter && (
-                  <Button outline color="info" onClick={this.handleToggleOnline}>
-                    {filterStateText}
-                  </Button>
-                )}
+      <Toolbar isFluid={true}>
+        {!queueEntity &&
+          !isHideFilter && (
+            <Button outline color="info" onClick={this.handleToggleOnline}>
+              {filterStateText}
+            </Button>
+          )}
 
-              <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy} title="Spy">
-                <FontAwesomeIcon icon="user-secret" />
-              </Button>
+        <Button outline color="info" disabled={!selectedSip} onClick={this.handleSpy} title="Spy">
+          <FontAwesomeIcon icon="user-secret" />
+        </Button>
 
-              <Button
-                outline
-                color="info"
-                disabled={!selectedSip}
-                onClick={this.handleSpyAndWhisper}
-                title="Spy & whisper"
-              >
-                <FontAwesomeIcon icon="microphone" />
-              </Button>
-            </ButtonGroup>
-
-            {!!queueEntity && (
-              <ButtonGroup className="float-right">
-                <span className="badge badge-primary">Queue - {queueEntity}</span>
-              </ButtonGroup>
-            )}
-          </nav>
-        </div>
-      </div>
+        <Button
+          outline
+          color="info"
+          disabled={!selectedSip}
+          onClick={this.handleSpyAndWhisper}
+          title="Spy & whisper"
+        >
+          <FontAwesomeIcon icon="microphone" />
+        </Button>
+      </Toolbar>
     );
   }
 }

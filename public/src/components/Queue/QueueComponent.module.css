@@ -2,3 +2,14 @@
   margin-bottom: 15px;
   margin-left: 15px;
 }
+
+.entries__divider {
+  border-top: 1px solid #9c9c9c;
+}
+
+@media (min-width: 768px) {
+  .entries__divider {
+    border-top: none;
+    border-left: 1px solid #9c9c9c;
+  }
+}

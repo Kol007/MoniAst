@@ -19,12 +19,12 @@ import 'components/App/css/main.css';
 
 // if (process.env.NODE_ENV !== 'production') {
 //   const { whyDidYouUpdate } = require('why-did-you-update');
-  // whyDidYouUpdate(React);
-  // whyDidYouUpdate(React, { exclude: [/Duration Timer$/] });
-  //   whyDidYouUpdate(React, { include: [/^PanelQueues/], exclude: [/^Connect/] });
-  //   whyDidYouUpdate(React, { include: [/^QueueMembers/], exclude: [/^Connect/] });
-  //   whyDidYouUpdate(React, { include: [/^QueueEntryContainer/]});
-  //   whyDidYouUpdate(React, { include: [/^QueueEntries/], exclude: [/^Connect/] });
+// whyDidYouUpdate(React);
+// whyDidYouUpdate(React, { exclude: [/Duration Timer$/] });
+//   whyDidYouUpdate(React, { include: [/^PanelQueues/], exclude: [/^Connect/] });
+//   whyDidYouUpdate(React, { include: [/^QueueMembers/], exclude: [/^Connect/] });
+//   whyDidYouUpdate(React, { include: [/^QueueEntryContainer/]});
+//   whyDidYouUpdate(React, { include: [/^QueueEntries/], exclude: [/^Connect/] });
 // }
 
 // v4

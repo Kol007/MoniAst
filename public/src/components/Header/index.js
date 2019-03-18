@@ -66,7 +66,7 @@ class Header extends PureComponent {
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <NavLink onClick={logOutUser} href="#">
-                  LogOut
+                  Sign Out
                 </NavLink>
               </NavItem>
             </Nav>

@@ -3,3 +3,7 @@
   padding: 20px;
   width: 100%;
 }
+
+a.toolbar__link {
+  padding: 0;
+}

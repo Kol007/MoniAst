@@ -6,11 +6,9 @@ import { connect } from 'react-redux';
 import { getUsers, deleteUser } from 'AC/user';
 import { Container, Row, Table, ButtonGroup, Button, NavLink, Card } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
-import {
-  getUserIsLoadedState,
-  getUserIsLoadingState,
-  getUsersState
-} from '../../store/selectors/user';
+import { getUserIsLoadedState, getUserIsLoadingState, getUsersState } from 'store/selectors/user';
+
+import Toolbar from 'components/Toolbar';
 
 import styles from './PanelUsers.module.css';
 
@@ -83,22 +81,25 @@ class PanelUsers extends Component {
     const usersComponent = users.entrySeq().map(([key, user]) => this._renderTableItem(user));
 
     return (
-      <Container>
-        <Row>
-          <Card body={false} className={styles.content}>
-            <NavLink tag={RRNavLink} to="/users/register">
-              <Button outline color="primary">
-                Add User
-              </Button>
-            </NavLink>
-
-            <Table bordered hover striped responsive>
-              {this._renderTableHeader()}
-              <tbody>{usersComponent}</tbody>
-            </Table>
-          </Card>
-        </Row>
-      </Container>
+      <>
+        <Toolbar isFluid={false}>
+          <NavLink tag={RRNavLink} to="/users/register" className={styles.toolbar__link}>
+            <Button outline color="primary">
+              Add User
+            </Button>
+          </NavLink>
+        </Toolbar>
+        <Container>
+          <Row>
+            <Card body={false} className={styles.content}>
+              <Table bordered hover striped responsive>
+                {this._renderTableHeader()}
+                <tbody>{usersComponent}</tbody>
+              </Table>
+            </Card>
+          </Row>
+        </Container>
+      </>
     );
   }
 }

@@ -39,7 +39,7 @@ const QueueComponent = props => {
               <QueueMembersContainer queueId={entity} />
             </Row>
           </div>
-          <div className="col-md-3 left-divider">
+          <div className={`col-md-3 ${styles.entries__divider}`}>
             <Row>
               <QueueEntryContainer queueId={entity} />
             </Row>
