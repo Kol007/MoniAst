@@ -85,6 +85,13 @@ Default login/password admin/admin
 
 ### Nginx example
 
+<hr>
+
+In version 0.4.0 you need to update root path:
+```nginx
+root /*Path to application*/MoniAst/public/build; 
+```
+<hr>
 Simple on 80 port:
 
 ```nginx
@@ -96,7 +103,7 @@ server {
     error_log  /var/log/nginx/moniast.error.log;
 
     location ~ \.(png|html|js) {
-        root /*Path to application*/MoniAst/public;
+        root /*Path to application*/MoniAst/public/build;
     }
 
     location / {
@@ -137,7 +144,7 @@ server {
     ssl_certificate_key /etc/ssl/ssl.key;
 
     location ~ \.(png|html|js) {
-        root /*Path to application*/MoniAst/public;
+        root /*Path to application*/MoniAst/public/build;
     }
     
     location / {

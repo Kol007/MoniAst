@@ -77,6 +77,7 @@ class Login extends Component {
             autoFocus
             value={this.state.username}
             onChange={this.handleChangeInput}
+            aria-label="Username"
           />
 
           <label htmlFor="inputPassword" className="sr-only">
@@ -91,6 +92,7 @@ class Login extends Component {
             required
             value={this.state.password}
             onChange={this.handleChangeInput}
+            aria-label="Username"
           />
 
           <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={isLoading}>
