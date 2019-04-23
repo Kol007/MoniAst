@@ -16,7 +16,7 @@
     "react-redux": "^6.0.0",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
+    "react-scripts": "3.0.0",
     "react-toastify": "^4.5.2",
     "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",
