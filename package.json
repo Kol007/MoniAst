@@ -31,7 +31,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "snyk": "^1.260.0",
+    "snyk": "^1.316.2",
     "socket.io": "^2.2.0",
     "socketio-jwt": "^4.5.0"
   },
