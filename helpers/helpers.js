@@ -12,7 +12,7 @@ function createDefaultAdmin() {
   const firstName = 'default';
   const lastName = 'admin';
   const password = 'admin';
-  const role = ROLE_ADMIN;
+  const role = ROLE_STRING_ADMIN;
   const sip = '0';
 
   const user = new User({
