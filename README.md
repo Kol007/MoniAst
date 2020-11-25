@@ -11,6 +11,7 @@ MoniAst - real-time monitoring for you agents.
 Features:
 
 * Real-time monitoring status of agents and trunks
+* Real-time monitoring of queues
 * Listening to current calls (spy)
 * Prompter (whisper)
 
