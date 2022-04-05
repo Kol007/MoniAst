@@ -9,7 +9,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "immutable": "^4.0.0-rc.12",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
