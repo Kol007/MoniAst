@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "asterisk-manager": "^0.1.16",
-    "async": "^2.6.2",
+    "async": "^3.2.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
