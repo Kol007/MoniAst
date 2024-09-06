@@ -21,18 +21,18 @@
   "license": "MIT",
   "dependencies": {
     "asterisk-manager": "^0.1.16",
-    "async": "^2.6.2",
+    "async": "^3.0.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.24",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^5.12.4",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "snyk": "^1.260.0",
-    "socket.io": "^2.2.0",
+    "socket.io": "^3.0.0",
     "socketio-jwt": "^4.5.0"
   },
   "snyk": true
