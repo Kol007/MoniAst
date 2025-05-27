@@ -27,7 +27,7 @@ exports.login = function(req, res, next) {
 //= =======================================
 // Registration Route
 //= =======================================
-exports.register = function(req, res, next) {
+exports.register = async function(req, res, next) {
   // Check for registration errors
   const username = req.body.username;
   const firstName = req.body.firstName;
@@ -54,10 +54,8 @@ exports.register = function(req, res, next) {
     return res.status(422).send({ error: 'You must enter a SIP number.' });
   }
 
-  User.findOne({ username }, (err, existingUser) => {
-    if (err) {
-      return next(err);
-    }
+  try {
+    let existingUser = await User.findOne({ username });
 
     // If user is not unique, return error
     if (existingUser) {
@@ -72,17 +70,19 @@ exports.register = function(req, res, next) {
       sip
     });
 
-    user.save((err, user) => {
-      if (err) {
-        return next(err);
-      }
+    try {
+      user = await user.save();
 
       // Respond with JWT if user was created
       const userInfo = setUserInfo(user);
 
       res.status(201).json(userInfo);
-    });
-  });
+    } catch (err) {
+      return next(err);
+    }
+  } catch (err) {
+    return next(err);
+  }
 };
 
 //= =======================================
@@ -90,15 +90,12 @@ exports.register = function(req, res, next) {
 //= =======================================
 
 // Role authorization check
-exports.roleAuthorization = function(requiredRole) {
+exports.roleAuthorization = async function(requiredRole) {
   return function(req, res, next) {
     const user = req.user[0];
 
-    User.findById(user._id, (err, foundUser) => {
-      if (err) {
-        res.status(422).json({ error: 'No user was found.' });
-        return next(err);
-      }
+    try {
+      let foundUser = await User.findById(user._id);
 
       // If user is found, check role.
       if (getRole(foundUser.role) >= requiredRole) {
@@ -106,7 +103,10 @@ exports.roleAuthorization = function(requiredRole) {
       }
 
       return res.status(423).json({ errorMessage: 'You are not authorized to do this' });
-    });
+    } catch (err) {
+      res.status(422).json({ error: 'No user was found.' });
+      return next(err);
+    }
   };
 };
 
@@ -114,42 +114,43 @@ exports.roleAuthorization = function(requiredRole) {
 // Reset Password Route
 //= =======================================
 
-exports.verifyToken = function(req, res, next) {
-  User.findOne(
-    {
-      resetPasswordToken: req.params.token,
-      resetPasswordExpires: { $gt: Date.now() }
-    },
-    (err, resetUser) => {
-      // If query returned no results, token expired or was invalid. Return error.
-      if (!resetUser) {
-        res.status(422).json({
-          error: 'Your token has expired. Please attempt to reset your password again.'
-        });
-      }
-
-      // Otherwise, save new password and clear resetToken from database
-      resetUser.password = req.body.password;
-      resetUser.resetPasswordToken = null;
-      resetUser.resetPasswordExpires = null;
-
-      resetUser.save(err => {
-        if (err) {
-          return next(err);
-        }
-
-        // If password change saved successfully, alert user via username
-        const message = {
-          subject: 'Password Changed',
-          text:
-            'You are receiving this username because you changed your password. \n\n' +
-            'If you did not request this change, please contact us immediately.'
-        };
-
-        return res.status(200).json({
-          message: 'Password changed successfully. Please login with your new password.'
-        });
+exports.verifyToken = async function(req, res, next) {
+  try {
+    let resetUser = await User.findOne(
+      {
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() }
+    };
+    // If query returned no results, token expired or was invalid. Return error.
+    if (!resetUser) {
+      res.status(422).json({
+        error: 'Your token has expired. Please attempt to reset your password again.'
       });
     }
-  );
+
+    // Otherwise, save new password and clear resetToken from database
+    resetUser.password = req.body.password;
+    resetUser.resetPasswordToken = null;
+    resetUser.resetPasswordExpires = null;
+
+    try {
+      await resetUser.save();
+
+      // If password change saved successfully, alert user via username
+      const message = {
+        subject: 'Password Changed',
+        text:
+          'You are receiving this username because you changed your password. \n\n' +
+          'If you did not request this change, please contact us immediately.'
+      };
+
+      return res.status(200).json({
+        message: 'Password changed successfully. Please login with your new password.'
+      });
+    } catch (err) {
+      return next(err);
+    }
+  } catch (err) {
+  }
+  
 };

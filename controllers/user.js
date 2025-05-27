@@ -4,42 +4,37 @@ const setUserInfo = require('../helpers/helpers').setUserInfo;
 //= =======================================
 // User Routes
 //= =======================================
-exports.viewProfile = function(req, res, next) {
+exports.viewProfile = async function(req, res, next) {
   const username = req.params.username;
 
-  User.findOne({ username }, (err, user) => {
-    if (err) {
-      res.status(400).json({ error: 'No user could be found for this ID.' });
-      return next(err);
-    }
-
+  try {
+    let user = await User.findOne({ username });
     const userToReturn = setUserInfo(user);
 
     return res.status(200).json(userToReturn);
-  });
+  } catch (err) {
+    res.status(400).json({ error: 'No user could be found for this ID.' });
+    return next(err);
+  }
 };
 
-exports.allUsers = function(req, res, next) {
-  User.find({}, (err, users) => {
-    if (err) {
-      res.status(400).json({ error: 'No user could be found for this ID.' });
-      return next(err);
-    }
-
+exports.allUsers = async function(req, res, next) {
+  try {
+    let users = await User.find({});
     users = users.map(el => setUserInfo(el));
 
     return res.status(200).json(users);
-  });
+  } catch (err) {
+    res.status(400).json({ error: 'No user could be found for this ID.' });
+    return next(err);
+  }
 };
 
-exports.patchUser = function(req, res, next) {
+exports.patchUser = async function(req, res, next) {
   const username = req.params.username;
 
-  User.findOne({ username }, (err, user) => {
-    if (err) {
-      res.status(400).json({ error: 'No user could be found for this ID.' });
-      return next(err);
-    }
+  try {
+    let user = await User.findOne({ username });
 
     if (req.body.password === '') {
       delete req.body.password;
@@ -54,34 +49,36 @@ exports.patchUser = function(req, res, next) {
     delete user.lastName;
     delete user.firstName;
 
-    user.save(err => {
-      // If error in saving token, return it
-      if (err) {
-        return next(err);
-      }
-
+    try {
+      await user.save()
       return res.status(200).json(setUserInfo(user));
-    });
-  });
-};
-
-exports.deleteUser = function(req, res, next) {
-  const username = req.params.username;
-
-  User.remove({ username }, err => {
-    if (err) {
-      res.status(400).json({ error: 'No user could be found for this ID.' });
+    } catch (err) {
+      // If error in saving token, return it
       return next(err);
     }
+  } catch (err) {
+    res.status(400).json({ error: 'No user could be found for this ID.' });
+    return next(err);
+  }
+};
+
+exports.deleteUser = async function(req, res, next) {
+  const username = req.params.username;
+
+  try {
+    await User.remove({ username });
 
     return res.status(200).json({ status: 'success' });
-  });
+  } catch (err) {
+    res.status(400).json({ error: 'No user could be found for this ID.' });
+    return next(err);
+  }
 };
 
 //= =======================================
 // Registration Route
 //= =======================================
-exports.postUser = function(req, res, next) {
+exports.postUser = async function(req, res, next) {
   // Check for registration errors
   const username = req.body.username;
   const firstName = req.body.firstName;
@@ -121,11 +118,8 @@ exports.postUser = function(req, res, next) {
     return res.status(422).send({ errorMessage: 'You must enter a SIP number.', field: 'sip' });
   }
 
-  User.findOne({ username }, (err, existingUser) => {
-    if (err) {
-      return next(err);
-    }
-
+  try {
+    let existingUser = await User.findOne({ username });
     // If user is not unique, return error
     if (existingUser) {
       return res
@@ -142,11 +136,8 @@ exports.postUser = function(req, res, next) {
       sip
     });
 
-    user.save((err, user) => {
-      if (err) {
-        return next(err);
-      }
-
+    try {
+      user = await user.save();
       // Subscribe member to Mailchimp list
       // mailchimp.subscribeToNewsletter(user.username);
 
@@ -155,6 +146,10 @@ exports.postUser = function(req, res, next) {
       const userInfo = setUserInfo(user);
 
       res.status(201).json(userInfo);
-    });
-  });
+    } catch (err) {
+      return next(err);
+    }
+  } catch (err) {
+    return next(err);
+  }
 };
