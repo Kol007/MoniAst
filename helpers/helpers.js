@@ -23,25 +23,25 @@ function createDefaultAdmin() {
     sip
   });
 
-  user.save((err, user) => {
-    if (err) {
-      console.log('error with creating default user:', err);
-    }
+  try {
+    user = await user.save();
 
     console.log('Created default user: admin/admin');
-  });
+  } catch (err) {
+    console.log('error with creating default user:', err);
+  }
 }
 
-exports.isAdminExists = function isAdminExists() {
-  User.find({}, (err, users) => {
-    if (err) {
-      return console.log('Error with DB!');
-    }
+exports.isAdminExists = async function isAdminExists() {
+  try {
+    let users = await User.find({});
 
     if (users.length === 0) {
       createDefaultAdmin();
     }
-  });
+  } catch (err) {
+    return console.log('Error with DB!');
+  }
 };
 
 exports.convertDurationToSeconds = function convertDurationToSeconds(str) {
